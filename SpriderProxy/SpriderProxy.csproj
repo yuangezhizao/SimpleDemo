@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{763E72F5-F60F-4311-825A-08DEE502604A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpriderProxy</RootNamespace>
+    <AssemblyName>SpriderProxy</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Analysis\Amazon.cs" />
+    <Compile Include="Analysis\Baoshuiguoji.cs" />
+    <Compile Include="Analysis\Cnbuyers.cs" />
+    <Compile Include="Analysis\DangDang.cs" />
+    <Compile Include="Analysis\Ehaoyao.cs" />
+    <Compile Include="Analysis\Feiniu.cs" />
+    <Compile Include="Analysis\Gjmj.cs" />
+    <Compile Include="Analysis\Gome\CategoryEF.cs" />
+    <Compile Include="Analysis\Gome\Gome.cs" />
+    <Compile Include="Analysis\Gome\GomeCpsApi.cs" />
+    <Compile Include="Analysis\Gome\ItemEF.cs" />
+    <Compile Include="Analysis\Gome\ItemsResponseEF.cs" />
+    <Compile Include="Analysis\Gome\GroupPurchaseEF.cs" />
+    <Compile Include="Analysis\Gome\ListItemEF.cs" />
+    <Compile Include="Analysis\Gome\PromoResponseEF.cs" />
+    <Compile Include="Analysis\Haier.cs" />
+    <Compile Include="Analysis\HeXun.cs" />
+    <Compile Include="Analysis\HuaweiGw.cs" />
+    <Compile Include="Analysis\Jianyi.cs" />
+    <Compile Include="Analysis\jingdong\JDBaseConfig.cs" />
+    <Compile Include="Analysis\JuMei.cs" />
+    <Compile Include="Analysis\Jxdyf.cs" />
+    <Compile Include="Analysis\Kad.cs" />
+    <Compile Include="Analysis\Kaixinren.cs" />
+    <Compile Include="Analysis\Kfzj.cs" />
+    <Compile Include="Analysis\Kjt.cs" />
+    <Compile Include="Analysis\Lbxcn.cs" />
+    <Compile Include="Analysis\LeFeng.cs" />
+    <Compile Include="Analysis\Metao.cs" />
+    <Compile Include="Analysis\Mia.cs" />
+    <Compile Include="Analysis\NewEgg.cs" />
+    <Compile Include="Analysis\OkBuy.cs" />
+    <Compile Include="Analysis\OkHqb.cs" />
+    <Compile Include="Analysis\Philips.cs" />
+    <Compile Include="Analysis\Qlk.cs" />
+    <Compile Include="Analysis\Sfda.cs" />
+    <Compile Include="Analysis\ShopRobam.cs" />
+    <Compile Include="Analysis\Sundian.cs" />
+    <Compile Include="Analysis\Taoxie.cs" />
+    <Compile Include="Analysis\Suning.cs" />
+    <Compile Include="Analysis\Unieclub.cs" />
+    <Compile Include="Analysis\VipShop.cs" />
+    <Compile Include="Analysis\Vmei.cs" />
+    <Compile Include="Analysis\Yaofangwang.cs" />
+    <Compile Include="Analysis\Yesmywine.cs" />
+    <Compile Include="Analysis\Yhd.cs" />
+    <Compile Include="Analysis\jingdong\JingDong.cs" />
+    <Compile Include="Analysis\TMall.cs" />
+    <Compile Include="Analysis\WoMai.cs" />
+    <Compile Include="Analysis\YierYao.cs" />
+    <Compile Include="Analysis\YiWuGou.cs" />
+    <Compile Include="Analysis\YiXun.cs" />
+    <Compile Include="Analysis\Hangowa.cs" />
+    <Compile Include="Analysis\Yiyao.cs" />
+    <Compile Include="Analysis\ymatou.cs" />
+    <Compile Include="Analysis\Zmmm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BaseSiteInfo.cs" />
+    <Compile Include="Analysis\Sfbest.cs" />
+    <Compile Include="SiteValid.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Commons\Commons.csproj">
+      <Project>{2185eb3b-84a0-457d-a80f-5339a90e47a6}</Project>
+      <Name>Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mode\Mode.csproj">
+      <Project>{3aa9c9ff-780b-4d51-b62c-23e6c8b379b5}</Project>
+      <Name>Mode</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
