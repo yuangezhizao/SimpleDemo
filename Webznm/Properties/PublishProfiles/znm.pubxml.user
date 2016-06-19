@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+您 Web 项目的发布/打包进程将使用此文件。您可以通过编辑此 MSBuild 文件
+来自定义该进程的行为。若要了解与此相关的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=208121。
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>E:\webfabu</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/BLL.dll">
+      <publishTime>07/04/2015 15:48:55</publishTime>
+    </File>
+    <File Include="bin/Commons.dll">
+      <publishTime>07/04/2015 15:48:53</publishTime>
+    </File>
+    <File Include="bin/DataBase.dll">
+      <publishTime>07/04/2015 15:48:54</publishTime>
+    </File>
+    <File Include="bin/Mode.dll">
+      <publishTime>07/04/2015 15:48:54</publishTime>
+    </File>
+    <File Include="bin/MongoDB.Bson.dll">
+      <publishTime>10/21/2014 13:06:41</publishTime>
+    </File>
+    <File Include="bin/MongoDB.Driver.dll">
+      <publishTime>10/21/2014 13:06:41</publishTime>
+    </File>
+    <File Include="bin/NetDimension.Weibo.dll">
+      <publishTime>08/20/2014 09:03:56</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Common.dll">
+      <publishTime>01/16/2015 09:24:52</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Interfaces.dll">
+      <publishTime>10/21/2014 12:52:38</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.OrmLite.dll">
+      <publishTime>01/16/2015 09:24:52</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.OrmLite.Sqlite.Windows.dll">
+      <publishTime>01/16/2015 09:24:52</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.OrmLite.SqlServer.dll">
+      <publishTime>01/16/2015 09:25:59</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Text.dll">
+      <publishTime>10/21/2014 12:54:11</publishTime>
+    </File>
+    <File Include="bin/SpriderProxy.dll">
+      <publishTime>07/04/2015 15:48:54</publishTime>
+    </File>
+    <File Include="bin/System.Data.SQLite.dll">
+      <publishTime>12/16/2014 08:37:07</publishTime>
+    </File>
+    <File Include="bin/Ude.dll">
+      <publishTime>08/20/2014 09:03:56</publishTime>
+    </File>
+    <File Include="bin/Webznm.dll">
+      <publishTime>07/04/2015 15:48:56</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>10/13/2014 13:36:48</publishTime>
+    </File>
+    <File Include="Index.aspx">
+      <publishTime>12/16/2014 08:35:35</publishTime>
+    </File>
+    <File Include="news/RankingDetial.aspx">
+      <publishTime>10/13/2014 13:37:02</publishTime>
+    </File>
+    <File Include="news/RankingList.aspx">
+      <publishTime>07/04/2015 15:47:11</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>12/16/2014 08:48:23</publishTime>
+    </File>
+    <File Include="Prodetial.aspx">
+      <publishTime>12/16/2014 08:35:35</publishTime>
+    </File>
+    <File Include="Products.aspx">
+      <publishTime>12/16/2014 08:35:35</publishTime>
+    </File>
+    <File Include="root.Master">
+      <publishTime>12/16/2014 08:35:35</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>07/04/2015 15:48:56</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

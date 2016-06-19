@@ -1,0 +1,14 @@
+.pav-verticalmenu{
+	position: relative;	
+}
+.pav-verticalmenu .mega-group .caret {
+  display: none;
+}
+.pav-verticalmenu .mega-col .mega-col-inner > ul {
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+}
+.pav-verticalmenu .dropdown-submenu:hover .dropdown-menu {
+  display: block;
+}

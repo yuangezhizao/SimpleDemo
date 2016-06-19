@@ -1,0 +1,22 @@
+.newsletter_block {
+    overflow: hidden;
+    margin-bottom: 0;
+}
+.newsletter_block .box-content {
+    border: none;
+    background-color: transparent;
+}
+.newsletter_block p.success_inline {
+    color: #418B19;
+    font-weight: bold;
+    text-align: center;
+}
+.newsletter_block p.warning_inline {
+    color: #DA0F00;
+    font-weight: bold;
+    text-align: center;
+}
+.valid{
+    position: absolute;
+    font-size: 12px;
+}

@@ -1,0 +1,27 @@
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.CompilerServices 生成存根: 类型已密封。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.CodeTransformers.RewriteLinePragmas 生成存根: 类型已密封。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.DirectivesParser 生成存根: 类型已密封。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.DynamicUtils 生成存根: 类型已密封。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.RenderPartialDelegate 生成存根: 类型已密封。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.RazorPageExtensions 生成存根: 类型已密封。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.IRazorCodeTransformer 生成填充码: 类型是一个接口。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.CodeTransformers.SetImports+NamespaceComparer 生成填充码: 类型对 exported or assembly(ServiceStack.Razor.4.0.0.0.Fakes) 不可见。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.CodeTransformers.RewriteLinePragmas 生成填充码: 类型对 exported or assembly(ServiceStack.Razor.4.0.0.0.Fakes) 不可见。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.ILiveReload 生成填充码: 类型是一个接口。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.CodeTransformers.WebConfigTransformer+<>c__DisplayClass1 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.DirectivesParser 生成填充码: 类型对 exported or assembly(ServiceStack.Razor.4.0.0.0.Fakes) 不可见。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.IRazorHost 生成填充码: 类型是一个接口。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.RazorPageHost+<>c__DisplayClassb 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.RazorPageHost+<>c__DisplayClassd 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Compilation.ServiceStackCSharpCodeParser+SetModelTypeCodeGenerator 生成填充码: 类型对 exported or assembly(ServiceStack.Razor.4.0.0.0.Fakes) 不可见。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.DynamicRequestObject+<>c__DisplayClass2 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.RenderPartialDelegate 生成填充码: 类型是一个委托。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.RazorPageResolver+<>c__DisplayClass2 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.RazorPageResolver+<>c__DisplayClass6 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.RazorPageResolver+<>c__DisplayClass9 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.IRazorConfig 生成填充码: 类型是一个接口。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.RazorFormat+<>c__DisplayClass3 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.Managers.RazorViewManager+<>c__DisplayClass7 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.RenderingPage+<get_TypedViewBag>o__SiteContainer0 生成填充码: 类型不受支持，因为存在内部限制。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 无法为 ServiceStack.Razor.IHasModel 生成填充码: 类型是一个接口。
+E:\ServiceStack\demo\web\SimpleDemo\WebApp\Fakes\ServiceStack.Razor.fakes : warning : 编译失败，将在不使用代码协定的情况下重试

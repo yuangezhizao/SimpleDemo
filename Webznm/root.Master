@@ -1,0 +1,581 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="root.master.cs" Inherits="Webznm.root" %>
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" class="ltr" lang="cn">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+     <meta name="viewport" content="width=device-width">
+    <link href="/stylesheet/bootstrap.css" rel="stylesheet" />
+    <link href="/stylesheet/stylesheet.css" rel="stylesheet" />
+<%--    <link href="stylesheet/font-awesome.min.css" rel="stylesheet" />--%>
+    <link href="/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    
+    <link href="/stylesheet/admin.css" rel="stylesheet" />
+    <link href="/stylesheet/sliderlayer/css/typo.css" rel="stylesheet" />
+
+    <script src="/js/jquery/jquery-1.7.1.min.js"></script>
+    <script src="/js/jquery/ui/jquery-ui-1.8.16.custom.min.js"></script>
+    <script src="/js/jquery/ui/external/jquery.cookie.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/pav_styleshop/js/common.js"></script>
+    <script src="/js/jquery/bootstrap/bootstrap.min.js"></script>
+<%--    <script src="js/jquery/colorbox/jquery.colorbox-min.js"></script>--%>
+    <script src="/js/layerslider/jquery.themepunch.plugins.min.js"></script>
+    <script src="/js/layerslider/jquery.themepunch.revolution.min.js"></script>
+    <link href="/stylesheet/paneltool.css" rel="stylesheet" />
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+
+
+    </asp:ContentPlaceHolder>
+</head>
+<body id="offcanvas-container" class="offcanvas-container layout-fullwidth fs14 page-home ">
+    <section id="page" class="offcanvas-pusher" role="main">
+        <header id="header">
+            <div id="topbar">
+                <div class="container">
+                    <div class="show-desktop">
+                        <div class="quick-top-link">
+                            <!-- Single button -->
+                            <%--<div class="language btn-top pull-left">
+								<div class="language-wrapper pull-right">	
+	<div class="btn-group">
+		<button type="button" class="form-control" data-toggle="dropdown">
+						<span>			
+				<img src="image/flags/gb.png" alt="English" title="English" />
+				English				
+			</span>		
+						<span class="fa fa-sort-asc"></span>
+		</button>
+		<div class="dropdown-menu dropdown">
+<form action="http://demopavothemes.com/pav_styleshop/d/index.php?route=module/language" method="post" enctype="multipart/form-data">
+				<div class="box-language">
+    						<a class="list-item" onclick="$('input[name=\'language_code\']').attr('value', 'en'); $(this).parent().parent().submit();">
+							<img src="image/flags/gb.png" alt="English" title="English" onclick="$('input[name=\'language_code\']').attr('value', 'en'); $(this).parent().parent().submit();" class="item-symbol" />
+							<span class="item-name">English</span>							
+						</a>				
+    						<a class="list-item" onclick="$('input[name=\'language_code\']').attr('value', 'ar'); $(this).parent().parent().submit();">
+							<img src="image/flags/ar.png" alt="Arabic" title="Arabic" onclick="$('input[name=\'language_code\']').attr('value', 'ar'); $(this).parent().parent().submit();" class="item-symbol" />
+							<span class="item-name">Arabic</span>							
+						</a>				
+        <input type="hidden" name="language_code" value="" />
+    <input type="hidden" name="redirect" value="http://demopavothemes.com/pav_styleshop/d/index.php?route=common/home" />
+  </div>
+</form>
+		</div>
+	</div>
+ </div> 
+							</div>
+							<div class="currency btn-top pull-left">
+									<div class="currency-wrapper pull-right"> 
+				<div class="btn-group">
+			<button type="button" class="form-control" data-toggle="dropdown">
+				<span>			
+																																					US Dollar	
+									</span>			
+				<span class="fa fa-sort-asc"></span>
+			</button>
+			<div class="dropdown-menu dropdown">
+				<form action="http://demopavothemes.com/pav_styleshop/d/index.php?route=module/currency" method="post" enctype="multipart/form-data">
+					<div class="box-currency">						
+																													<a title="Euro" onclick="$('input[name=\'currency_code\']').attr('value', 'EUR'); $(this).parent().parent().submit();" class="list-item">
+									<span class="item-symbol">€</span>
+									<span class="item-name">Euro</span>
+								</a>
+																																													<a title="Pound Sterling" onclick="$('input[name=\'currency_code\']').attr('value', 'GBP'); $(this).parent().parent().submit();" class="list-item">
+									<span class="item-symbol">£</span>
+									<span class="item-name">Pound Sterling</span>
+								</a>
+																																													<a title="US Dollar" class="list-item">									
+									<span class="item-symbol">$</span>
+									<span class="item-name">US Dollar</span>	
+								</a>
+																												<input type="hidden" name="currency_code" value="" />
+						<input type="hidden" name="redirect" value="http://demopavothemes.com/pav_styleshop/d/index.php?route=common/home" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+							</div>	--%>
+                            <div class="quick-access btn-group btn-top pull-left">
+                                <button type="button" class="form-control" data-toggle="dropdown">
+                                    <span class="quick-icon">My Account										<span class="fa fa-sort-asc"></span>
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <ul class="links">
+                                        <li><a class="wishlist" href="#"><span class="fa fa-heart"></span>Wish List (0)</a></li>
+                                        <li><a class="account" href="#"><span class="fa fa-user"></span>My Account</a></li>
+                                        <li><a class="shoppingcart" href="#"><span class="fa fa-shopping-cart"></span>Shopping Cart</a></li>
+                                        <li><a class="last checkout" href="#"><span class="fa fa-file"></span>Checkout</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="welcome pull-right hidden-sm hidden-xs">
+                                Welcome visitor you can <a href="#">login</a> or <a href="#">create an account</a>.								 
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="show-mobile hidden-lg hidden-md">
+
+                        <div class="btn-top quick-user pull-left">
+                            <div class="form-control quickaccess-toggle">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="inner-toggle dropdown-menu">
+                                <div class="login links">
+                                    Welcome visitor you can <a href="#">login</a> or <a href="#">create an account</a>.														
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quick-cart btn-top pull-left">
+                            <div class="quickaccess-toggle form-control">
+                                <a href="#"><i class="fa fa-shopping-cart"></i></a>
+                            </div>
+                        </div>
+                        <!-- 
+					<div class="quick-access pull-left">
+						<div class="quickaccess-toggle">
+							<i class="fa fa-tasks"></i>															
+						</div>	
+						<div class="inner-toggle">
+							<ul class="links">									
+								<li><a href="http://demopavothemes.com/pav_styleshop/d/index.php?route=account/wishlist"><i class="fa fa-list-alt"></i>Wish List (0)</a></li>
+								<li><a href="http://demopavothemes.com/pav_styleshop/d/index.php?route=account/account"><i class="fa fa-user"></i>My Account</a></li>
+								<li><a href="http://demopavothemes.com/pav_styleshop/d/index.php?route=checkout/cart"><i class="fa fa-bookmark"></i>Shopping Cart</a></li>
+								<li><a class="last" href="http://demopavothemes.com/pav_styleshop/d/index.php?route=checkout/checkout"><i class="fa fa-share"></i>Checkout</a></li>
+							</ul>								
+						</div>						
+					</div>											
+				
+					<div class="support pull-left">
+						<div class="quickaccess-toggle">
+							<i class="fa fa-sun-o"></i>								
+						</div>						
+						<div class="inner-toggle quick-setting">
+							<div class="language">
+								<div class="language-wrapper pull-right">	
+	<div class="btn-group">
+		<button type="button" class="form-control" data-toggle="dropdown">
+						<span>			
+				<img src="image/flags/gb.png" alt="English" title="English" />
+				English				
+			</span>		
+						<span class="fa fa-sort-asc"></span>
+		</button>
+		<div class="dropdown-menu dropdown">
+<form action="http://demopavothemes.com/pav_styleshop/d/index.php?route=module/language" method="post" enctype="multipart/form-data">
+				<div class="box-language">
+    						<a class="list-item" onclick="$('input[name=\'language_code\']').attr('value', 'en'); $(this).parent().parent().submit();">
+							<img src="image/flags/gb.png" alt="English" title="English" onclick="$('input[name=\'language_code\']').attr('value', 'en'); $(this).parent().parent().submit();" class="item-symbol" />
+							<span class="item-name">English</span>							
+						</a>				
+    						<a class="list-item" onclick="$('input[name=\'language_code\']').attr('value', 'ar'); $(this).parent().parent().submit();">
+							<img src="image/flags/ar.png" alt="Arabic" title="Arabic" onclick="$('input[name=\'language_code\']').attr('value', 'ar'); $(this).parent().parent().submit();" class="item-symbol" />
+							<span class="item-name">Arabic</span>							
+						</a>				
+        <input type="hidden" name="language_code" value="" />
+    <input type="hidden" name="redirect" value="http://demopavothemes.com/pav_styleshop/d/index.php?route=common/home" />
+  </div>
+</form>
+		</div>
+	</div>
+ </div> 
+							</div>
+							<div class="currency">
+									<div class="currency-wrapper pull-right"> 
+				<div class="btn-group">
+			<button type="button" class="form-control" data-toggle="dropdown">
+				<span>			
+																																					US Dollar	
+									</span>			
+				<span class="fa fa-sort-asc"></span>
+			</button>
+			<div class="dropdown-menu dropdown">
+				<form action="http://demopavothemes.com/pav_styleshop/d/index.php?route=module/currency" method="post" enctype="multipart/form-data">
+					<div class="box-currency">						
+																													<a title="Euro" onclick="$('input[name=\'currency_code\']').attr('value', 'EUR'); $(this).parent().parent().submit();" class="list-item">
+									<span class="item-symbol">€</span>
+									<span class="item-name">Euro</span>
+								</a>
+																																													<a title="Pound Sterling" onclick="$('input[name=\'currency_code\']').attr('value', 'GBP'); $(this).parent().parent().submit();" class="list-item">
+									<span class="item-symbol">£</span>
+									<span class="item-name">Pound Sterling</span>
+								</a>
+																																													<a title="US Dollar" class="list-item">									
+									<span class="item-symbol">$</span>
+									<span class="item-name">US Dollar</span>	
+								</a>
+																												<input type="hidden" name="currency_code" value="" />
+						<input type="hidden" name="redirect" value="http://demopavothemes.com/pav_styleshop/d/index.php?route=common/home" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+							</div>
+						</div>															
+					</div> -->
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div id="header-main">
+                <div class="row">
+                    <div class="container">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 logo">
+                            <div id="logo-theme"><a href="/"><span>StyleShop</span></a></div>
+
+                        </div>
+
+                         <div class="hidden-xs hidden-sm inner pull-left">
+                             <div class="support " style=" min-width:600px;position: relative;">
+                <form class="search-form open" method="get" role="form" autocomplete="off">
+      
+       
+            <div class="form-group">
+                  <button type="submit"><i class="fa fa-search"></i></button>
+              <input type="text" class="form-control" name="search-hd" id="search-hd" placeholder="Search for product">
+            
+          </div>
+      
+      </form>
+                                 </div>
+                         </div>
+
+                        <%--<div class="pull-right shopping-cart hidden-xs hidden-sm">
+                            <div class="cart-top">
+                                <div id="cart" class="clearfix">
+                                    <div class="heading media">
+                                        <div class="cart-inner media-body">
+                                            <span class="icon-cart"></span>
+                                            <h4>Shopping Cart</h4>
+                                            <a><span id="cart-total">0 item(s) - $0.00</span></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="content">
+                                        <div class="empty">Your shopping cart is empty!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>--%>
+                        <div id="search">
+                            <div class="input-group">
+                                <input type="text" name="search" placeholder="Search" value="" class="input-search form-control" />
+                                <span class="input-group-btn">
+                                    <button class="button-search" type="button"><em class="fa fa-search"></em></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="custom-menu">
+                <div id="pav-mainnav">
+                    <div class="container">
+
+                        <div class="pav-megamenu">
+                            <div class="navbar navbar-default">
+                                <div id="mainmenutop" class="megamenu" role="navigation">
+                                    <div class="navbar-header">
+                                        <a class="navbar-toggle hidden-lg hidden-md" href="javascript:;" data-target=".navbar-collapse" data-toggle="collapse">
+                                            <span class="fa fa-bars"></span>
+                                        </a>
+                                        <div class="collapse navbar-collapse navbar-ex1-collapse hidden-sm hidden-xs">
+                                            <ul class="nav navbar-nav megamenu">
+                                                <li class="home"><a href="/Index.aspx"><span class="menu-title">首页</span></a></li>
+                                                <li class=" parent dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="menu-title">母婴</span><%--<b class="caret"></b>--%></a>
+                                                    <%--<div class="dropdown-menu" style="width: 1140px">
+                                                    <div class="dropdown-menu-inner">
+                                                        <div class="row">
+                                                            <div class="mega-col col-xs-12 col-sm-12 col-md-3 ">
+                                                                <div class="mega-col-inner">
+                                                                    <div class="pavo-widget" id="pavowid-3">
+                                                                        <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Products Latest</span></h3>
+                                                                        <div class="widget-product-list">
+                                                                            <div class="widget-inner clearfix">
+                                                                                <div class="product-block pull-left">
+                                                                                    <div class="w-product">
+                                                                                        <div class="image">
+                                                                                            <a href="#">
+                                                                                                <img src="http://demopavothemes.com/pav_styleshop/d/image/cache/data/demo/product_25-150x150.jpg" alt="Citizen Women's EW and Men's EW" /></a>
+                                                                                        </div>
+
+                                                                                        <div class="product-meta">
+                                                                                            <h3 class="name"><a href="http://demopavothemes.com/pav_styleshop/d/index.php?route=product/product&amp;product_id=59">Citizen Women's EW and Men's EW</a></h3>
+                                                                                            <div class="price">
+                                                                                                <span class="price-old">$119.50</span>
+                                                                                                <span class="price-new">$107.75</span>
+
+                                                                                            </div>
+
+                                                                                            <div class="rating">
+                                                                                                <img src="pav_styleshop/image/stars-5.png" alt="text_reviews" /></div>
+
+                                                                                            <div class="action hide">
+                                                                                                <div class="cart">
+                                                                                                    <input type="button" value="Add to Cart" onclick="addToCart('59');" class="product-icon fa fa-shopping-cart shopping-cart " />
+                                                                                                </div>
+                                                                                                <div class="wishlist">
+                                                                                                    <a onclick="addToWishList('59');" title="Add to Wish List" class="fa fa-heart product-icon"></a>
+                                                                                                </div>
+                                                                                                <div class="compare">
+                                                                                                    <a onclick="addToCompare('59');" title="Add to Compare" class="fa fa-refresh product-icon"></a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mega-col col-xs-12 col-sm-12 col-md-2 ">
+                                                                <div class="mega-col-inner">
+                                                                    <div class="pavo-widget" id="pavowid-7">
+                                                                        <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Clothing</span></h3>
+                                                                        <div class="widget-html">
+                                                                            <div class="widget-inner">
+                                                                                <ul>
+                                                                                    <li>
+                                                                                        <a href="index.php?route=product/category&path=28">Dresses</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Jeans & Trousers</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Blouses & Shirts</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Tops & T-Shirts</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Jackets & Coats</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Skirts</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Tristique Turpis</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Phasellus leo</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mega-col col-xs-12 col-sm-12 col-md-2 ">
+                                                                <div class="mega-col-inner">
+                                                                    <div class="pavo-widget" id="pavowid-8">
+                                                                        <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Accessories</span></h3>
+                                                                        <div class="widget-html">
+                                                                            <div class="widget-inner">
+                                                                                <ul>
+                                                                                    <li>
+                                                                                        <a href="index.php?route=product/category&path=28">Formal Shoes</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Casual Shoes</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Sandals</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Boots</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Wide Fit</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Slippers</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Phasellus leo</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Bibendum</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mega-col col-xs-12 col-sm-12 col-md-2 ">
+                                                                <div class="mega-col-inner">
+                                                                    <div class="pavo-widget" id="pavowid-9">
+                                                                        <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Malesuada </span></h3>
+                                                                        <div class="widget-html">
+                                                                            <div class="widget-inner">
+                                                                                <ul>
+                                                                                    <li>
+                                                                                        <a href="index.php?route=product/category&path=28">Phasellus Purus</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Bags & Purses</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Belts</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Gloves</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Jewellery</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Sunglasses</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Hair Accessories</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Tristique Turpis</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mega-col col-xs-12 col-sm-12 col-md-3 ">
+                                                                <div class="mega-col-inner">
+                                                                    <div class="pavo-widget" id="pavowid-10">
+                                                                        <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Banner</span></h3>
+                                                                        <div class="widget-html">
+                                                                            <div class="widget-inner">
+                                                                                <img src="image/data/banner/menu-banner.jpg" alt="">
+                                                                                <p style="padding-top: 10px;">This Photoshops consequat ipsum sagittis dccumsan consequat ipsum sagittis cusan psum velit.</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>--%>
+                                                </li>
+
+
+                                                <li class="pav-parrent parent dropdown ">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="menu-title">吃货</span><%--<b class="caret"></b>--%></a>
+                                                    <%--<div class="dropdown-menu" style="width: 795px">
+                                                        <div class="dropdown-menu-inner">
+                                                            <div class="row">
+                                                                <div class="mega-col col-xs-12 col-sm-12 col-md-3 ">
+                                                                    <div class="mega-col-inner">
+                                                                        <div class="pavo-widget" id="pavowid-9">
+                                                                            <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Malesuada </span></h3>
+                                                                            <div class="widget-html">
+                                                                                <div class="widget-inner">
+                                                                                    <ul>
+                                                                                        <li>
+                                                                                            <a href="index.php?route=product/category&path=28">Phasellus Purus</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Bags & Purses</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Belts</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Gloves</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Jewellery</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Sunglasses</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Hair Accessories</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#">Tristique Turpis</a>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mega-col col-xs-12 col-sm-12 col-md-9 ">
+                                                                    <div class="mega-col-inner">
+                                                                        <div class="pavo-widget" id="pavowid-1">
+                                                                            <h3 class="menu-title"><span class="menu-title"><em class="fa fa-caret-right"></em>Video </span></h3>
+                                                                            <div class="widget-html">
+                                                                                <div class="widget-inner">
+                                                                                    	<iframe width="580" height="390" src="#" frameborder="0" allowfullscreen></iframe>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>--%>
+                                                </li>
+                                                <li class="parent dropdown ">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="menu-title">促销活动</span></a>
+                                                </li>
+                                              
+                                                <li class="">
+                                                    <a href="#"><span class="menu-title">导购</span></a></li>
+                                                <li class="">
+                                                    <a href="/toplist"><span class="menu-title">排行榜</span></a></li>
+                                                  <li class="">
+                                                    <a href="#"><span class="menu-title">商城大全</span></a></li>
+                                                <li class="">
+                                                    <a href="/topLess"><span class="menu-title">降价监控</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+ 
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+   
+
+         <footer id="footer">
+            <div id="powered">
+                <div class="container">
+                    <div id="top"><a class="scrollup" href="#"><i class="fa fa-angle-up"></i>Top</a></div>
+                    <div class="copyright pull-left">
+                        Powered By chennysnow &copy; 2014. 
+			
+                    </div>
+                    
+                </div>
+            </div>
+
+        </footer>
+        </section>
+</body>
+</html>

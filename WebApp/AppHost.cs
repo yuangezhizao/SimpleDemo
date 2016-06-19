@@ -1,0 +1,182 @@
+﻿using ServiceStack;
+using Servers;
+using Mode;
+using ServiceStack.Configuration;
+using ServiceStack.Auth;
+//using ServiceStack.Authentication.OAuth2;
+//using ServiceStack.Razor;
+
+namespace WebApp
+{
+    //A customizeable typed UserSession that can be extended with your own properties
+    //To access ServiceStack's Session, Cache, etc from MVC Controllers inherit from ControllerBase<CustomUserSession>
+
+
+    public class AppHost : AppHostBase
+    {
+        public AppHost()
+            : base("StarterTemplate ASP.NET Host", typeof(UserServer).Assembly) { }
+
+        public override void Configure(Funq.Container container)
+        {
+            Routes
+                .Add<UserInfo>("/users")
+                .Add<UserInfo>("/users/{name*}")
+                .Add<EmailInfo>("/email");
+            //Plugins.Add(new RazorFormat());
+
+            Plugins.Add(new CorsFeature());
+            ConfigureAuth(container);
+        }
+        private void ConfigureAuth(Funq.Container container)
+        {
+            var appSettings = new AppSettings();
+
+            //Default route: /auth/{provider}
+            Plugins.Add(new AuthFeature(() => new CustomSession(),
+                new IAuthProvider[] {
+                    new CustomCredentialsAuthProvider(),
+                    //new GoogleOAuth2Provider(appSettings), 
+                    //new mmbOAuth2Provider(appSettings), 
+                }));
+
+            ////Default route: /register
+            //Plugins.Add(new RegistrationFeature());
+
+            ////Requires ConnectionString configured in Web.Config
+            //container.Register<IDbConnectionFactory>(
+            //   new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider)
+            //   {
+            //       ConnectionFilter = x => new ProfiledDbConnection(x, Profiler.Current)
+            //   });
+
+            //container.Register<IUserAuthRepository>(c =>
+            //    new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
+
+            //container.Resolve<IUserAuthRepository>().InitSchema();
+        }
+
+    }
+    //        public class AppHost : AppHostBase
+
+    //    {
+    //        public AppHost()
+    //            : base("Test Auth", typeof(AppHost).Assembly) { }
+
+    //        public override void Configure(Container container)
+    //        {
+    //            Plugins.Add(new RazorFormat());
+
+    //            container.Register(new DataSource());
+
+    //            container.Register<IDbConnectionFactory>(
+    //                new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider) {
+    //                    ConnectionFilter = x => new ProfiledDbConnection(x, Profiler.Current)
+    //                });
+
+    //            //using (var db = container.Resolve<IDbConnectionFactory>().Open())
+    //            //{
+    //            //    db.CreateTableIfNotExists<Rockstar>();
+    //            //    db.Insert(Rockstar.SeedData);
+    //            //}
+
+    //            JsConfig.EmitCamelCaseNames = true;
+
+    //            //Register Typed Config some services might need to access
+    //            var appSettings = new AppSettings();
+
+    //            //Register a external dependency-free 
+    //            container.Register<ICacheClient>(new MemoryCacheClient());
+    //            //Configure an alt. distributed persistent cache that survives AppDomain restarts. e.g Redis
+    //            //container.Register<IRedisClientsManager>(c => new PooledRedisClientManager("localhost:6379"));
+
+    //            //Enable Authentication an Registration
+    //            ConfigureAuth(container);
+
+    //            //Create your own custom User table
+    //            using (var db = container.Resolve<IDbConnectionFactory>().Open())
+    //                db.DropAndCreateTable<UserTable>();
+
+    //            SetConfig(new HostConfig {
+    //                DebugMode = true,
+    //            });
+    //        }
+
+    //        private void ConfigureAuth(Container container)
+    //        {
+    //            //Enable and register existing services you want this host to make use of.
+    //            //Look in Web.config for examples on how to configure your oauth providers, e.g. oauth.facebook.AppId, etc.
+    //            var appSettings = new AppSettings();
+
+    //            //Register all Authentication methods you want to enable for this web app.            
+    //            Plugins.Add(new AuthFeature(
+    //                () => new CustomUserSession(), //Use your own typed Custom UserSession type
+    //                new IAuthProvider[] {
+    //                    new CredentialsAuthProvider(),              //HTML Form post of UserName/Password credentials
+    //                    new TwitterAuthProvider(appSettings),       //Sign-in with Twitter
+    //                    new FacebookAuthProvider(appSettings),      //Sign-in with Facebook
+    //                    new DigestAuthProvider(appSettings),        //Sign-in with Digest Auth
+    //                    new BasicAuthProvider(),                    //Sign-in with Basic Auth
+    //                    new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
+    //                    new YahooOpenIdOAuthProvider(appSettings),  //Sign-in with Yahoo OpenId
+    //                    new OpenIdOAuthProvider(appSettings),       //Sign-in with Custom OpenId
+    //                    new GoogleOAuth2Provider(appSettings),      //Sign-in with Google OAuth2 Provider
+    //                    new LinkedInOAuth2Provider(appSettings),    //Sign-in with LinkedIn OAuth2 Provider
+    //                }));
+
+    //#if HTTP_LISTENER
+    //            //Required for DotNetOpenAuth in HttpListener 
+    //            OpenIdOAuthProvider.OpenIdApplicationStore = new InMemoryOpenIdApplicationStore();
+    //#endif
+
+    //            //Provide service for new users to register so they can login with supplied credentials.
+    //            Plugins.Add(new RegistrationFeature());
+
+    //            //override the default registration validation with your own custom implementation
+    //            container.RegisterAs<CustomRegistrationValidator, IValidator<Register>>();
+
+    //            //Store User Data into the referenced SqlServer database
+    //            container.Register<IAuthRepository>(c =>
+    //                new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>())); //Use OrmLite DB Connection to persist the UserAuth and AuthProvider info
+
+    //            var authRepo = (OrmLiteAuthRepository)container.Resolve<IAuthRepository>(); //If using and RDBMS to persist UserAuth, we must create required tables
+    //            if (appSettings.Get("RecreateAuthTables", false))
+    //                authRepo.DropAndReCreateTables(); //Drop and re-create all Auth and registration tables
+    //            else
+    //                authRepo.InitSchema();   //Create only the missing tables
+
+    //            Plugins.Add(new RequestLogsFeature());
+    //        }
+    //    }
+
+    //    //Provide extra validation for the registration process
+    //    public class CustomRegistrationValidator : RegistrationValidator
+    //    {
+    //        public CustomRegistrationValidator()
+    //        {
+    //            RuleSet(ApplyTo.Post, () =>
+    //            {
+    //                RuleFor(x => x.DisplayName).NotEmpty();
+    //            });
+    //        }
+    //    }
+
+    //    public class CustomUserSession : AuthUserSession
+    //    {
+    //        public override void OnAuthenticated(IServiceBase authService, IAuthSession session, IAuthTokens tokens, System.Collections.Generic.Dictionary<string, string> authInfo)
+    //        {
+    //            "OnAuthenticated()".Print();
+    //        }
+    //    }
+
+    //    public class DataSource
+    //    {
+    //        public string[] Items = new[] { "Eeny", "meeny", "miny", "moe" };
+    //    }
+
+    //    public class UserTable
+    //    {
+    //        public int Id { get; set; }
+    //        public string CustomField { get; set; }
+    //    }
+}
