@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+     <script type="text/javascript" src="http://misc.360buyimg.com/lib/js/e/jquery-1.2.6.pack.js"></script>
+
+  <script type="text/javascript" >
+
+function AddProduct(id,count,obj){
+
+	$.getJSON("http://cart.jd.com/cart/dynamic/addSkuToCartAsync.action?rd="+Math.random()+"&pid="+id+"&ptype=1&pcount="+count,function(result){
+
+		if(result && result.l == 1){
+
+			if(result.redirectUrl){
+
+				window.location.href= result.redirectUrl;
+
+			}
+
+			else{
+
+				window.location.href= "www.jd.com";
+
+			}
+
+			return;
+
+		}
+
+		if(result && result.redirectUrl && result.redirectUrl != "cart"){
+
+			window.location.href= result.redirectUrl;
+
+			return;
+
+		}
+
+		if(result != null && result.success){
+
+			var data = TrimPath.processDOMTemplate("template_Cart", result);
+
+			if(document.getElementById("cart_content") != null){
+
+				document.getElementById("cart_content").innerHTML = data;
+
+			}
+
+			if(result.addSkuLimitState != null &&
+
+			   result.addSkuLimitState != "" &&
+
+			   result.addSkuLimitState == "Add_Item_Fail"){
+
+			   alert("添加商品失败,已超出购物车最大容量!");
+
+			}
+
+			else{
+
+				if(id != null && id != ""){
+
+					var backurl = "http://item.jd.com/"+id+".html";
+
+					var url = PurchaseAppConfig.Domain + "/cart.html?backurl=" + backurl+"&rid="+Math.random();
+
+					$(".btn-continue").attr("href",backurl);
+
+					$(".btn-pay").attr("href",url);
+
+				}
+
+				var cid = 0;
+
+				var firstCid = 0;
+
+				if(result.lastAddedSku != null){
+
+					if(result.lastAddedSku.id == id){
+
+						cid = result.lastAddedSku.cid;
+
+						firstCid = result.lastAddedSku.firstCid;
+
+					}
+
+				}
+
+				GetWares(id,cid,firstCid);
+
+				ShowAddSucTip("商品已成功加入购物车！");
+
+				//writeCn();
+
+			}
+
+			
+
+		}else{
+
+			ShowAddSucTip("增加商品失败！");
+
+		}
+
+	});
+
+
+
+}
+
+function addcat()
+{
+//AddProduct("495359",1,this);
+alert('dddddd');
+     $.ajax({
+             url:"http://cart.jd.com/cart/dynamic/addSkuToCartAsync.action?rd=0.06773282728409413&pid=1057838917&ptype=1&pcount=1",
+             dataType:"jsonp",
+             jsonp:"jsonpcallback",
+             success:function(data){
+             alert('ok');
+             }
+        });
+
+}
+
+
+function delCat()
+{
+   $.post("http://cart.jd.com/cart/sortedDynamic/removeSkuFromCart.action?rd=0.8507373727430136", {
+
+pid: "1057838917", rd: Math.random(),ptype:1,locationId:"15-1158-46345-0",outSkus:"",packId:0,venderId:53092,targetId:0});
+}
+
+
+
+
+</script>
+
+
+
+</head>
+<body>
+    <div Visible="false" id="phAuthenticated" runat="server" enableviewstate=false style="color:green;">Authenticated.</div>
+    <form id="form1" runat="server">
+    <div>
+    <a href='http://cart.jd.com/cart/dynamic/addSkuToCartAsync.action?rd=129620'></a>
+    </div>
+    </form>
+
+   <button onclick="addcat()">添加到购物车</button> 
+<button onclick="delcat()">删除购物车</button> 
+ 
+        <button onclick="ajaxLogin()">Ajax Login</button> 
+
+    <div class="protectedServices">
+        <button onclick="helloService()">Invoke Hello Service</button> 
+    </div>
+
+
+</body>
+</html>
