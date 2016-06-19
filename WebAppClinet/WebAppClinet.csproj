@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0C18E223-6636-4424-BDD9-330653037BB0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebAppClinet</RootNamespace>
+    <AssemblyName>WebAppClinet</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>false</IncludeIisSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FastVerCode">
+      <HintPath>..\libs\FastVerCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack, Version=4.0.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\libs\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AddTransaction.aspx" />
+    <Content Include="Admin.Master" />
+    <None Include="App_Data\SiteBase.db" />
+    <Content Include="BindCat.aspx" />
+    <Content Include="ClassDetial.aspx" />
+    <Content Include="ClassList.aspx" />
+    <Content Include="js\jquery-2.1.1.min.js" />
+    <Content Include="Plugin\bootstrap\css\select2.css" />
+    <Content Include="js\jquery-1.11.1.min.js" />
+    <Content Include="Plugin\bootstrap\css\select2.png" />
+    <Content Include="Plugin\bootstrap\js\select2.min.js" />
+    <Content Include="packages.config" />
+    <Content Include="Plugin\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="Plugin\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Plugin\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Plugin\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Plugin\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Plugin\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Plugin\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Plugin\bootstrap\css\bootstrap.css" />
+    <Content Include="Plugin\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Plugin\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Plugin\bootstrap\js\bootstrap-treeview.js" />
+    <Content Include="Plugin\bootstrap\js\bootstrap.js" />
+    <Content Include="Plugin\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Plugin\bootstrap\js\select2_locale_zh-CN.js" />
+    <Content Include="Plugin\font-awesome-4-2-0\css\font-awesome.min.css" />
+    <Content Include="SiteClass.aspx" />
+    <Content Include="SpiderConfigList.aspx" />
+    <Content Include="SpiderProSet.aspx" />
+    <Content Include="Web.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddTransaction.aspx.cs">
+      <DependentUpon>AddTransaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddTransaction.aspx.designer.cs">
+      <DependentUpon>AddTransaction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin.Master.cs">
+      <DependentUpon>Admin.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin.Master.designer.cs">
+      <DependentUpon>Admin.Master</DependentUpon>
+    </Compile>
+    <Compile Include="BindCat.aspx.cs">
+      <DependentUpon>BindCat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BindCat.aspx.designer.cs">
+      <DependentUpon>BindCat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClassDetial.aspx.cs">
+      <DependentUpon>ClassDetial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClassDetial.aspx.designer.cs">
+      <DependentUpon>ClassDetial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClassList.aspx.cs">
+      <DependentUpon>ClassList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClassList.aspx.designer.cs">
+      <DependentUpon>ClassList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HttpServletRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteClass.aspx.cs">
+      <DependentUpon>SiteClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SiteClass.aspx.designer.cs">
+      <DependentUpon>SiteClass.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SpiderConfigList.aspx.cs">
+      <DependentUpon>SpiderConfigList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SpiderConfigList.aspx.designer.cs">
+      <DependentUpon>SpiderConfigList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SpiderProSet.aspx.cs">
+      <DependentUpon>SpiderProSet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SpiderProSet.aspx.designer.cs">
+      <DependentUpon>SpiderProSet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web.aspx.cs">
+      <DependentUpon>Web.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web.aspx.designer.cs">
+      <DependentUpon>Web.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{32c0a1a2-a0a5-4b32-9550-ad84400b1501}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Commons\Commons.csproj">
+      <Project>{2185eb3b-84a0-457d-a80f-5339a90e47a6}</Project>
+      <Name>Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mode\Mode.csproj">
+      <Project>{3aa9c9ff-780b-4d51-b62c-23e6c8b379b5}</Project>
+      <Name>Mode</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhantomjsDrive\PhantomjsDrive.csproj">
+      <Project>{a1767ad1-4dfe-4a03-af8b-1bf85487ecde}</Project>
+      <Name>PhantomjsDrive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Servers\Servers.csproj">
+      <Project>{d39bd966-c27e-4f8b-bc8e-8c9475d6a4ba}</Project>
+      <Name>Servers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\test\test.csproj">
+      <Project>{d8a73462-e691-431a-9531-dcf6b0c24126}</Project>
+      <Name>test</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="css\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49525</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49525/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
