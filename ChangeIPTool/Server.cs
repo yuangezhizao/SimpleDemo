@@ -14,17 +14,17 @@ namespace ChangeIPTool
         private int IPLoopCount = 3;//允许重复次数  拨号3次还是重复的ip 
         private int DialFaildSleepTime = 30000;
 
-       
+
         /// <summary>
         /// ip转换
         /// </summary>
         /// <param name="kdlj">宽带连接名称 如：本地连接，宽带连接</param>
         /// <param name="userName">帐号</param>
         /// <param name="pwd">密码</param>
-        public void ChangeIp(string kdlj,string userName,string pwd)
+        public void ChangeIp(string kdlj, string userName, string pwd)
         {
             //hx.Mset.IsChangeIp = hx.Mset.IsChangeIp;
-            LogServer.WriteLog("开始准备更换IP","changeIp");
+            LogServer.WriteLog("开始准备更换IP", "changeIp");
 
             HANDUPCON:
             string oldIpAddress;
@@ -33,14 +33,13 @@ namespace ChangeIPTool
             string entryName = "";
             if (oldConn != null)
             {
-                entryName = oldConn.EntryName;
-                RasIPInfo ipAddresses = (RasIPInfo)oldConn.GetProjectionInfo(RasProjectionType.IP);
-                string oldIp = ipAddresses.IPAddress.ToString();
- 
-                LogServer.WriteLog("现在名称:"+ entryName + "IP是" + oldIp, "changeIp");
 
                 try
                 {
+                    entryName = oldConn.EntryName;
+                    RasIPInfo ipAddresses = (RasIPInfo)oldConn.GetProjectionInfo(RasProjectionType.IP);
+                    string oldIp = ipAddresses.IPAddress.ToString();
+                    LogServer.WriteLog("现在名称:" + entryName + "IP是" + oldIp, "changeIp");
                     LogServer.WriteLog("开始挂断", "changeIp");
                     oldConn.HangUp(10 * 1000);
                     //Thread.Sleep(hx.Mset.RasHangUpSleepTime);
@@ -50,38 +49,45 @@ namespace ChangeIPTool
                         goto HANDUPCON;
                     }
                     oldConn = null;
-                    LogServer.WriteLog("结束挂断" , "changeIp");
+                    LogServer.WriteLog("结束挂断", "changeIp");
                 }
                 catch (Exception ex)
                 {
                     LogServer.WriteLog("宽带连接挂断失败，" + ex.Message, "changeIp");
                 }
             }
-            CHANGEIP:
-            try
+            int error = 0;
+            do
             {
-                //  var dt = SqliteHelper.GetDataTable("select * from sys_config");
-                RasDialer rs = new RasDialer();
-                if (entryName == "")
+                try
                 {
-                    entryName = kdlj;// dt.Rows[0]["SC_NetEntryName"].ToString();
+                    //  var dt = SqliteHelper.GetDataTable("select * from sys_config");
+                    RasDialer rs = new RasDialer();
+                    if (entryName == "")
+                    {
+                        entryName = kdlj;// dt.Rows[0]["SC_NetEntryName"].ToString();
+                    }
+                    rs.EntryName = entryName;
+                    rs.PhoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.AllUsers);
+                    rs.Credentials = new NetworkCredential(userName, pwd);
+                    rs.Dial();
+                    rs.Dispose();
+                    LogServer.WriteLog("开始重新拨号", "changeIp");
+                    break;
                 }
-                rs.EntryName = entryName;
-                rs.PhoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.AllUsers);
-                rs.Credentials = new NetworkCredential(userName, pwd);
-                rs.Dial();
-                rs.Dispose();
-
-                LogServer.WriteLog("开始重新拨号", "changeIp");
-            }
-            catch (Exception ex)
+                catch (Exception ex)
+                {
+                    error++;
+                    LogServer.WriteLog("宽带重新拨号失败" + ex.Message, "changeIp");
+                    Thread.Sleep(30000);
+                }
+            } while (error < 5);
+            if (error >= 5)
             {
-                //addlog("宽带连接拨号失败，" + ex.Message);
-                //Thread.Sleep(hx.Mset.DialFaildSleepTime);
-                LogServer.WriteLog("宽带连接拨号失败" + ex.Message, "changeIp");
-                Thread.Sleep(30000);
-                goto CHANGEIP;
+                LogServer.WriteLog("宽带重新拨号5次数失败", "changeIp");
+                return;
             }
+
             if (oldConn != null)
             {
                 string ipAddresses;
@@ -127,7 +133,7 @@ namespace ChangeIPTool
             {
                 try
                 {
-                    RasIPInfo ipAddresses = (RasIPInfo) oldConn.GetProjectionInfo(RasProjectionType.IP);
+                    RasIPInfo ipAddresses = (RasIPInfo)oldConn.GetProjectionInfo(RasProjectionType.IP);
                     ipAddress = ipAddresses.IPAddress.ToString();
                 }
                 catch (Exception ex)
@@ -152,7 +158,7 @@ namespace ChangeIPTool
                 {
                     LogServer.WriteLog(ex, "changeIp");
                 }
-            
+
             }
         }
 

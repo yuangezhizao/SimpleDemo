@@ -58,7 +58,7 @@
             this.txtLinkName.Name = "txtLinkName";
             this.txtLinkName.Size = new System.Drawing.Size(130, 21);
             this.txtLinkName.TabIndex = 1;
-            this.txtLinkName.Text = "本地连接";
+            this.txtLinkName.Text = "宽带连接";
             // 
             // lblUserName
             // 
