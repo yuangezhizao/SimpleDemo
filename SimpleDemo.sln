@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servers", "Servers\Servers.csproj", "{D39BD966-C27E-4F8B-BC8E-8C9475D6A4BA}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeIPTool", "ChangeIPTool\ChangeIPTool.csproj", "{AAF19AE5-B30E-41E9-A092-75E6C3CA61A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderWinService", "SpiderWinService\SpiderWinService.csproj", "{8EDA8D74-93C5-4AE9-8500-9658E29BCE22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AamirKhan", "AamirKhan\AamirKhan.csproj", "{78E4CD8F-EA65-44DC-90C6-D4591B0264BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{8EDA8D74-93C5-4AE9-8500-9658E29BCE22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDA8D74-93C5-4AE9-8500-9658E29BCE22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDA8D74-93C5-4AE9-8500-9658E29BCE22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E4CD8F-EA65-44DC-90C6-D4591B0264BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E4CD8F-EA65-44DC-90C6-D4591B0264BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E4CD8F-EA65-44DC-90C6-D4591B0264BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E4CD8F-EA65-44DC-90C6-D4591B0264BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,5 +116,6 @@ Global
 		{A1767AD1-4DFE-4A03-AF8B-1BF85487ECDE} = {BD53575A-697C-49C2-A5A5-1CBC883FBD4D}
 		{AAF19AE5-B30E-41E9-A092-75E6C3CA61A6} = {BD53575A-697C-49C2-A5A5-1CBC883FBD4D}
 		{8EDA8D74-93C5-4AE9-8500-9658E29BCE22} = {BD53575A-697C-49C2-A5A5-1CBC883FBD4D}
+		{78E4CD8F-EA65-44DC-90C6-D4591B0264BC} = {BD53575A-697C-49C2-A5A5-1CBC883FBD4D}
 	EndGlobalSection
 EndGlobal
