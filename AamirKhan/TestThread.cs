@@ -12,7 +12,7 @@ namespace AamirKhan
     /// <summary>
     /// 下载线程对了.
     /// </summary>
-    public class DownLoadQueueThread : QueueThreadBase<ProInfo>
+    public class DownLoadQueueThread : QueueThreadPlusBase<ProInfo>
     {
 
       
@@ -33,13 +33,15 @@ namespace AamirKhan
         /// </summary>
         /// <param name="pendingId">列表ID</param>
         /// <returns></returns>
-        protected override DoWorkResult DoWork(ProInfo pendingId)
+        protected override DoWorkResult DoWork(int index,ProInfo pendingId)
         {
             try
             {
+                //MessageCenter.ListViewMsg(index, $"{pendingId.Id}正在执行中...");
                 LogServer.WriteLog(pendingId.Id+"正在执行中", "DownLoadQueueThread");
-                LogServer.WriteLog("JdCouponServer执行完成", "JdCoupon");
-                Thread.Sleep(1000 * 3);
+
+ 
+                Thread.Sleep(1000 *1);
                 //..........多线程处理....
                 return DoWorkResult.ContinueThread;//没有异常让线程继续跑..
 
