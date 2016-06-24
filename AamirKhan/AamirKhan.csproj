@@ -64,6 +64,9 @@
     <Compile Include="QueueThreadPlusBase.cs" />
     <Compile Include="QueueThreadBase.cs" />
     <Compile Include="TestThread.cs" />
+    <EmbeddedResource Include="Accent.resx">
+      <DependentUpon>Accent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Domain.resx">
       <DependentUpon>Domain.cs</DependentUpon>
     </EmbeddedResource>

@@ -59,6 +59,7 @@
     <Compile Include="account\UserAccount.cs" />
     <Compile Include="account\UserTransaction.cs" />
     <Compile Include="AddSiteProInfo.cs" />
+    <Compile Include="ApiConfig.cs" />
     <Compile Include="APIRequstHistroy.cs" />
     <Compile Include="BandInfo.cs" />
     <Compile Include="ClassInfo.cs" />

@@ -85,6 +85,7 @@
     <Compile Include="Account\OrderDb.cs" />
     <Compile Include="Account\UserAccountDb.cs" />
     <Compile Include="Account\UserTransactionDb.cs" />
+    <Compile Include="ApiConfigDB.cs" />
     <Compile Include="APIRequstHistroyDB.cs" />
     <Compile Include="ClassInfoDB.cs" />
     <Compile Include="CommentDB.cs" />
