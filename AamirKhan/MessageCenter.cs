@@ -19,13 +19,18 @@ namespace AamirKhan
         {
             _priceUpdataMsgbox = null;
             _priceUpdataErrbox = null;
+            _progressBar = null;
         }
         static RichTextBox _priceUpdataMsgbox;
         static RichTextBox _priceUpdataErrbox;
+        private static ProgressBar _progressBar;
         static ListView _listViewMsgBox;
         static readonly object PriceUpdataMsgSync = new object();//同步锁
         static readonly object PriceUpdataErrSync = new object();//同步锁
+        static readonly object progressBarSync = new object();//同步锁
         delegate void ShowMessageHandler(string msgText);
+
+        delegate void ProgressBarHandler(int addstep);
 
         private delegate void ListViewMessageHandler(int Itemid,  string msgText);
 
@@ -48,11 +53,34 @@ namespace AamirKhan
 
             }
         }
-
-        public static void RegisterMessageControl(RichTextBox control)
+        public static void progressBarControl(ProgressBar control)
         {
-            if (_priceUpdataMsgbox == null)
-                _priceUpdataMsgbox = control;
+            if (_progressBar == null)
+                _progressBar = control;
+        }
+
+        public static void progressBarShow(int currentIndex)
+        {
+            if (_progressBar.InvokeRequired)
+            {
+                _progressBar.Invoke(new ProgressBarHandler(progressBarShow), currentIndex);
+            }
+            else
+            {
+                lock (progressBarSync)
+                {
+                    _progressBar.Value = currentIndex;
+                }
+
+
+            }
+        }
+
+
+        public static void RegisterMessageControl(ProgressBar control)
+        {
+            if (_progressBar == null)
+                _progressBar = control;
         }
         public static void RegistErrorControl(RichTextBox control)
         {

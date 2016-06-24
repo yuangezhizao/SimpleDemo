@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Commons;
 
@@ -10,6 +11,7 @@ namespace AamirKhan
         public Domain()
         {
             InitializeComponent();
+            MessageCenter.progressBarControl(progressBar);
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -45,9 +47,12 @@ namespace AamirKhan
             dqt.addBindDate(prolist1);
             progressBar.Minimum = 0;
             progressBar.Step = 1;
-            progressBar.TabIndex = 1;
+            progressBar.Maximum =150;
 
         }
+
+
+
         public void AllCompleted(QueueThreadPlusBase<ProInfo>.CompetedEventArgs cea)
         {
             LogServer.WriteLog("所有任务已经完成");
@@ -55,8 +60,8 @@ namespace AamirKhan
 
         public void Onecompleted(int index,ProInfo pro, QueueThreadPlusBase<ProInfo>.CompetedEventArgs cea)
         {
-            progressBar.Value = cea.CompletedCount;
-            progressBar.Maximum = cea.QueueCount;
+            //progressBar.Value = cea.CompletedCount;
+            MessageCenter.progressBarShow(cea.CompletedCount);
             MessageCenter.ListViewMsg(index, pro.Id + "执行已经完成,总任务数量" + cea.QueueCount + "已完成" + cea.CompletedCount + "已完成" + cea.CompetedPrecent + "%");
             //LogServer.WriteLog(pro.Id+"执行已经完成,总任务数量"+cea.QueueCount+"已完成"+cea.CompletedCount+"已完成"+cea.CompetedPrecent+ "%");
         }
@@ -92,6 +97,15 @@ namespace AamirKhan
                 }
                 //MessageBox.Show(lstrow.SubItems[1].Text);
             }
+        }
+
+        private void AccentToolStripMenuItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //this.Hide();
+            //this.Enabled = false;
+            //MessageCenter.Dispose();
+            Accent pst = new Accent();
+            pst.ShowDialog();
         }
     }
 }

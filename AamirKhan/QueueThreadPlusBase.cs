@@ -43,7 +43,7 @@ namespace AamirKhan
         /// <summary>
         /// 线程列表
         /// </summary>
-        List<Thread> _mThreadList;
+        //List<Thread> _mThreadList;
         /// <summary>
         /// 完成队列个数
         /// </summary>
@@ -139,7 +139,7 @@ namespace AamirKhan
         /// </summary>
         private void InitThread()
         {
-            _mThreadList = new List<Thread>();
+            //_mThreadList = new List<Thread>();
             for (var i = 0; i < ThreadCount; i++)
             {
                 Task task = new Task(obj => InnerDoWork((int)obj), i);
@@ -195,7 +195,7 @@ namespace AamirKhan
                 lock (_mAllCompletedLock)
                 {
                     _mCompetedCount++;
-                    if (_mCompetedCount == _mThreadList.Count)
+                    if (_mCompetedCount == ThreadCount)
                     {
                         OnAllCompleted(new CompetedEventArgs() { CompetedPrecent = 100 });
                     }

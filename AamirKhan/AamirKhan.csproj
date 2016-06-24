@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accent.Designer.cs">
+      <DependentUpon>Accent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Domain.cs">
       <SubType>Form</SubType>
     </Compile>
