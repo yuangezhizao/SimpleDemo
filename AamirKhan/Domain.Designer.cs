@@ -35,10 +35,11 @@
             this.lblTotal = new System.Windows.Forms.Label();
             this.btnStop = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.lvTheadDetial = new System.Windows.Forms.ListView();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lvTheadDetial = new System.Windows.Forms.ListView();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,6 +105,21 @@
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // 设置ToolStripMenuItem
+            // 
+            this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AccentToolStripMenuItem});
+            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.设置ToolStripMenuItem.Text = "设置";
+            // 
+            // AccentToolStripMenuItem
+            // 
+            this.AccentToolStripMenuItem.Name = "AccentToolStripMenuItem";
+            this.AccentToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.AccentToolStripMenuItem.Text = "账户设置";
+            this.AccentToolStripMenuItem.Click += new System.EventHandler(this.AccentToolStripMenuItemToolStripMenuItem_Click);
+            // 
             // progressBar
             // 
             this.progressBar.Location = new System.Drawing.Point(0, 533);
@@ -119,26 +135,20 @@
             this.lvTheadDetial.TabIndex = 8;
             this.lvTheadDetial.UseCompatibleStateImageBehavior = false;
             // 
-            // 设置ToolStripMenuItem
+            // webBrowser
             // 
-            this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AccentToolStripMenuItem});
-            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.设置ToolStripMenuItem.Text = "设置";
-            // 
-            // AccentToolStripMenuItem
-            // 
-            this.AccentToolStripMenuItem.Name = "AccentToolStripMenuItem";
-            this.AccentToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.AccentToolStripMenuItem.Text = "账户设置";
-            this.AccentToolStripMenuItem.Click += new System.EventHandler(this.AccentToolStripMenuItemToolStripMenuItem_Click);
+            this.webBrowser.Location = new System.Drawing.Point(0, 319);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.Size = new System.Drawing.Size(518, 208);
+            this.webBrowser.TabIndex = 9;
             // 
             // Domain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(518, 556);
+            this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.lvTheadDetial);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnStop);
@@ -172,6 +182,7 @@
         private System.Windows.Forms.ListView lvTheadDetial;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AccentToolStripMenuItem;
+        private System.Windows.Forms.WebBrowser webBrowser;
     }
 }
 

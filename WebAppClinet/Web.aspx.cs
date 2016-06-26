@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using BLL.Sprider.Stock;
 using FastVerCode;
+using Mode;
 using Mode.account;
 
 namespace WebAppClinet
@@ -36,7 +37,7 @@ namespace WebAppClinet
             test();
             //new SpriderSystem().SaveAllSiteCate();
             //new SpriderSystem().LoadBand();
-           //new SpriderSystem().Start();
+            //new SpriderSystem().Start();
             //new SinalweiboBll().write("aaa");
             //new SiteClassBll().UpdatemmbsiteClass(10);
             //test();
@@ -48,6 +49,8 @@ namespace WebAppClinet
             //pingan();
             //test1();
             //yikeman();
+
+            
         }
 
         
@@ -66,17 +69,18 @@ namespace WebAppClinet
 
         private void test()
         {
-            //string feiniuurl = "https://reg.feiniu.com/patcha/image";
-            //WebClient myWebClient = new WebClient();
-            //var imge= myWebClient.DownloadData(feiniuurl);
-            //var filename= ImageServer.DoloadImg(imge, "ddd");
-          
-            //string wlfile="";
+            string feiniuurl = "https://reg.feiniu.com/patcha/image";
+            WebClient myWebClient = new WebClient();
+            var imge = myWebClient.DownloadData(feiniuurl);
+            var filename = ImageServer.DoloadImg(imge, "ddd");
 
-            //string key1=  VerCode.GetUserInfo("maiden","52zhuzhu");
-            //string returnMess = VerCode.RecByte_A(imge, imge.Length, "maiden", "52zhuzhu", "");
+            string wlfile = "";
+
+            string key1 = VerCode.GetUserInfo("maiden", "52zhuzhu");
+            string returnMess = VerCode.RecByte_A(imge, imge.Length, "maiden", "52zhuzhu", "");
 
             new BenlaiShenhuo().RegionUser();
+
             return;
             string key = "LzMuY";
             string url = "http://api.hellotrue.com/api/do.php?action=loginIn&name=api-rmm0nm29&password=62415109";

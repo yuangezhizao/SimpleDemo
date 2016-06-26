@@ -62,6 +62,7 @@
     <Compile Include="Account\OrderBll.cs" />
     <Compile Include="Account\UserAccountBll.cs" />
     <Compile Include="Account\UserTransactionBll.cs" />
+    <Compile Include="ApiConfigBll.cs" />
     <Compile Include="BenlaiShenhuo.cs" />
     <Compile Include="ClassInfoBll.cs" />
     <Compile Include="CommentBll.cs" />

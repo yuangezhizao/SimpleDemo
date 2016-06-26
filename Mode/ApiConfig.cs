@@ -8,9 +8,11 @@ namespace Mode
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
-        public string AppId { get; set; }
-        public string AppName { get; set; }
-        public string AppSecret { get; set; }
+        public string ApiId { get; set; }
+        public string ApiSupplier { get; set; }
+        public string ApiUserName { get; set; }
+        public string ApiUserPwd { get; set; }
+        public string ApiSecret { get; set; }
         public string RequestUrl { get; set; }
         public string Token { get; set; }
         public string CallBackUrl { get; set; }
