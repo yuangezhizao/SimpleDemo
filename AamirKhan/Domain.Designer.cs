@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnStart = new System.Windows.Forms.Button();
             this.lblTheadCount = new System.Windows.Forms.Label();
             this.txtTheadCount = new System.Windows.Forms.TextBox();
@@ -37,9 +38,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.webBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lvTheadDetial = new System.Windows.Forms.ListView();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.rtbMsg = new System.Windows.Forms.RichTextBox();
+            this.SpiderTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,7 +101,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.设置ToolStripMenuItem});
+            this.设置ToolStripMenuItem,
+            this.webBrowserToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(518, 25);
@@ -120,6 +124,13 @@
             this.AccentToolStripMenuItem.Text = "账户设置";
             this.AccentToolStripMenuItem.Click += new System.EventHandler(this.AccentToolStripMenuItemToolStripMenuItem_Click);
             // 
+            // webBrowserToolStripMenuItem
+            // 
+            this.webBrowserToolStripMenuItem.Name = "webBrowserToolStripMenuItem";
+            this.webBrowserToolStripMenuItem.Size = new System.Drawing.Size(80, 21);
+            this.webBrowserToolStripMenuItem.Text = "内置浏览器";
+            this.webBrowserToolStripMenuItem.Click += new System.EventHandler(this.webBrowserToolStripMenuItem_Click);
+            // 
             // progressBar
             // 
             this.progressBar.Location = new System.Drawing.Point(0, 533);
@@ -135,20 +146,24 @@
             this.lvTheadDetial.TabIndex = 8;
             this.lvTheadDetial.UseCompatibleStateImageBehavior = false;
             // 
-            // webBrowser
+            // rtbMsg
             // 
-            this.webBrowser.Location = new System.Drawing.Point(0, 319);
-            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(518, 208);
-            this.webBrowser.TabIndex = 9;
+            this.rtbMsg.Location = new System.Drawing.Point(2, 322);
+            this.rtbMsg.Name = "rtbMsg";
+            this.rtbMsg.Size = new System.Drawing.Size(516, 205);
+            this.rtbMsg.TabIndex = 9;
+            this.rtbMsg.Text = "";
+            // 
+            // SpiderTimer
+            // 
+            this.SpiderTimer.Tick += new System.EventHandler(this.SpiderTimer_Tick);
             // 
             // Domain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(518, 556);
-            this.Controls.Add(this.webBrowser);
+            this.Controls.Add(this.rtbMsg);
             this.Controls.Add(this.lvTheadDetial);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnStop);
@@ -160,7 +175,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Domain";
-            this.Text = "Form1";
+            this.Text = "AamirKhan";
             this.Load += new System.EventHandler(this.Domain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -182,7 +197,9 @@
         private System.Windows.Forms.ListView lvTheadDetial;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AccentToolStripMenuItem;
-        private System.Windows.Forms.WebBrowser webBrowser;
+        private System.Windows.Forms.RichTextBox rtbMsg;
+        private System.Windows.Forms.ToolStripMenuItem webBrowserToolStripMenuItem;
+        private System.Windows.Forms.Timer SpiderTimer;
     }
 }
 

@@ -69,6 +69,12 @@ namespace WebAppClinet
 
         private void test()
         {
+            string loginurl =
+                "https://passport.jd.com/uc/loginService?uuid=bc069405-c238-4af6-90b4-98162ea88ae9&&r=0.376717114952144&version=2015";
+            //http://a.jd.com/coupons.html
+            var loginpage =HtmlAnalysis.Gethtmlcode(loginurl);
+
+
             string feiniuurl = "https://reg.feiniu.com/patcha/image";
             WebClient myWebClient = new WebClient();
             var imge = myWebClient.DownloadData(feiniuurl);

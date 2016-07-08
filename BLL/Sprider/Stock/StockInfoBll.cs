@@ -151,6 +151,7 @@ namespace BLL.Sprider.Stock
 
         public void GetStockDetial()
         {
+            LogServer.WriteLog("dayRepord start..." + "stock");
             var skdb = new StockinfoDB();
             var allskif = skdb.GetAllinfo();
             List<StockDayReport> list = new List<StockDayReport>();
@@ -224,7 +225,7 @@ namespace BLL.Sprider.Stock
                 new StockDayReportDB().AddStockinfo(list);
                 list.Clear();
             }
-
+            LogServer.WriteLog("dayRepord finshed..."+"stock");
 
         }
     }

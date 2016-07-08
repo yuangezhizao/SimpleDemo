@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BLL;
 using Commons;
 
 namespace AamirKhan
@@ -11,7 +12,10 @@ namespace AamirKhan
         public Domain()
         {
             InitializeComponent();
-            MessageCenter.progressBarControl(progressBar);
+            MessageCenter.ProgressBarControl(progressBar);
+            MessageCenter.RegisterMessageControl(rtbMsg);
+            SpiderTimer.Interval = 1000*60;
+            SpiderTimer.Start();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -61,8 +65,11 @@ namespace AamirKhan
         public void Onecompleted(int index,ProInfo pro, QueueThreadPlusBase<ProInfo>.CompetedEventArgs cea)
         {
             //progressBar.Value = cea.CompletedCount;
-            MessageCenter.progressBarShow(cea.CompletedCount);
-            MessageCenter.ListViewMsg(index, pro.Id + "执行已经完成,总任务数量" + cea.QueueCount + "已完成" + cea.CompletedCount + "已完成" + cea.CompetedPrecent + "%");
+            MessageCenter.ProgressBarShow(cea.CompletedCount);
+            var msg = pro.Id + "执行已经完成,总任务数量" + cea.QueueCount + "已完成" + cea.CompletedCount + "已完成" +
+                      cea.CompetedPrecent + "%";
+            MessageCenter.ListViewMsg(index, msg);
+            MessageCenter.ShowBox(msg,2);
             //LogServer.WriteLog(pro.Id+"执行已经完成,总任务数量"+cea.QueueCount+"已完成"+cea.CompletedCount+"已完成"+cea.CompetedPrecent+ "%");
         }
 
@@ -75,7 +82,7 @@ namespace AamirKhan
             lvTheadDetial.MultiSelect = false; 
             lvTheadDetial.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             lvTheadDetial.Columns.Add("编号", 30, HorizontalAlignment.Center);
-            lvTheadDetial.Columns.Add("执行情况", 600, HorizontalAlignment.Left);
+            lvTheadDetial.Columns.Add("执行情况", 400, HorizontalAlignment.Left);
             lvTheadDetial.Columns.Add("时间", 80, HorizontalAlignment.Left);
             lvTheadDetial.MouseDown += threadstatus_MouseDown;
             MessageCenter.RegisterListViewMsgBoxControl(lvTheadDetial);
@@ -106,6 +113,23 @@ namespace AamirKhan
             //MessageCenter.Dispose();
             Accent pst = new Accent();
             pst.ShowDialog();
+        }
+
+        private void webBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //this.Hide();
+            //this.Enabled = false;
+            //MessageCenter.Dispose();
+            webBrowserForm pst = new webBrowserForm();
+            pst.ShowDialog();
+        }
+
+        private void SpiderTimer_Tick(object sender, EventArgs e)
+        {
+            if (DateTime.Now.Hour == 15 && DateTime.Now.Minute == 5)
+            {
+                new SiteFactory().StockInfoManager.GetALlStockInfo();
+            }
         }
     }
 }

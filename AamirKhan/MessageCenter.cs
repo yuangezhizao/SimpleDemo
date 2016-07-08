@@ -53,17 +53,17 @@ namespace AamirKhan
 
             }
         }
-        public static void progressBarControl(ProgressBar control)
+        public static void ProgressBarControl(ProgressBar control)
         {
             if (_progressBar == null)
                 _progressBar = control;
         }
 
-        public static void progressBarShow(int currentIndex)
+        public static void ProgressBarShow(int currentIndex)
         {
             if (_progressBar.InvokeRequired)
             {
-                _progressBar.Invoke(new ProgressBarHandler(progressBarShow), currentIndex);
+                _progressBar.Invoke(new ProgressBarHandler(ProgressBarShow), currentIndex);
             }
             else
             {
@@ -77,10 +77,10 @@ namespace AamirKhan
         }
 
 
-        public static void RegisterMessageControl(ProgressBar control)
+        public static void RegisterMessageControl(RichTextBox control)
         {
-            if (_progressBar == null)
-                _progressBar = control;
+            if (_priceUpdataMsgbox == null)
+                _priceUpdataMsgbox = control;
         }
         public static void RegistErrorControl(RichTextBox control)
         {

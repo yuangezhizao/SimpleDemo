@@ -37,11 +37,7 @@ namespace AamirKhan
         {
             try
             {
-                //MessageCenter.ListViewMsg(index, $"{pendingId.Id}正在执行中...");
                 LogServer.WriteLog(pendingId.Id+"正在执行中", "DownLoadQueueThread");
-
-
-
                 Thread.Sleep(1000 *1);
                 //..........多线程处理....
                 return DoWorkResult.ContinueThread;//没有异常让线程继续跑..

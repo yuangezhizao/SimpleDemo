@@ -64,6 +64,12 @@
     <Compile Include="QueueThreadPlusBase.cs" />
     <Compile Include="QueueThreadBase.cs" />
     <Compile Include="TestThread.cs" />
+    <Compile Include="webBrowserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="webBrowserForm.Designer.cs">
+      <DependentUpon>webBrowserForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Accent.resx">
       <DependentUpon>Accent.cs</DependentUpon>
     </EmbeddedResource>
@@ -80,6 +86,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="webBrowserForm.resx">
+      <DependentUpon>webBrowserForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -91,7 +100,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">
