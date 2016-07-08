@@ -21,6 +21,22 @@ namespace DataBase.Stock
             }
         }
 
+        public void AddStockinfo(StockDayReport item)
+        {
+            try
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    db.Insert(item);
+                }
+            }
+            catch (Exception ex1)
+            {
+
+                LogServer.WriteLog(ex1.Message, "DBError");
+            }
+        }
+
         public void AddStockinfo(List<StockDayReport> list)
         {
 

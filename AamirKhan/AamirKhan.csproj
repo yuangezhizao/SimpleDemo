@@ -117,6 +117,10 @@
       <Project>{3aa9c9ff-780b-4d51-b62c-23e6c8b379b5}</Project>
       <Name>Mode</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SpriderProxy\SpriderProxy.csproj">
+      <Project>{763e72f5-f60f-4311-825a-08dee502604a}</Project>
+      <Name>SpriderProxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

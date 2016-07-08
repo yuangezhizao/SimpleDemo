@@ -61,7 +61,7 @@ namespace DataBase.Stock
             {
                 using (var db = _dbFactory.OpenDbConnection())
                 {
-                  return  db.Select<StockInfo>().ToList();
+                    return db.Select<StockInfo>().ToList();
                 }
             }
             catch (Exception ex)

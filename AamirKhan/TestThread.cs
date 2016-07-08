@@ -5,14 +5,16 @@ using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BLL.Sprider.Stock;
 using Commons;
+using Mode;
 
 namespace AamirKhan
 {
     /// <summary>
     /// 下载线程对了.
     /// </summary>
-    public class DownLoadQueueThread : QueueThreadPlusBase<ProInfo>
+    public class DownLoadQueueThread : QueueThreadPlusBase<StockInfo>
     {
 
       
@@ -21,9 +23,10 @@ namespace AamirKhan
         /// 
         /// </summary>
         /// <param name="list">下载的列表ID</param>
-        public DownLoadQueueThread(IEnumerable<ProInfo> list) : base(list)
+        public DownLoadQueueThread(IEnumerable<StockInfo> list) : base(list)
         {
-        
+            
+            //var allskif = new StockInfoBll().GetAllinfo();
         }
 
         
@@ -33,10 +36,11 @@ namespace AamirKhan
         /// </summary>
         /// <param name="pendingId">列表ID</param>
         /// <returns></returns>
-        protected override DoWorkResult DoWork(int index,ProInfo pendingId)
+        protected override DoWorkResult DoWork(int index, StockInfo pendingId)
         {
             try
             {
+               new StockInfoBll().GetStockDetial(pendingId);
                 LogServer.WriteLog(pendingId.Id+"正在执行中", "DownLoadQueueThread");
                 Thread.Sleep(1000 *1);
                 //..........多线程处理....

@@ -69,6 +69,7 @@ namespace WebAppClinet
 
         private void test()
         {
+            new SiteFactory().StockInfoManager.GetALlStockInfo();
             string loginurl =
                 "https://passport.jd.com/uc/loginService?uuid=bc069405-c238-4af6-90b4-98162ea88ae9&&r=0.376717114952144&version=2015";
             //http://a.jd.com/coupons.html

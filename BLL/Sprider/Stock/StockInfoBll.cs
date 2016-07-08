@@ -149,6 +149,73 @@ namespace BLL.Sprider.Stock
             }
         }
 
+        public List<StockInfo> GetAllinfo()
+        {
+            return new StockinfoDB().GetAllinfo();
+        }
+
+        public void GetStockDetial(StockInfo info)
+        {
+            var cnum = RegGroupsX<string>(info.StockNo, "(?<x>[A-Za-z]{2})");
+            var num = RegGroupsX<string>(info.StockNo, "(?<x>\\d+)");
+            var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
+            var mainurl = $"http://www.windin.com/home/stock/html/{num}.{cnum.ToUpper()}.shtml?&t=1&q={num}";
+            var dpage = HtmlAnalysis.Gethtmlcode(durl);
+            var mpage = HtmlAnalysis.Gethtmlcode(mainurl);
+            string hy = (RegGroupsX<string>(mpage, "相关行业板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+            string dq = (RegGroupsX<string>(mpage, "相关地域板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+            string ix = (RegGroupsX<string>(mpage, "所属指数成分</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+
+            var dconn = RegGroupsX<string>(dpage, "(?<x>\\{.*?\\})");
+            if (string.IsNullOrEmpty(dconn))
+                return;
+            var winItem = JObject.Parse(dconn);
+
+            try
+            {
+                StockDayReport sdr = new StockDayReport
+                {
+                    StockNo = num,
+                    StockName = info.StockName,
+                    Amount = winItem["Amount"].Value<float>(),
+                    CurrentPrice = winItem["Price"].Value<decimal>(),
+                    MarketValue = winItem["MarketValue"].Value<float>(),
+                    Maxprice = winItem["High"].Value<decimal>(),
+                    Minprice = winItem["Low"].Value<decimal>(),
+                    Volume = winItem["Volumn"].Value<int>(),
+                    Exchange = winItem["Exchange"].Value<float>(),
+                    Pe = winItem["PE"].Value<decimal>(),
+                    Pb = winItem["PB"].Value<decimal>(),
+                    Range = winItem["Range"].Value<float>(),
+                    RangeRatio = winItem["RangeRatio"].Value<float>(),
+                    ZhenFu = winItem["ZhenFu"].Value<decimal>(),
+                    OpenPrice = winItem["Open"].Value<decimal>(),
+                    Zdf5 = winItem["zdf5"].Value<float>(),
+                    Zdf10 = winItem["zdf10"].Value<float>(),
+                    Zdf20 = winItem["zdf20"].Value<float>(),
+                    Zdf60 = winItem["zdf60"].Value<float>(),
+                    Zdf120 = winItem["zdf120"].Value<float>(),
+                    Zdf250 = winItem["zdf250"].Value<float>(),
+                    PElyr = winItem["PElyr"].Value<decimal>(),
+                    IndexNumber = ix,
+                    Industry = hy,
+                    Area = dq,
+                    IsStop = winItem["IsStop"].Value<bool>(),
+                    CreateDate = DateTime.Now.Date
+
+                };
+
+                new StockDayReportDB().AddStockinfo(sdr);
+
+            }
+
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex);
+                
+            }
+        }
+
         public void GetStockDetial()
         {
             LogServer.WriteLog("dayRepord start..." + "stock");

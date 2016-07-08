@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
+using BLL.Sprider.Stock;
 using Commons;
+using Mode;
 
 namespace AamirKhan
 {
@@ -20,13 +22,18 @@ namespace AamirKhan
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            List<ProInfo> prolist = new List<ProInfo>();
-            for (int i = 0; i < 50; i++)
-            {
-                prolist.Add(new ProInfo { Id = i });
-            }
+            //List<ProInfo> prolist = new List<ProInfo>();
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    prolist.Add(new ProInfo { Id = i });
+            //}
+            var prolist = new StockInfoBll().GetAllinfo();
             int count;
             int.TryParse(txtTheadCount.Text, out count);
+
+            progressBar.Maximum = prolist.Count;
+            txTotalTask.Text = progressBar.Maximum.ToString();
+
             lvTheadDetial.Items.Clear();
             for (var i = 0; i < count; i++)
             {
@@ -43,30 +50,30 @@ namespace AamirKhan
             dqt.OneCompleted += Onecompleted;
             dqt.Start();
 
-            List<ProInfo> prolist1 = new List<ProInfo>();
-            for (int i = 0; i < 100; i++)
-            {
-                prolist1.Add(new ProInfo { Id = i });
-            }
-            dqt.addBindDate(prolist1);
+            //List<ProInfo> prolist1 = new List<ProInfo>();
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    prolist1.Add(new ProInfo { Id = i });
+            //}
+            //dqt.addBindDate(prolist1);
             progressBar.Minimum = 0;
             progressBar.Step = 1;
-            progressBar.Maximum =150;
+            //progressBar.Maximum =150;
 
         }
 
 
 
-        public void AllCompleted(QueueThreadPlusBase<ProInfo>.CompetedEventArgs cea)
+        public void AllCompleted(QueueThreadPlusBase<StockInfo>.CompetedEventArgs cea)
         {
             LogServer.WriteLog("所有任务已经完成");
         }
 
-        public void Onecompleted(int index,ProInfo pro, QueueThreadPlusBase<ProInfo>.CompetedEventArgs cea)
+        public void Onecompleted(int index, StockInfo pro, QueueThreadPlusBase<StockInfo>.CompetedEventArgs cea)
         {
             //progressBar.Value = cea.CompletedCount;
             MessageCenter.ProgressBarShow(cea.CompletedCount);
-            var msg = pro.Id + "执行已经完成,总任务数量" + cea.QueueCount + "已完成" + cea.CompletedCount + "已完成" +
+            var msg =  pro.StockNo + "执行已经完成,总任务数量" + cea.QueueCount + "已完成" + cea.CompletedCount + "已完成" +
                       cea.CompetedPrecent + "%";
             MessageCenter.ListViewMsg(index, msg);
             MessageCenter.ShowBox(msg,2);
