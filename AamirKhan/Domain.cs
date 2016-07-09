@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
 using BLL.Sprider.Stock;
@@ -44,7 +42,7 @@ namespace AamirKhan
                 lvTheadDetial.Items.Add(li);
             }
 
-            DownLoadQueueThread dqt = new DownLoadQueueThread(prolist);
+            StockInfoThread dqt = new StockInfoThread(prolist);
             dqt.ThreadCount = count;
             dqt.AllCompleted += AllCompleted;
             dqt.OneCompleted += Onecompleted;
@@ -105,9 +103,9 @@ namespace AamirKhan
                     ListViewItem lstrow = lvTheadDetial.GetItemAt(mMbRpt.X, mMbRpt.Y);
                     Clipboard.SetDataObject(lstrow.SubItems[1].Text);
                 }
-                catch
+                catch(Exception ex)
                 {
-
+                    LogServer.WriteLog(ex);
                 }
                 //MessageBox.Show(lstrow.SubItems[1].Text);
             }
@@ -133,10 +131,21 @@ namespace AamirKhan
 
         private void SpiderTimer_Tick(object sender, EventArgs e)
         {
-            if (DateTime.Now.Hour == 15 && DateTime.Now.Minute == 5)
+            if (dtpTime.Text != @"0:00:00")
             {
-                new SiteFactory().StockInfoManager.GetALlStockInfo();
+                if (DateTime.Now.Hour == dtpTime.Value.Hour && DateTime.Now.Hour == dtpTime.Value.Minute)
+                {
+                    if(DateTime.Now.DayOfWeek== DayOfWeek.Saturday|| DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                        return;
+                    new SiteFactory().StockInfoManager.GetALlStockInfo();
+                }
             }
+          
+        }
+
+        private void cbxTime_CheckedChanged(object sender, EventArgs e)
+        {
+            SpiderTimer.Start();
         }
     }
 }

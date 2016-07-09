@@ -14,7 +14,7 @@ namespace AamirKhan
     /// <summary>
     /// 下载线程对了.
     /// </summary>
-    public class DownLoadQueueThread : QueueThreadPlusBase<StockInfo>
+    public class StockInfoThread : QueueThreadPlusBase<StockInfo>
     {
 
       
@@ -23,10 +23,10 @@ namespace AamirKhan
         /// 
         /// </summary>
         /// <param name="list">下载的列表ID</param>
-        public DownLoadQueueThread(IEnumerable<StockInfo> list) : base(list)
+        public StockInfoThread(IEnumerable<StockInfo> list) : base(list)
         {
-            
-            //var allskif = new StockInfoBll().GetAllinfo();
+
+           
         }
 
         

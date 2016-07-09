@@ -205,7 +205,7 @@ namespace BLL.Sprider.Stock
 
                 };
 
-                new StockDayReportDB().AddStockinfo(sdr);
+                new StockDayReportDb().AddStockinfo(sdr);
 
             }
 
@@ -275,7 +275,7 @@ namespace BLL.Sprider.Stock
                     list.Add(sdr);
                     if (list.Count == 200)
                     {
-                        new StockDayReportDB().AddStockinfo(list);
+                        new StockDayReportDb().AddStockinfo(list);
                         list.Clear();
                     }
 
@@ -289,7 +289,7 @@ namespace BLL.Sprider.Stock
 
             if (list.Count >0)
             {
-                new StockDayReportDB().AddStockinfo(list);
+                new StockDayReportDb().AddStockinfo(list);
                 list.Clear();
             }
             LogServer.WriteLog("dayRepord finshed..."+"stock");

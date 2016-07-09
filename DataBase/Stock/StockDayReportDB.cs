@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using Commons;
 using Mode;
-using Mode.account;
 using ServiceStack.OrmLite;
 
 namespace DataBase.Stock
 {
-    public class StockDayReportDB : OrmLiteFactory
+    public class StockDayReportDb : OrmLiteFactory
     {
-        private static OrmLiteConnectionFactory _dbFactory;
-        public StockDayReportDB()
+        public static OrmLiteConnectionFactory DbFactory;
+        public StockDayReportDb()
         {
-            _dbFactory = new OrmLiteConnectionFactory(ZnmDBConnectionString,SqlServerDialect.Provider);
-            using (var db = _dbFactory.OpenDbConnection())
+            if (DbFactory == null)
+                DbFactory = new OrmLiteConnectionFactory(ZnmDBConnectionString, SqlServerDialect.Provider);
+            using (var db = DbFactory.OpenDbConnection())
             {
                 db.CreateTable<StockDayReport>();
             }
@@ -23,24 +23,31 @@ namespace DataBase.Stock
 
         public void AddStockinfo(StockDayReport item)
         {
-            try
+            int error = 0;
+            do
             {
-                using (var db = _dbFactory.OpenDbConnection())
+                try
                 {
-                    db.Insert(item);
+                    using (var db = DbFactory.OpenDbConnection())
+                    {
+                        db.Insert(item);
+                    }
+                    break;
                 }
-            }
-            catch (Exception ex1)
-            {
-
-                LogServer.WriteLog(ex1.Message, "DBError");
-            }
+                catch (Exception ex1)
+                {
+                    error++;
+                    Thread.Sleep(10000);
+                    LogServer.WriteLog(ex1.Message, "DBError");
+                }
+            } while (error<4);
+       
         }
 
         public void AddStockinfo(List<StockDayReport> list)
         {
 
-            using (var db = _dbFactory.OpenDbConnection())
+            using (var db = DbFactory.OpenDbConnection())
             {
 
                 try
@@ -75,7 +82,7 @@ namespace DataBase.Stock
         {
             try
             {
-                using (var db = _dbFactory.OpenDbConnection())
+                using (var db = DbFactory.OpenDbConnection())
                 {
                   return  db.Select<StockDayReport>().ToList();
                 }

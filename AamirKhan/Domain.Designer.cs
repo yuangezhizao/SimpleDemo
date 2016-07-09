@@ -43,12 +43,14 @@
             this.lvTheadDetial = new System.Windows.Forms.ListView();
             this.rtbMsg = new System.Windows.Forms.RichTextBox();
             this.SpiderTimer = new System.Windows.Forms.Timer(this.components);
+            this.dtpTime = new System.Windows.Forms.DateTimePicker();
+            this.cbxTime = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(314, 27);
+            this.btnStart.Location = new System.Drawing.Point(330, 32);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
@@ -75,7 +77,7 @@
             // 
             // txTotalTask
             // 
-            this.txTotalTask.Location = new System.Drawing.Point(204, 29);
+            this.txTotalTask.Location = new System.Drawing.Point(204, 28);
             this.txTotalTask.Name = "txTotalTask";
             this.txTotalTask.Size = new System.Drawing.Size(55, 21);
             this.txTotalTask.TabIndex = 4;
@@ -91,7 +93,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(411, 27);
+            this.btnStop.Location = new System.Drawing.Point(431, 32);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 5;
@@ -140,9 +142,9 @@
             // 
             // lvTheadDetial
             // 
-            this.lvTheadDetial.Location = new System.Drawing.Point(0, 74);
+            this.lvTheadDetial.Location = new System.Drawing.Point(0, 91);
             this.lvTheadDetial.Name = "lvTheadDetial";
-            this.lvTheadDetial.Size = new System.Drawing.Size(518, 245);
+            this.lvTheadDetial.Size = new System.Drawing.Size(518, 228);
             this.lvTheadDetial.TabIndex = 8;
             this.lvTheadDetial.UseCompatibleStateImageBehavior = false;
             // 
@@ -158,11 +160,34 @@
             // 
             this.SpiderTimer.Tick += new System.EventHandler(this.SpiderTimer_Tick);
             // 
+            // dtpTime
+            // 
+            this.dtpTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpTime.Location = new System.Drawing.Point(60, 60);
+            this.dtpTime.Name = "dtpTime";
+            this.dtpTime.ShowUpDown = true;
+            this.dtpTime.Size = new System.Drawing.Size(62, 21);
+            this.dtpTime.TabIndex = 10;
+            this.dtpTime.Value = new System.DateTime(2016, 7, 9, 0, 0, 0, 0);
+            // 
+            // cbxTime
+            // 
+            this.cbxTime.AutoSize = true;
+            this.cbxTime.Location = new System.Drawing.Point(135, 60);
+            this.cbxTime.Name = "cbxTime";
+            this.cbxTime.Size = new System.Drawing.Size(72, 16);
+            this.cbxTime.TabIndex = 11;
+            this.cbxTime.Text = "定时执行";
+            this.cbxTime.UseVisualStyleBackColor = true;
+            this.cbxTime.CheckedChanged += new System.EventHandler(this.cbxTime_CheckedChanged);
+            // 
             // Domain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(518, 556);
+            this.Controls.Add(this.cbxTime);
+            this.Controls.Add(this.dtpTime);
             this.Controls.Add(this.rtbMsg);
             this.Controls.Add(this.lvTheadDetial);
             this.Controls.Add(this.progressBar);
@@ -200,6 +225,8 @@
         private System.Windows.Forms.RichTextBox rtbMsg;
         private System.Windows.Forms.ToolStripMenuItem webBrowserToolStripMenuItem;
         private System.Windows.Forms.Timer SpiderTimer;
+        private System.Windows.Forms.DateTimePicker dtpTime;
+        private System.Windows.Forms.CheckBox cbxTime;
     }
 }
 
