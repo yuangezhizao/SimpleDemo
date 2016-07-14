@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Text.RegularExpressions;
 using Commons;
 using DataBase;
@@ -20,11 +20,39 @@ namespace BLL.Sprider.classInfo
             Baseinfo = new SiteInfoDB().SiteById(161);
         }
 
+        private static CookieContainer _cookie;
+        private static CookieContainer Cookies
+        {
+            get
+            {
+                _cookie = new CookieContainer();
+                var ckdist = new Cookie
+                {
+                    Value = "CPG1_CS000016",
+                    Name = "C_dist",
+                    Domain = ".feiniu.com",
+                    Path = "/",
+                    Expires = DateTime.Now.AddMonths(1)
+                };
+                var ckdistarea = new Cookie
+                {
+                    Value = "S000016_310100_310113_3101130001",
+                    Name = "C_dist_area",
+                    Domain = ".feiniu.com",
+                    Path = "/",
+                    Expires = DateTime.Now.AddMonths(1)
+                };
+                _cookie.Add(ckdist);
+                _cookie.Add(ckdistarea);
+                return _cookie;
+            }
+        }
+
 
         public void SaveAllSiteClass()
         {
              HasBindClasslist = new SiteClassInfoDB().getAllSiteCatInfo(Baseinfo.SiteId);
-             string directoryHtml = HtmlAnalysis.Gethtmlcode("http://www.feiniu.com/sitemap");
+             string directoryHtml = HtmlAnalysis.Gethtmlcode("http://www.feiniu.com/sitemap", Cookies);
              directoryHtml = RegGroupsX<string>(directoryHtml, "<!-- 全部分类左侧-->(?<x>.*?)</section>");
 
              var list = RegGroupCollection(directoryHtml, "<a(?<x>.*?)</a>");
@@ -33,6 +61,10 @@ namespace BLL.Sprider.classInfo
                
                 string item = list[i].Groups["x"].Value;
                 string href = RegGroupsX<string>(item, "href=\"(?<x>.*?)\"");
+                if (href.IndexOf("category", StringComparison.Ordinal)==0)
+                {
+                    href = "http://www.feiniu.com/"+ href;
+                }
                 string proName = RegGroupsX<string>(item, " target=\"_blank\">(?<x>.*?)$");
                 if (href.Contains("market"))
                 {
@@ -92,6 +124,8 @@ namespace BLL.Sprider.classInfo
             {
                 try
                 {
+                    if(HasBindClasslist[i].Urlinfo.Contains("market"))
+                        continue;
                     if (HasBindClasslist[i].ClassId != "")
                         UpdateCat(HasBindClasslist[i]);
                 }
@@ -107,91 +141,85 @@ namespace BLL.Sprider.classInfo
 
         private void UpdateCat(SiteClassInfo siteClassInfo)
         {
-            string pageinfo = HtmlAnalysis.Gethtmlcode(siteClassInfo.Urlinfo);
 
-            string crumble = RegGroupsX<string>(pageinfo,
-                "<div class=\"item\">(?<x>.*?)<div class=\"search\">");
-            if (crumble == null)
+            string pageinfo = HtmlAnalysis.Gethtmlcode(siteClassInfo.Urlinfo, Cookies);
+
+            string fncatid = RegGroupsX<string>(pageinfo, " dsp_object.cate_id = \"(?<x>.*?)\"");
+            string one_cate = RegGroupsX<string>(pageinfo, " dsp_object.one_cate = \"(?<x>.*?)\"");
+            string two_cate = RegGroupsX<string>(pageinfo, " dsp_object.two_cate = \"(?<x>.*?)\"");
+            string three_cate = RegGroupsX<string>(pageinfo, " dsp_object.three_cate = \"(?<x>.*?)\"");
+            string four_cate = RegGroupsX<string>(pageinfo, " dsp_object.four_cate = \"(?<x>.*?)\"");
+            string parentName = "";
+            string catname = "";
+            if (siteClassInfo.ClassId != fncatid)
             {
                 LogServer.WriteLog(Baseinfo.SiteName + "分类抓取错误1\turl:" + siteClassInfo.Urlinfo, "AddClassError");
                 return;
             }
-            var crumblelist = RegGroupCollection(crumble,
-                "<a href=\"(?<x>.*?)\">(?<y>.*?)</a>");
-            siteClassInfo.TotalProduct = RegGroupsX<int>(pageinfo,
-                "<span>共(?<x>\\d+)个商品</span>");
-
-            if (crumblelist == null || crumblelist.Count == 0)
+            if (!string.IsNullOrEmpty(four_cate))
             {
-                LogServer.WriteLog(Baseinfo.SiteName + "分类抓取错误2\turl:" + siteClassInfo.Urlinfo, "AddClassError");
-                return;
+                catname = four_cate;
+                parentName = three_cate;
+            }
+            else if (!string.IsNullOrEmpty(three_cate))
+            {
+                catname = three_cate;
+                parentName = two_cate;
+            }
+            else if (!string.IsNullOrEmpty(two_cate))
+            {
+                catname = two_cate;
+                parentName = one_cate;
             }
 
-            string pcatUrl = "";
-            string pcatName = "";
-            string pcatId = "";
-            string classCrumble = "";
-   
-
-            for (int i = 0; i < crumblelist.Count; i++)
+            if (parentName != siteClassInfo.ClassName)
             {
-              
-                if (i > 0)
+                siteClassInfo.ParentName = parentName;
+            }
+
+            if (!string.IsNullOrEmpty(catname))
+            {
+                siteClassInfo.ClassName = catname;
+            }
+            var sonpage = RegGroupsX<string>(pageinfo, "<ul class=\"v-lst J-lst\">(?<x>.*?)</ul>");
+            var soncat = RegGroupCollection(sonpage, "category/(?<x>C\\d+)");
+            if (soncat != null && soncat.Count > 0)
+            {
+                var db = new mmbSiteClassInfoDB();
+                foreach (Match catinf in soncat)
                 {
-   
-                    pcatUrl = crumblelist[i-1].Groups["x"].Value;
-                    pcatName = crumblelist[i-1].Groups["y"].Value;
-                    if (pcatName != "首页" && pcatName != "飞牛网")
+                    var catitem = HasBindClasslist.FirstOrDefault(c => c.ClassId == catinf.Groups["x"].Value);
+                    if (catitem == null)
+                        continue;
+                    catitem.ParentUrl = siteClassInfo.Urlinfo;
+
+                    if (siteClassInfo.ClassId != catitem.ClassId)
                     {
-                        pcatId = RegGroupsX<string>(pcatUrl, "http://searchex.yixun.com/(?<x>.*?)-1-/|http://www.feiniu.com/market/(?<x>\\w+)$");
-                        if (!ValidCatId(pcatId))
-                            pcatId = "";
-                        if (!string.IsNullOrEmpty(pcatId))
-                        {
-                            classCrumble += pcatId + ",";
-                        }
-
+                        catitem.ParentClass = siteClassInfo.ClassId;
                     }
-                }
                
+                    if (siteClassInfo.ClassName != catitem.ClassName)
+                    {
+                        catitem.ParentName = siteClassInfo.ClassName;
+                    }
+                   
+                    db.UpdateSiteClass(catitem);
+                }
             }
-            string currentCat = RegGroupsX<string>(crumble, "<h1 style=\"display:inline;\"><a href=\"javascript:;\">(?<x>.*?)</a>");
-            if(!string.IsNullOrEmpty(currentCat))
-            {
-                siteClassInfo.ClassName = currentCat;
-            }
-
-            if ( siteClassInfo.ClassId.Contains('t'))
-            {
-             
-                siteClassInfo.ParentClass = siteClassInfo.ClassId.Substring(0, siteClassInfo.ClassId.IndexOf('t'));
-            }
-
-
-            siteClassInfo.ParentUrl = pcatUrl;
-            if (pcatName != "")
-            siteClassInfo.ParentName = pcatName;
-            if (pcatId!="")
-            siteClassInfo.ParentClass = pcatId;
+            
+            siteClassInfo.TotalProduct = RegGroupsX<int>(pageinfo, "<div class=\"t-s\">共<span>(?<x>\\d+)</span>个商品</div>");
             siteClassInfo.UpdateTime = DateTime.Now;
+            siteClassInfo.HasChild = HasBindClasslist.Exists(c => c.ParentClass == siteClassInfo.ClassId);
             new mmbSiteClassInfoDB().UpdateSiteClass(siteClassInfo);
 
-            var catlist = RegGroupsX<string>(pageinfo, "<div id=\"cata_list\">(?<x>.*?)<div class=\"cata_shop_right\" id=\"tracker_category\">");
+            var catlist =RegGroupCollection(pageinfo, "category/C(?<x>\\d+)");
 
-            var catidList = RegGroupCollection(catlist, "href=\"(?<x>.*?)\"");
-            foreach (Match item in catidList)
+            foreach (Match item in catlist)
             {
 
-                string tempCatUrl = item.Groups["x"].Value;
-                string tempCatId = RegGroupsX<string>(tempCatUrl, "http://www.feiniu.com/(category|market)/(?<x>\\w+)$");
-
-                if (tempCatId.Contains("t"))
-                {
-                    var tempids = tempCatId.Split('t');
-                    string catid = tempids[tempids.Length - 1];
-                    if (!HasBindClasslist.Exists(p => p.ClassId == catid))
-                        AddNode(tempCatUrl);
-                }
+                string tempid = item.Groups["x"].Value;
+                string tempurl=$"http://www.feiniu.com/category/C{tempid}";
+                AddNode(tempurl);
             }
             if (shopClasslist.Count > 0)
             {
@@ -200,45 +228,48 @@ namespace BLL.Sprider.classInfo
             }
 
         }
-
-
         private void  AddNode(string url)
         {
             string classid = RegGroupsX<string>(url, "category/(?<x>.*?)$");
-
             if (string.IsNullOrEmpty(classid))
                 return;
-
             if (HasBindClasslist.Exists(p => p.ClassId == classid))
                 return;
+            string pageinfo = HtmlAnalysis.Gethtmlcode(url, Cookies);
 
-            string pageinfo = HtmlAnalysis.Gethtmlcode(url);
-
-
-            string cromp = RegGroupsX<string>(pageinfo, "<div id=\"path\"(?<x>.*?)</div>");
-            int total = RegGroupsX<int>(pageinfo, "\"total\":(?<x>\\d+)");
+            string cromp = RegGroupsX<string>(pageinfo, "<!-- 面包屑 -->(?<x>.*?)<!-- 品牌 -->");
+            int total = RegGroupsX<int>(pageinfo, "<div class=\"t-s\">共<span>(?<x>\\d+)</span>个商品</div>");
             if (string.IsNullOrEmpty(cromp)) return;
 
-
-
-            var caplist = RegGroupCollection(cromp, "<li>(?<x>.*?)</li>");
+            var caplist = RegGroupCollection(cromp, "<div class=\"u-bar-item\">(?<x>.*?)</div>");
             if (caplist == null)
                 return;
-            int crompCount = caplist.Count;
+            string one_cate = RegGroupsX<string>(pageinfo, " dsp_object.one_cate = \"(?<x>.*?)\"");
+            string two_cate = RegGroupsX<string>(pageinfo, " dsp_object.two_cate = \"(?<x>.*?)\"");
+            string three_cate = RegGroupsX<string>(pageinfo, " dsp_object.three_cate = \"(?<x>.*?)\"");
+            string four_cate = RegGroupsX<string>(pageinfo, " dsp_object.four_cate = \"(?<x>.*?)\"");
+            string parentName = "";
+            string catname = "";
 
-
-            string parItem = caplist[crompCount-2].Groups["x"].Value;
-            string parentUrl = RegGroupsX<string>(parItem, "href=\"(?<x>.*?)\"");
-            string parentid = RegGroupsX<string>(parentUrl, "(market|category)/(?<x>.*?)$");
-            string parentName = RegGroupsX<string>(parItem, "\">(?<x>.*?)</a>");
-            string proName = RegGroupsX<string>(caplist[crompCount - 1].Groups["x"].Value, "\">(?<x>.*?)</h1>"); 
-          
-         
-          
+            if (!string.IsNullOrEmpty(four_cate))
+            {
+                catname = four_cate;
+                parentName = three_cate;
+            }
+            else if (!string.IsNullOrEmpty(three_cate))
+            {
+                catname = three_cate;
+                parentName = two_cate;
+            }
+            else if (!string.IsNullOrEmpty(two_cate))
+            {
+                catname = two_cate;
+                parentName = one_cate;
+            }
             SiteClassInfo cat = new SiteClassInfo
             {
-                ParentUrl = parentUrl,
-                ParentClass = parentid,
+                ParentUrl = "",
+                ParentClass = "",
                 ParentName = parentName,
                 TotalProduct = total,
                 Urlinfo = url,
@@ -250,17 +281,13 @@ namespace BLL.Sprider.classInfo
                 HasChild = false,
                 IsBind = false,
                 IsHide = false,
-                ClassName = proName,
+                ClassName = catname,
                 SiteId = Baseinfo.SiteId,
-                ClassCrumble = parentid,
-
+                ClassCrumble = "",
                 CreateDate = DateTime.Now
             };
             HasBindClasslist.Add(cat);
             shopClasslist.Add(cat);
-
-         
-
         }
 
         public void LoadBand()

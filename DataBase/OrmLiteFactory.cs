@@ -1,10 +1,4 @@
-﻿using ServiceStack.OrmLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DataBase
+﻿namespace DataBase
 {
    public class OrmLiteFactory
    {
@@ -12,36 +6,36 @@ namespace DataBase
 
        public static string ConnectionString
        {
-           get { 
+           get
+           {
                if (System.Configuration.ConfigurationManager.AppSettings["ConnectionString"] == null)
                {
                    return Connent;
                }
                return System.Configuration.ConfigurationManager.AppSettings["ConnectionString"];
-                }
-   
+           }
+
        }
 
-       public static string mmbDBConnectionString {
-           get { return System.Configuration.ConfigurationManager.AppSettings["mmbDB"]; }
-           set { mmbDBConnectionString = value; } }
+       public static string MmbDbConnectionString {
+           get { return System.Configuration.ConfigurationManager.AppSettings["mmbDB"]; } }
 
-       public static string mmbpriceDBConnectionString
+       public static string MmbpriceDbConnectionString
        {
            get { return System.Configuration.ConfigurationManager.AppSettings["mmbpriceDB"]; }
        }
 
-       public static string mmbUpdateTempEConnectionString
+       public static string MmbUpdateTempEConnectionString
        {
            get { return System.Configuration.ConfigurationManager.AppSettings["mmbUpdateTempEDB"]; }
        }
 
-       public static string SpiderDBConnectionString
+       public static string SpiderDbConnectionString
        {
            get { return System.Configuration.ConfigurationManager.AppSettings["LocalDB"]; }
-           set { mmbDBConnectionString = value; }
+          
        }
-       public static string ZnmDBConnectionString
+       public static string ZnmDbConnectionString
        {
            get { return System.Configuration.ConfigurationManager.AppSettings["znmDB"]; }
        }

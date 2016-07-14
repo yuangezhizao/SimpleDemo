@@ -15,7 +15,7 @@ namespace DataBase
         public List<ProLessInfo> GetProLessList()
         {
             string  Sqlstr="select top 100 id,spbh as SkuId,spname as ProName, spPrice as ProPrice , spurl as ProUrl,sppic as ProImg,youhui as Promotions,ppid as BrandID,pingpai as BrandName,HisZeKou as HisDiscounts,oldPrice as HisDiscounts,jiangjia as balance,minPrice as floorPrice,ziying as SellType,classid ,siteid,siteclass asSiteClassId, createdate from [dbo].[temp_PriceLess] with(nolock) order by id desc";
-            _dbFactory = new OrmLiteConnectionFactory(mmbUpdateTempEConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbUpdateTempEConnectionString, SqlServerDialect.Provider);
             try
             {
                 

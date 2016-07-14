@@ -13,7 +13,7 @@ namespace DataBase
         private static OrmLiteConnectionFactory _dbFactory;
         public ApiRequstHistroyDB()
         {
-            _dbFactory = new OrmLiteConnectionFactory(ZnmDBConnectionString,SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString,SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 db.CreateTable<APIRequstHistroy>();

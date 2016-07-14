@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using Commons;
 using Mode;
-using Mode.account;
 using ServiceStack.OrmLite;
 
 namespace DataBase.Stock
@@ -14,7 +13,8 @@ namespace DataBase.Stock
         private static OrmLiteConnectionFactory _dbFactory;
         public StockinfoDB()
         {
-            _dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
+            //_dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 db.CreateTable<StockInfo>();
@@ -57,18 +57,25 @@ namespace DataBase.Stock
 
         public List<StockInfo> GetAllinfo()
         {
-            try
+            int error = 0;
+            do
             {
-                using (var db = _dbFactory.OpenDbConnection())
+                try
                 {
-                    return db.Select<StockInfo>().ToList();
+                    using (var db = _dbFactory.OpenDbConnection())
+                    {
+                        return db.Select<StockInfo>().ToList();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                LogServer.WriteLog(ex);
-                return null;
-            }
+                catch (Exception ex)
+                {
+                    LogServer.WriteLog(ex);
+                    Thread.Sleep(10000);
+                    error++;
+                }
+            } while (error<5);
+            return null;
+
         }
     }
 }

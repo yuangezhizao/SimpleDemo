@@ -39,7 +39,7 @@ namespace DataBase
         public void getSithInfo()
         {
             List<SiteInfo> lits = null;
-            _dbFactory = new OrmLiteConnectionFactory(mmbDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 lits = db.SqlList<SiteInfo>("select id as SiteId,sitename as SiteName,sitelogo as SiteLogo,fk as Domain,smallLogo as smallLogo from JD_hzSite");

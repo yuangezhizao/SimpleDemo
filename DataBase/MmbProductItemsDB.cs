@@ -13,7 +13,7 @@ namespace DataBase
 
        public MmbProductItemsDB()
        {
-           _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+           _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
        }
 
        public List<MmbProductItems> GetItem(int minProid, int maxProid,string siteid)
@@ -49,7 +49,7 @@ namespace DataBase
 
        public int GetItemMaxId()
        {
-           _dbFactory = new OrmLiteConnectionFactory(mmbDBConnectionString, SqlServerDialect.Provider);
+           _dbFactory = new OrmLiteConnectionFactory(MmbDbConnectionString, SqlServerDialect.Provider);
            int error = 0;
            do
            {

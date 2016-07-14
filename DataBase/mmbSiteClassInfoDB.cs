@@ -12,7 +12,7 @@ namespace DataBase
 
         public mmbSiteClassInfoDB()
         {
-            _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 db.CreateTable<SiteClassInfo>();
@@ -58,7 +58,7 @@ namespace DataBase
             if (lits == null || lits.Count == 0)
                 return;
 
-            _dbFactory = new OrmLiteConnectionFactory(mmbDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 foreach (SiteClassInfo item in lits)
@@ -95,7 +95,7 @@ namespace DataBase
         public List<SiteClassInfo> getmmbSiteClass(int siteid)
         {
             List<SiteClassInfo> lits = null;
-            _dbFactory = new OrmLiteConnectionFactory(mmbDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 // var bb=  db.SqlList<Dictionary<int, List<string>>>("select id as SiteId,sitename as SiteName,sitelogo as SiteLogo,fk as Domain,smallLogo as smallLogo from JD_hzSite");

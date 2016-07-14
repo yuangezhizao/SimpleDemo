@@ -15,8 +15,7 @@ namespace BLL.Sprider.Stock
         private List<StockInfo> oldlist;
         public void GetALlStockInfo()
         {
-            GetStockDetial();
-            return;
+            //GetStockDetial();
             oldlist = new StockinfoDB().GetAllinfo() ?? new List<StockInfo>();
 
             var files = DocumentServer.GetAllFileNameByPath(@"F:\d");
@@ -25,7 +24,8 @@ namespace BLL.Sprider.Stock
             {
                 GetStockExcel(@"F:\d\" + file);
             }
-
+  
+            return;
             //for (int i = 1; i < 11; i++)
             //{
             //    GetStockExcel(@"F:\s\"+i+".xls");
@@ -48,6 +48,11 @@ namespace BLL.Sprider.Stock
                     GetStockInfo(page);
                 }
             }
+        }
+
+        public void DayReport()
+        {
+            GetStockDetial();
         }
 
         public void GetStockInfo(string page)
@@ -160,8 +165,11 @@ namespace BLL.Sprider.Stock
             var num = RegGroupsX<string>(info.StockNo, "(?<x>\\d+)");
             var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
             var mainurl = $"http://www.windin.com/home/stock/html/{num}.{cnum.ToUpper()}.shtml?&t=1&q={num}";
+            //var hq = $"http://hq.sinajs.cn/rn=&list={info.StockNo},{info.StockNo}_i,bk_new_dzxx";
+            //var hqpage = HtmlAnalysis.Gethtmlcode(hq);
             var dpage = HtmlAnalysis.Gethtmlcode(durl);
             var mpage = HtmlAnalysis.Gethtmlcode(mainurl);
+        
             string hy = (RegGroupsX<string>(mpage, "相关行业板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
             string dq = (RegGroupsX<string>(mpage, "相关地域板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
             string ix = (RegGroupsX<string>(mpage, "所属指数成分</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");

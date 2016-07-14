@@ -14,7 +14,7 @@ namespace DataBase
 
         public ShopInfoDb()
         {
-            _dbFactory = new OrmLiteConnectionFactory(ZnmDBConnectionString,SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString,SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 db.CreateTable<ShopInfo>();

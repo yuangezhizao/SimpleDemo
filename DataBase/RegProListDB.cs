@@ -52,7 +52,7 @@ namespace DataBase
        public void ReFreshProList()
        {
            List<RegProListInfo> lits;
-           _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+           _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
            try
            {
                using (var db = _dbFactory.OpenDbConnection())

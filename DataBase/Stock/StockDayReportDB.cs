@@ -14,7 +14,7 @@ namespace DataBase.Stock
         public StockDayReportDb()
         {
             if (DbFactory == null)
-                DbFactory = new OrmLiteConnectionFactory(ZnmDBConnectionString, SqlServerDialect.Provider);
+                DbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
             using (var db = DbFactory.OpenDbConnection())
             {
                 db.CreateTable<StockDayReport>();

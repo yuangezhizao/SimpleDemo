@@ -13,7 +13,7 @@ namespace DataBase
 
         public SqlMonitorDB()
         {
-            _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
         }
 
         /// <summary>

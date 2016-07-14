@@ -13,7 +13,7 @@ namespace DataBase
         public SiteClassInfoDB()
         {
             // _dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
-          _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+          _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
           using (var db = _dbFactory.OpenDbConnection())
             {
                 db.CreateTable<SiteClassInfo>();
@@ -23,7 +23,7 @@ namespace DataBase
         private void init()
         {
             List<SiteClassInfo> list = new List<SiteClassInfo>();
-            _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 list = db.Select<SiteClassInfo>();
@@ -70,7 +70,7 @@ namespace DataBase
             //test(siteid);
             try
             {
-                _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+                _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
                 using (var db = _dbFactory.OpenDbConnection())
                 {
                     return db.Select<SiteClassInfo>(p => p.SiteId==siteid && p.IsDel==false).OrderBy(p=>p.UpdateTime).ToList();
@@ -88,7 +88,7 @@ namespace DataBase
             //init();
             try
             {
-                _dbFactory = new OrmLiteConnectionFactory(ZnmDBConnectionString, SqlServerDialect.Provider);
+                _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
                 using (var db = _dbFactory.OpenDbConnection())
                 {
                     return db.Select<SiteClassInfo>(p => p.SiteId == siteid && p.IsDel == false);
@@ -143,6 +143,8 @@ namespace DataBase
                 {
                     for (int i = 0; i < classList.Count; i++)
                     {
+                        if(string.IsNullOrEmpty(classList[i].ClassId))
+                            continue;
                         if (
                             db.Exists<SiteClassInfo>(
                                 p => p.SiteId == classList[i].SiteId && p.ClassId == classList[i].ClassId))
@@ -214,7 +216,7 @@ namespace DataBase
 
         public void UpdateSiteClass(SiteClassInfo catinfo)
         {
-            _dbFactory = new OrmLiteConnectionFactory(mmbpriceDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbpriceDbConnectionString, SqlServerDialect.Provider);
             if (catinfo == null) throw new ArgumentNullException("catinfo");
             using (var db = _dbFactory.OpenDbConnection())
             {
@@ -261,7 +263,7 @@ namespace DataBase
         public List<SiteClassInfo> getmmbSiteClass(int siteid)
         {
             List<SiteClassInfo> lits = null;
-            _dbFactory = new OrmLiteConnectionFactory(mmbDBConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(MmbDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                lits = db.SelectFmt<SiteClassInfo>("select id,siteid,classid,classname,parentclass,parentname,classCrumble,parentUrl,urlinfo,HasChild,procount as TotalProduct ,smallclassid as  BindClassId,IsBind ,isshow as IsHide,getdate() as UpdateTime,getdate() as CreateDate from  JD_Shop_Class where siteid={0}" , siteid);
