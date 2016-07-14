@@ -50,7 +50,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(330, 32);
+            this.btnStart.Location = new System.Drawing.Point(296, 62);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
@@ -61,7 +61,7 @@
             // lblTheadCount
             // 
             this.lblTheadCount.AutoSize = true;
-            this.lblTheadCount.Location = new System.Drawing.Point(12, 32);
+            this.lblTheadCount.Location = new System.Drawing.Point(12, 33);
             this.lblTheadCount.Name = "lblTheadCount";
             this.lblTheadCount.Size = new System.Drawing.Size(53, 12);
             this.lblTheadCount.TabIndex = 1;
@@ -93,7 +93,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(431, 32);
+            this.btnStop.Location = new System.Drawing.Point(395, 62);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 5;
@@ -142,9 +142,9 @@
             // 
             // lvTheadDetial
             // 
-            this.lvTheadDetial.Location = new System.Drawing.Point(0, 91);
+            this.lvTheadDetial.Location = new System.Drawing.Point(0, 100);
             this.lvTheadDetial.Name = "lvTheadDetial";
-            this.lvTheadDetial.Size = new System.Drawing.Size(518, 228);
+            this.lvTheadDetial.Size = new System.Drawing.Size(518, 219);
             this.lvTheadDetial.TabIndex = 8;
             this.lvTheadDetial.UseCompatibleStateImageBehavior = false;
             // 
@@ -163,17 +163,17 @@
             // dtpTime
             // 
             this.dtpTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtpTime.Location = new System.Drawing.Point(60, 60);
+            this.dtpTime.Location = new System.Drawing.Point(278, 29);
             this.dtpTime.Name = "dtpTime";
             this.dtpTime.ShowUpDown = true;
-            this.dtpTime.Size = new System.Drawing.Size(62, 21);
+            this.dtpTime.Size = new System.Drawing.Size(71, 21);
             this.dtpTime.TabIndex = 10;
             this.dtpTime.Value = new System.DateTime(2016, 7, 9, 0, 0, 0, 0);
             // 
             // cbxTime
             // 
             this.cbxTime.AutoSize = true;
-            this.cbxTime.Location = new System.Drawing.Point(135, 60);
+            this.cbxTime.Location = new System.Drawing.Point(363, 32);
             this.cbxTime.Name = "cbxTime";
             this.cbxTime.Size = new System.Drawing.Size(72, 16);
             this.cbxTime.TabIndex = 11;

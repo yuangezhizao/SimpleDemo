@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using BLL;
 using BLL.Sprider.Stock;
 using Commons;
 using Mode;
@@ -20,11 +19,11 @@ namespace AamirKhan
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            //List<ProInfo> prolist = new List<ProInfo>();
-            //for (int i = 0; i < 50; i++)
-            //{
-            //    prolist.Add(new ProInfo { Id = i });
-            //}
+            StockDayReport();
+        }
+
+        public void StockDayReport()
+        {
             var prolist = new StockInfoBll().GetAllinfo();
             int count;
             int.TryParse(txtTheadCount.Text, out count);
@@ -48,18 +47,9 @@ namespace AamirKhan
             dqt.OneCompleted += Onecompleted;
             dqt.Start();
 
-            //List<ProInfo> prolist1 = new List<ProInfo>();
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    prolist1.Add(new ProInfo { Id = i });
-            //}
-            //dqt.addBindDate(prolist1);
             progressBar.Minimum = 0;
             progressBar.Step = 1;
-            //progressBar.Maximum =150;
-
         }
-
 
 
         public void AllCompleted(QueueThreadPlusBase<StockInfo>.CompetedEventArgs cea)
@@ -113,18 +103,12 @@ namespace AamirKhan
 
         private void AccentToolStripMenuItemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //this.Hide();
-            //this.Enabled = false;
-            //MessageCenter.Dispose();
             Accent pst = new Accent();
             pst.ShowDialog();
         }
 
         private void webBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //this.Hide();
-            //this.Enabled = false;
-            //MessageCenter.Dispose();
             webBrowserForm pst = new webBrowserForm();
             pst.ShowDialog();
         }
@@ -133,11 +117,12 @@ namespace AamirKhan
         {
             if (dtpTime.Text != @"0:00:00")
             {
-                if (DateTime.Now.Hour == dtpTime.Value.Hour && DateTime.Now.Hour == dtpTime.Value.Minute)
+                if (DateTime.Now.Hour == dtpTime.Value.Hour && DateTime.Now.Minute == dtpTime.Value.Minute)
                 {
                     if(DateTime.Now.DayOfWeek== DayOfWeek.Saturday|| DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                         return;
-                    new SiteFactory().StockInfoManager.GetALlStockInfo();
+                    LogServer.WriteLog("定时任务开始执行", "StockDayReport");
+                    StockDayReport();
                 }
             }
           

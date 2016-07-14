@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using BLL.Sprider.Stock;
 using Commons;
 using Mode;
@@ -16,40 +12,34 @@ namespace AamirKhan
     /// </summary>
     public class StockInfoThread : QueueThreadPlusBase<StockInfo>
     {
-
-      
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="list">下载的列表ID</param>
         public StockInfoThread(IEnumerable<StockInfo> list) : base(list)
         {
-
-           
         }
-
-        
 
         /// <summary>
         /// 每次多线程都到这里来,处理多线程
         /// </summary>
-        /// <param name="pendingId">列表ID</param>
+        /// <param name="item">列表ID</param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        protected override DoWorkResult DoWork(int index, StockInfo pendingId)
+        protected override DoWorkResult DoWork(int index, StockInfo item)
         {
             try
             {
-               new StockInfoBll().GetStockDetial(pendingId);
-                LogServer.WriteLog(pendingId.Id+"正在执行中", "DownLoadQueueThread");
-                Thread.Sleep(1000 *1);
-                //..........多线程处理....
+                Thread.Sleep(1000 * 1);
+                if(item==null)
+                    return DoWorkResult.ContinueThread;
+                new StockInfoBll().GetStockDetial(item);
+                LogServer.WriteLog("线程："+ index +"编号："+ item.StockNo+"正在执行中", "StockDayReport");
                 return DoWorkResult.ContinueThread;//没有异常让线程继续跑..
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                LogServer.WriteLog(ex, "StockDayReportError");
                 return DoWorkResult.AbortCurrentThread;//有异常,可以终止当前线程.当然.也可以继续,
                 //return  DoWorkResult.AbortAllThread; //特殊情况下 ,有异常终止所有的线程...
             }
@@ -57,11 +47,5 @@ namespace AamirKhan
             //return base.DoWork(pendingValue);
         }
     }
-
-    public class ProInfo
-    {
-        public  int Id { get; set; }
-    }
-
 
 }
