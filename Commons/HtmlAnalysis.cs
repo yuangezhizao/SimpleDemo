@@ -397,7 +397,7 @@ namespace Commons
         /// <param name="encodingType">utf8、Default 网页编码格式</param>
         /// <param name="ranAgent">随机的用户代理</param>
         /// <returns>网页信息</returns>
-        public static string Gethtmlcode(string url, string encodingType = "utf8", bool ranAgent = false)
+        public static string Gethtmlcode(string url, string encodingType = "utf-8", bool ranAgent = false)
         {
             if (string.IsNullOrEmpty(url) || (!url.Contains("http://") && !url.Contains("https://")))
                 return "";
@@ -486,7 +486,7 @@ namespace Commons
                         //如果自动识别程序未能识别页面编码，则使用程序指定
                         if (string.IsNullOrEmpty(cdet.Charset))
                         {
-                            EncodingType = encodingType == "utf8" ? Encoding.UTF8 : Encoding.Default;
+                            EncodingType = encodingType == "utf-8" ? Encoding.UTF8 : Encoding.Default;
                         }
                         else
                         {
@@ -519,15 +519,17 @@ namespace Commons
             }
         }
 
+ 
+
         /// <summary>
         /// GET方式抓取网页信息
         /// </summary>
         /// <param name="url">地址</param>
-        /// <param name="encodingType">utf8、Default 网页编码格式</param>
+        /// <param name="encodingType">utf-8、Default 网页编码格式</param>
         /// <param name="ranAgent">随机的用户代理</param>
         /// <param name="cookies">cookie 信息</param>
         /// <returns>网页信息</returns>
-        public static string Gethtmlcode(string url, string encodingType, CookieContainer cookies, bool ranAgent = true)
+        public static string Gethtmlcode(string url, CookieContainer cookies, string encodingType= "utf-8",  bool ranAgent = false)
         {
             if (string.IsNullOrEmpty(url) || (!url.Contains("http://") && !url.Contains("https://")))
                 return "";
@@ -555,7 +557,7 @@ namespace Commons
                 if (responseStream != null)
                 {
                     StreamReader sr = new StreamReader(responseStream,
-                        encodingType == "utf8" ? Encoding.UTF8 : Encoding.Default);
+                        encodingType == "utf-8" ? Encoding.UTF8 : Encoding.Default);
                     strGethtml = sr.ReadToEnd().Trim();
                     mywrp.Close();
                     sr.Close();
