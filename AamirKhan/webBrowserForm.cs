@@ -3,7 +3,10 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using BLL;
+using Mode;
 
 namespace AamirKhan
 {
@@ -12,6 +15,7 @@ namespace AamirKhan
         public webBrowserForm()
         {
             InitializeComponent();
+            webBrowser.ScriptErrorsSuppressed = false;
         }
 
         private void tbnGo_Click(object sender, EventArgs e)
@@ -37,6 +41,17 @@ namespace AamirKhan
             txtUrl.Text = webBrowser.Url.ToString();
             txtCookies.Text = GetCookieString(txtUrl.Text);
             txtUserAgent.Text = GetDefaultUserAgent();
+            Regex reg = new Regex(@"(?<=://)([\w-]+\.)+[\w-]+(?<=/?)");
+            string domain= reg.Match(txtUrl.Text, 0).Value.Replace("/", string.Empty);
+            DomainCookies cook = new DomainCookies
+            {
+                Domain=domain,
+                Url=txtUrl.Text,
+                Cookies = txtCookies.Text,
+                UserAgent = txtUserAgent.Text
+            };
+            new DomainCookiesBll().SaveCookies(cook);
+
             //string html = webBrowser.DocumentText;
         }
 

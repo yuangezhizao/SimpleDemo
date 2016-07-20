@@ -150,7 +150,7 @@ namespace BLL.Sprider.classInfo
             string three_cate = RegGroupsX<string>(pageinfo, " dsp_object.three_cate = \"(?<x>.*?)\"");
             string four_cate = RegGroupsX<string>(pageinfo, " dsp_object.four_cate = \"(?<x>.*?)\"");
             string parentName = "";
-            string catname = "";
+            //string catname = "";
             if (siteClassInfo.ClassId != fncatid)
             {
                 LogServer.WriteLog(Baseinfo.SiteName + "分类抓取错误1\turl:" + siteClassInfo.Urlinfo, "AddClassError");
@@ -158,52 +158,62 @@ namespace BLL.Sprider.classInfo
             }
             if (!string.IsNullOrEmpty(four_cate))
             {
-                catname = four_cate;
+                //catname = four_cate;
                 parentName = three_cate;
             }
             else if (!string.IsNullOrEmpty(three_cate))
             {
-                catname = three_cate;
+                //catname = three_cate;
                 parentName = two_cate;
             }
             else if (!string.IsNullOrEmpty(two_cate))
             {
-                catname = two_cate;
+                //catname = two_cate;
                 parentName = one_cate;
             }
 
-            if (parentName != siteClassInfo.ClassName)
+            if (parentName != siteClassInfo.ClassName&& siteClassInfo.ParentName=="")
             {
                 siteClassInfo.ParentName = parentName;
             }
 
-            if (!string.IsNullOrEmpty(catname))
-            {
-                siteClassInfo.ClassName = catname;
-            }
+            //if (!string.IsNullOrEmpty(catname))
+            //{
+            //    siteClassInfo.ClassName = catname;
+            //}
             var sonpage = RegGroupsX<string>(pageinfo, "<ul class=\"v-lst J-lst\">(?<x>.*?)</ul>");
             var soncat = RegGroupCollection(sonpage, "category/(?<x>C\\d+)");
             if (soncat != null && soncat.Count > 0)
             {
-                var db = new mmbSiteClassInfoDB();
+             
                 foreach (Match catinf in soncat)
                 {
-                    var catitem = HasBindClasslist.FirstOrDefault(c => c.ClassId == catinf.Groups["x"].Value);
-                    if (catitem == null)
+                    var tempcatid = catinf.Groups["x"].Value;
+                    if(string.IsNullOrEmpty(tempcatid))
                         continue;
-                    catitem.ParentUrl = siteClassInfo.Urlinfo;
+                    var catitem = HasBindClasslist.FirstOrDefault(c => c.ClassId == tempcatid);
+                    if (catitem == null)
+                    {
+                        AddNode($"http://www.feiniu.com/category/C{tempcatid}");
+                        continue;
+                    }
+                    if (string.IsNullOrEmpty(catitem.ParentClass))
+                    {
+                        var db = new mmbSiteClassInfoDB();
+                        catitem.ParentUrl = siteClassInfo.Urlinfo;
 
-                    if (siteClassInfo.ClassId != catitem.ClassId)
-                    {
-                        catitem.ParentClass = siteClassInfo.ClassId;
+                        if (siteClassInfo.ClassId != catitem.ClassId)
+                        {
+                            catitem.ParentClass = siteClassInfo.ClassId;
+                        }
+
+                        if (siteClassInfo.ClassName != catitem.ClassName)
+                        {
+                            catitem.ParentName = siteClassInfo.ClassName;
+                        }
+
+                        db.UpdateSiteClass(catitem);
                     }
-               
-                    if (siteClassInfo.ClassName != catitem.ClassName)
-                    {
-                        catitem.ParentName = siteClassInfo.ClassName;
-                    }
-                   
-                    db.UpdateSiteClass(catitem);
                 }
             }
             
@@ -218,6 +228,8 @@ namespace BLL.Sprider.classInfo
             {
 
                 string tempid = item.Groups["x"].Value;
+                if (HasBindClasslist.Exists(p => p.ClassId == tempid))
+                    continue;
                 string tempurl=$"http://www.feiniu.com/category/C{tempid}";
                 AddNode(tempurl);
             }

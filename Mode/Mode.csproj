@@ -64,6 +64,7 @@
     <Compile Include="BandInfo.cs" />
     <Compile Include="ClassInfo.cs" />
     <Compile Include="CommentInfo.cs" />
+    <Compile Include="DomainCookies.cs" />
     <Compile Include="EmailInfo.cs" />
     <Compile Include="HostProxy.cs" />
     <Compile Include="ImageInfo.cs" />

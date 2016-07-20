@@ -66,6 +66,7 @@
     <Compile Include="BenlaiShenhuo.cs" />
     <Compile Include="ClassInfoBll.cs" />
     <Compile Include="CommentBll.cs" />
+    <Compile Include="DomainCookiesBll.cs" />
     <Compile Include="HisSiteProInfoBll.cs" />
     <Compile Include="HostProxyBll.cs" />
     <Compile Include="ImgBll.cs" />

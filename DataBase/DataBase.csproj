@@ -89,6 +89,7 @@
     <Compile Include="APIRequstHistroyDB.cs" />
     <Compile Include="ClassInfoDB.cs" />
     <Compile Include="CommentDB.cs" />
+    <Compile Include="DomainCookiesDB.cs" />
     <Compile Include="ErrorInfoDB.cs" />
     <Compile Include="HostProxyDb.cs" />
     <Compile Include="MedicineSiteDB.cs" />
