@@ -7,13 +7,13 @@ using Mode;
 
 namespace BLL
 {
-    public class DomainCookiesBll
+    public class SiteCookiesBll
     {
-        public void SaveCookies(DomainCookies cookies)
+        public void SaveCookies(SiteCookies cookies)
         {
             new DomainCookiesDb().SaveCookies(cookies);
         }
-        public DomainCookies GetOneByDomain(string domain)
+        public SiteCookies GetOneByDomain(string domain)
         {
             return new DomainCookiesDb().GetOneByDomain(domain);
         }

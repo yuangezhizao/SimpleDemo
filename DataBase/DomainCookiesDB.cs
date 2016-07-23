@@ -13,24 +13,25 @@ namespace DataBase
         private static OrmLiteConnectionFactory _dbFactory;
         public DomainCookiesDb()
         {
-           _dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
-            //  _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
+            //_dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
-                db.CreateTable<DomainCookies>();
+                db.CreateTable<SiteCookies>();
             }
         }
 
-        public void SaveCookies(DomainCookies cookies)
+        public void SaveCookies(SiteCookies cookies)
         {
             try
             {
                 using (var db = _dbFactory.OpenDbConnection())
                 {
-                    var item = db.Single<DomainCookies>(c => c.Domain == cookies.Domain);
+                    var item = db.Single<SiteCookies>(c => c.Domain == cookies.Domain);
                     if (item == null || item.Id == 0)
                     {
-                        cookies.CreateDate=DateTime.Now;
+                        cookies.CreateDate = DateTime.Now;
+                        cookies.UpdateTime = DateTime.Now;
                         db.Insert(cookies);
                     }
                     else
@@ -51,18 +52,19 @@ namespace DataBase
             }
         }
 
-        public DomainCookies GetOneByDomain(string domain)
+        public SiteCookies GetOneByDomain(string domain)
         {
             try
             {
                 using (var db = _dbFactory.OpenDbConnection())
                 {
-                    var item = db.Single<DomainCookies>(c => c.Domain == domain);
+                    var item = db.Single<SiteCookies>(c => c.Domain == domain);
                     if (item == null || item.Id == 0)
                     {
-                        return item;
+
+                        return null;
                     }
-                    return null;
+                    return item;
                 }
             }
             catch (Exception ex)

@@ -5,7 +5,7 @@ using System.Text;
 using ServiceStack.DataAnnotations;
 namespace Mode
 {
-    public class DomainCookies
+    public class SiteCookies
     {
         [PrimaryKey]
         [AutoIncrement]

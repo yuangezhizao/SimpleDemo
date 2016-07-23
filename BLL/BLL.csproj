@@ -66,7 +66,7 @@
     <Compile Include="BenlaiShenhuo.cs" />
     <Compile Include="ClassInfoBll.cs" />
     <Compile Include="CommentBll.cs" />
-    <Compile Include="DomainCookiesBll.cs" />
+    <Compile Include="SiteCookiesBll.cs" />
     <Compile Include="HisSiteProInfoBll.cs" />
     <Compile Include="HostProxyBll.cs" />
     <Compile Include="ImgBll.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="SaveSpiderErrorBll.cs" />
     <Compile Include="SiteClassBll.cs" />
     <Compile Include="ShopInfoBll.cs" />
+    <Compile Include="SiteUserInfoBll.cs" />
     <Compile Include="Sprider\classInfo\BaoshuiguojiClassInfo.cs" />
     <Compile Include="Sprider\classInfo\EhaoyaoClassinfo.cs" />
     <Compile Include="Sprider\classInfo\JianyiClass.cs" />

@@ -35,18 +35,19 @@
             this.lblAgent = new System.Windows.Forms.Label();
             this.txtCookies = new System.Windows.Forms.TextBox();
             this.lblcookie = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtUrl
             // 
-            this.txtUrl.Location = new System.Drawing.Point(14, 14);
+            this.txtUrl.Location = new System.Drawing.Point(9, 12);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(386, 21);
+            this.txtUrl.Size = new System.Drawing.Size(322, 21);
             this.txtUrl.TabIndex = 7;
             // 
             // tbnGo
             // 
-            this.tbnGo.Location = new System.Drawing.Point(406, 12);
+            this.tbnGo.Location = new System.Drawing.Point(346, 12);
             this.tbnGo.Name = "tbnGo";
             this.tbnGo.Size = new System.Drawing.Size(45, 23);
             this.tbnGo.TabIndex = 6;
@@ -96,11 +97,22 @@
             this.lblcookie.TabIndex = 10;
             this.lblcookie.Text = "Cookies";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(406, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(45, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "确认";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // webBrowserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(478, 477);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.txtUserAgent);
             this.Controls.Add(this.lblAgent);
             this.Controls.Add(this.txtCookies);
@@ -123,5 +135,6 @@
         private System.Windows.Forms.Label lblAgent;
         private System.Windows.Forms.TextBox txtCookies;
         private System.Windows.Forms.Label lblcookie;
+        private System.Windows.Forms.Button button1;
     }
 }

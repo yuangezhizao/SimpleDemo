@@ -110,7 +110,9 @@ namespace AamirKhan
         private void webBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
             webBrowserForm pst = new webBrowserForm();
+            pst.login();
             pst.ShowDialog();
+           
         }
 
         private void SpiderTimer_Tick(object sender, EventArgs e)

@@ -111,6 +111,7 @@
     <Compile Include="SiteInfoDB.cs" />
     <Compile Include="SiteProductsDb.cs" />
     <Compile Include="SiteProInfoDB.cs" />
+    <Compile Include="SiteUserInfoDB.cs" />
     <Compile Include="SmsHistoryDB.cs" />
     <Compile Include="SpiderConfigDB.cs" />
     <Compile Include="SqlMonitorDB.cs" />

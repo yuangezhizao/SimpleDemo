@@ -64,7 +64,7 @@
     <Compile Include="BandInfo.cs" />
     <Compile Include="ClassInfo.cs" />
     <Compile Include="CommentInfo.cs" />
-    <Compile Include="DomainCookies.cs" />
+    <Compile Include="SiteCookies.cs" />
     <Compile Include="EmailInfo.cs" />
     <Compile Include="HostProxy.cs" />
     <Compile Include="ImageInfo.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="SiteBandInfo.cs" />
     <Compile Include="SiteClassBand.cs" />
     <Compile Include="SiteClassInfo.cs" />
+    <Compile Include="SiteUserInfo.cs" />
     <Compile Include="SmsHistory.cs" />
     <Compile Include="SmsManger.cs" />
     <Compile Include="SpiderConfig.cs" />

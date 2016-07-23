@@ -26,6 +26,30 @@ namespace Commons
             }
             return result.ToString();
         }
+
+        public static string ReadFileInfo(string fileName, string eccoding = "utf8")
+        {
+
+            if (!File.Exists(fileName))
+                return "";
+            Encoding cdg = eccoding == "utf8" ? Encoding.UTF8 : Encoding.Default;
+            try
+            {
+                using (StreamReader sr = new StreamReader(fileName, cdg))
+                {
+                    string result = sr.ReadToEnd();
+                    sr.Close();
+                    sr.Dispose();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex);
+                return "";
+            }
+        }
+
         public static List<string> GetAllFileNameByPath(string path)
         {
             if (!Directory.Exists(path))

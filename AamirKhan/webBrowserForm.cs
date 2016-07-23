@@ -4,14 +4,31 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
+using Commons;
 using Mode;
 
 namespace AamirKhan
 {
     public partial class webBrowserForm : Form
     {
+        private string reqUrl = "";
+        private string reqCookies = "";
+        private const string jdloginUrl = "https://passport.jd.com/new/login.aspx?ReturnUrl=https%3A%2F%2Fwww.jd.com%2F";
+
+
+        private string uname = "";
+        private string upwd = "";
+        public void login()
+        {
+            uname = "地狱狂壟";
+            upwd = "chengzho347";
+            webBrowser.Navigate(jdloginUrl);
+        }
+
         public webBrowserForm()
         {
             InitializeComponent();
@@ -21,6 +38,7 @@ namespace AamirKhan
         private void tbnGo_Click(object sender, EventArgs e)
         {
             string url = txtUrl.Text;
+         
             if (string.IsNullOrEmpty(url))
                 return;
             if (!url.Contains("http"))
@@ -43,16 +61,29 @@ namespace AamirKhan
             txtUserAgent.Text = GetDefaultUserAgent();
             Regex reg = new Regex(@"(?<=://)([\w-]+\.)+[\w-]+(?<=/?)");
             string domain= reg.Match(txtUrl.Text, 0).Value.Replace("/", string.Empty);
-            DomainCookies cook = new DomainCookies
+
+            if (txtUrl.Text.Contains("passport.jd.com"))
+            {
+                jdlogin(uname, upwd);
+            }
+
+
+            if (reqUrl == txtUrl.Text)
+            {
+                reqCookies = txtCookies.Text;
+            }
+            SiteCookies cook = new SiteCookies
             {
                 Domain=domain,
                 Url=txtUrl.Text,
                 Cookies = txtCookies.Text,
                 UserAgent = txtUserAgent.Text
             };
-            new DomainCookiesBll().SaveCookies(cook);
+            string html = webBrowser.DocumentText;
 
-            //string html = webBrowser.DocumentText;
+            new SiteCookiesBll().SaveCookies(cook);
+
+  
         }
 
         #region 公共方法
@@ -102,8 +133,24 @@ namespace AamirKhan
                 null, navigator, new object[] { });
             return userAgent.ToString();
         }
+
         #endregion
 
- 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            jdlogin("地狱狂壟", "chengzho347");
+        }
+
+
+        private void jdlogin(string username,string pwd)
+        {
+            HtmlElement loginname = webBrowser.Document.All["loginname"];
+            HtmlElement nloginpwd = webBrowser.Document.All["nloginpwd"];
+            //$("#loginsubmit").click()
+            if (loginname != null) loginname.SetAttribute("value", username);
+            if (nloginpwd != null) nloginpwd.SetAttribute("value", pwd);
+            HtmlElement frmlogin = webBrowser.Document.GetElementById("loginsubmit");
+            if (frmlogin != null) frmlogin.InvokeMember("Click");
+        }
     }
 }

@@ -33,6 +33,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Noesis.Javascript">
+      <HintPath>..\libs\x86\Noesis.Javascript.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\libs\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -52,6 +55,7 @@
     <Compile Include="Compression.cs" />
     <Compile Include="DocumentServer.cs" />
     <Compile Include="ImageServer.cs" />
+    <Compile Include="JsContext.cs" />
     <Compile Include="SimulationCookie.cs" />
     <Compile Include="HtmlAnalysis.cs" />
     <Compile Include="LogServer.cs" />
