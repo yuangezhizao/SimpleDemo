@@ -88,7 +88,10 @@
     <Content Include="BindCat.aspx" />
     <Content Include="ClassDetial.aspx" />
     <Content Include="ClassList.aspx" />
+    <Content Include="js\f.js" />
+    <Content Include="js\fp.js" />
     <Content Include="js\jquery-2.1.1.min.js" />
+    <Content Include="js\jquery-3.0.0.min.js" />
     <Content Include="Plugin\bootstrap\css\select2.css" />
     <Content Include="js\jquery-1.11.1.min.js" />
     <Content Include="Plugin\bootstrap\css\select2.png" />
@@ -120,6 +123,7 @@
     <Content Include="SiteClass.aspx" />
     <Content Include="SpiderConfigList.aspx" />
     <Content Include="SpiderProSet.aspx" />
+    <Content Include="test.html" />
     <Content Include="Web.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>

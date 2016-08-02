@@ -79,6 +79,7 @@
     <Compile Include="ShopInfoBll.cs" />
     <Compile Include="SiteUserInfoBll.cs" />
     <Compile Include="Sprider\classInfo\BaoshuiguojiClassInfo.cs" />
+    <Compile Include="Sprider\classInfo\DusunClassInfo.cs" />
     <Compile Include="Sprider\classInfo\EhaoyaoClassinfo.cs" />
     <Compile Include="Sprider\classInfo\JianyiClass.cs" />
     <Compile Include="Sprider\classInfo\JxdyfClassInfo.cs" />

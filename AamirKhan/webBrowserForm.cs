@@ -18,7 +18,7 @@ namespace AamirKhan
         private string reqUrl = "";
         private string reqCookies = "";
         private const string jdloginUrl = "https://passport.jd.com/new/login.aspx?ReturnUrl=https%3A%2F%2Fwww.jd.com%2F";
-
+        private const string jdOrderUrl = "http://trade.jd.com/shopping/order/getOrderInfo.action";
 
         private string uname = "";
         private string upwd = "";
@@ -66,7 +66,10 @@ namespace AamirKhan
             {
                 jdlogin(uname, upwd);
             }
-
+            if (txtUrl.Text==jdOrderUrl)
+            {
+                jdBuy();
+            }
 
             if (reqUrl == txtUrl.Text)
             {
@@ -138,7 +141,39 @@ namespace AamirKhan
 
         private void button1_Click(object sender, EventArgs e)
         {
-            jdlogin("地狱狂壟", "chengzho347");
+
+            SubmitOrder();
+        }
+
+        private void SubmitOrder()
+        {
+
+            webBrowser.Navigate(jdOrderUrl);
+        }
+
+        private void jdBuy()
+        {
+           var address= webBrowser.Document.GetElementById("sendAddr");
+            var mbl=webBrowser.Document.GetElementById("sendMobile");
+            HtmlElement ordersumbit = webBrowser.Document.GetElementById("order-submit");
+            string sendaddress = "";
+            string phone = "";
+            if (address != null)
+                sendaddress = address.InnerText;
+            if (address != null)
+                sendaddress = address.InnerText;
+            if (mbl != null)
+            {
+                phone = mbl.InnerText;
+            }
+            if (!string.IsNullOrEmpty(phone) && !string.IsNullOrEmpty(sendaddress))
+            {
+                webBrowser.Document.InvokeScript("save_Pay(1);");
+                if (ordersumbit != null)
+                    webBrowser.Document.InvokeScript("submit_Order();");
+            }
+
+
         }
 
 

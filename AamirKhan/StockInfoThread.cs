@@ -33,7 +33,8 @@ namespace AamirKhan
                 Thread.Sleep(1000 * 1);
                 if(item==null)
                     return DoWorkResult.ContinueThread;
-                new StockInfoBll().GetStockDetial(item);
+                new StockInfoBll().GetXueqiuStockDetial(item);
+                //new StockInfoBll().GetStockDetial(item);
                 LogServer.WriteLog("线程："+ index +"编号："+ item.StockNo+"正在执行中", "StockDayReport");
                 return DoWorkResult.ContinueThread;//没有异常让线程继续跑..
             }

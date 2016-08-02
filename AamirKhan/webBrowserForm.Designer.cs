@@ -47,7 +47,7 @@
             // 
             // tbnGo
             // 
-            this.tbnGo.Location = new System.Drawing.Point(346, 12);
+            this.tbnGo.Location = new System.Drawing.Point(336, 10);
             this.tbnGo.Name = "tbnGo";
             this.tbnGo.Size = new System.Drawing.Size(45, 23);
             this.tbnGo.TabIndex = 6;
@@ -99,11 +99,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(406, 10);
+            this.button1.Location = new System.Drawing.Point(387, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(45, 23);
+            this.button1.Size = new System.Drawing.Size(64, 23);
             this.button1.TabIndex = 14;
-            this.button1.Text = "确认";
+            this.button1.Text = "京东登录";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 

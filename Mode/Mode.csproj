@@ -85,6 +85,7 @@
     <Compile Include="SiteProInfo.cs" />
     <Compile Include="RegProListInfo.cs" />
     <Compile Include="SpiderError.cs" />
+    <Compile Include="XqStockDayReport.cs" />
     <Compile Include="StockDayReport.cs" />
     <Compile Include="StockInfo.cs" />
     <Compile Include="TweiboInfo.cs" />

@@ -224,6 +224,161 @@ namespace BLL.Sprider.Stock
             }
         }
 
+        public void GetThsStockDetial(StockInfo info)
+        {
+            //var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
+            var number = RegGroupsX<int>(info.StockNo, "(?<x>\\d+)");
+            if (number < 1)
+            {
+                LogServer.WriteLog("error number"+ info.StockNo, "StockDetial");
+                return;
+            }
+            var url = $"http://stockpage.10jqka.com.cn/spService/{number}/Header/realHeader";
+            var currentInfo = HtmlAnalysis.Gethtmlcode(url);
+            if (string.IsNullOrEmpty(currentInfo))
+            {
+                LogServer.WriteLog($"error detial {info.StockNo} url:{url}" , "StockDetial");
+                return;
+            }
+            var Item = JObject.Parse(currentInfo);
+            if (Item == null)
+            {
+                LogServer.WriteLog($"error json {info.StockNo} url:{url},detial:{currentInfo}", "StockDetial");
+            }
+
+            var pageingo = HtmlAnalysis.Gethtmlcode("$http://stockpage.10jqka.com.cn/{number}/");
+      
+        }
+
+        public void GetXueqiuStockDetial(StockInfo info)
+        {
+            var code = info.StockNo.ToUpper();
+            string url = $"https://xueqiu.com/v4/stock/quote.json?code={code}&_=1465259721266";
+
+            var cookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
+            HtmlAnalysis request = new HtmlAnalysis();
+            request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
+            request.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            if (cookies != null)
+                request.Headers.Add("Cookie", cookies.Cookies);
+            request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+         
+
+            var currentInfo = request.HttpRequest(url);
+            var Item = JObject.Parse(currentInfo);
+            if (Item == null)
+            {
+                LogServer.WriteLog($"error json {info.StockNo} url:{url},detial:{currentInfo}", "StockDetial");
+            }
+            var xqItem = Item[code];
+            try
+            {
+                XqStockDayReport xq = new XqStockDayReport();
+                xq.StockNo = code;
+                xq.Exchange = xqItem["exchange"].Value<string>();
+                xq.Code = xqItem["code"].Value<string>();
+                xq.StockName = xqItem["name"].Value<string>();
+                xq.CurrentPrice = xqItem["current"].Value<decimal>();
+                xq.Range = xqItem["percentage"].Value<float>();
+                xq.RangeRatio = xqItem["change"].Value<float>();
+                xq.OpenPrice = xqItem["open"].Value<decimal>();
+                xq.Maxprice = xqItem["high"].Value<decimal>();
+                xq.Minprice = xqItem["low"].Value<decimal>();
+                xq.Closeprice = xqItem["close"].Value<decimal>();
+                xq.LastCloseprice = xqItem["last_close"].Value<decimal>();
+                xq.High52Week = xqItem["high52week"].Value<float>();
+                xq.Low52Week = xqItem["low52week"].Value<float>();
+                xq.Volume = xqItem["volume"].Value<float>();
+                if (xqItem["volumeAverage"].ToString() != "")
+                    xq.VolumeAverage = xqItem["volumeAverage"].Value<float>();
+                xq.MarketCapital = xqItem["marketCapital"].Value<float>();
+                xq.Eps = xqItem["eps"].Value<float>();
+                if (xqItem["pe_ttm"].ToString() != "")
+                    xq.Pettm = xqItem["pe_ttm"].Value<float>();
+                if (xqItem["pe_lyr"].ToString() != "")
+                    xq.PElyr = xqItem["pe_lyr"].Value<float>();
+                xq.Beta = xqItem["beta"].Value<float>();
+                xq.TotalShares = xqItem["totalShares"].Value<float>();
+                xq.AfterHours = xqItem["afterHours"].Value<float>();
+                xq.AfterHoursPct = xqItem["afterHoursPct"].Value<float>();
+                xq.AfterHoursChg = xqItem["afterHoursChg"].Value<float>();
+                xq.UpdateAt = xqItem["updateAt"].Value<float>();
+                if (xqItem["dividend"].ToString() != "")
+                    xq.Dividend = xqItem["dividend"].Value<float>();
+                xq.Yield = xqItem["yield"].Value<float>();
+                xq.Turnoverrate = xqItem["turnover_rate"].Value<float>();
+                xq.InstOwn = xqItem["instOwn"].Value<float>();
+                xq.Risestop = xqItem["rise_stop"].Value<float>();
+                xq.FallStop = xqItem["fall_stop"].Value<float>();
+                xq.CurrencyUnit = xqItem["currency_unit"].Value<string>();
+                xq.Amount = xqItem["amount"].Value<string>();
+                xq.NetAssets = xqItem["net_assets"].Value<float>();
+                xq.Hasexist = xqItem["hasexist"].Value<string>();
+                xq.HasWarrant = xqItem["has_warrant"].Value<string>();
+                xq.Type = xqItem["type"].Value<float>();
+                xq.Flag = xqItem["flag"].Value<int>();
+                xq.RestDay = xqItem["rest_day"].Value<string>();
+                xq.Amplitude = xqItem["amplitude"].Value<float>();
+                xq.LotSize = xqItem["lot_size"].Value<float>();
+                xq.MinOrderQuantity = xqItem["min_order_quantity"].Value<float>();
+                xq.MaxOrderQuantity = xqItem["max_order_quantity"].Value<float>();
+                xq.TickSize = xqItem["tick_size"].Value<float>();
+                xq.KzzStockSymbol = xqItem["kzz_stock_symbol"].Value<string>();
+                xq.KzzStockName = xqItem["kzz_stock_name"].Value<string>();
+                xq.KzzStockCurrent = xqItem["kzz_stock_current"].Value<float>();
+                xq.KzzConvertPrice = xqItem["kzz_convert_price"].Value<float>();
+                xq.kzzcovertValue = xqItem["kzz_covert_value"].Value<float>();
+                xq.KzzCpr = xqItem["kzz_cpr"].Value<float>();
+                xq.KzzPutbackPrice = xqItem["kzz_putback_price"].Value<float>();
+                xq.KzzConvertTime = xqItem["kzz_convert_time"].Value<string>();
+                xq.KzzRedemptPrice = xqItem["kzz_redempt_price"].Value<float>();
+                xq.KzzStraightPrice = xqItem["kzz_straight_price"].Value<float>();
+                xq.KzzStockPercent = xqItem["kzz_stock_percent"].Value<string>();
+                xq.Pb = xqItem["pb"].Value<float>();
+                xq.BenefitBeforeTax = xqItem["benefit_before_tax"].Value<float>();
+                xq.BenefitAfterTax = xqItem["benefit_after_tax"].Value<float>();
+                xq.ConvertBondRatio = xqItem["convert_bond_ratio"].Value<string>();
+                xq.Totalissuescale = xqItem["totalissuescale"].Value<string>();
+                xq.Outstandingamt = xqItem["outstandingamt"].Value<string>();
+                xq.Maturitydate = xqItem["maturitydate"].Value<string>();
+                xq.RemainYear = xqItem["remain_year"].Value<string>();
+                xq.ConvertRate = xqItem["convertrate"].Value<float>();
+                xq.Interestrtmemo = xqItem["interestrtmemo"].Value<string>();
+                xq.ReleaseDate = xqItem["release_date"].Value<string>();
+                xq.Circulation = xqItem["circulation"].Value<float>();
+                xq.ParValue = xqItem["par_value"].Value<float>();
+                xq.DueTime = xqItem["due_time"].Value<float>();
+                xq.ValueDate = xqItem["value_date"].Value<string>();
+                xq.DueDate = xqItem["due_date"].Value<string>();
+                xq.Publisher = xqItem["publisher"].Value<string>();
+                xq.RedeemType = xqItem["redeem_type"].Value<string>();
+                xq.BondType = xqItem["bond_type"].Value<string>();
+                xq.Warrant = xqItem["warrant"].Value<string>();
+                xq.SaleRrg = xqItem["sale_rrg"].Value<string>();
+                xq.Rate = xqItem["rate"].Value<string>();
+                xq.AfterHourVol = xqItem["after_hour_vol"].Value<int>();
+                xq.FloatShares = xqItem["float_shares"].Value<float>();
+                xq.FloatMarketCapital = xqItem["float_market_capital"].Value<string>();
+                xq.DisnextPayDate = xqItem["disnext_pay_date"].Value<string>();
+                //xq.ConvertRate = xqItem["convert_rate"].Value<float>();
+                if (xqItem["psr"].ToString() != "")
+                    xq.Psr = xqItem["psr"].Value<float>();
+                xq.CreateDate = DateTime.Now;
+
+
+                //,\"float_market_capital\":\"3.88908818298E9\",\"disnext_pay_date\":\"\",\"convert_rate\":\"0.0\",\"psr\":\"5.4811\"}}"
+
+                new XqStockDayReportDB().AddXqStockDayReport(xq);
+            }
+            catch (Exception ex)
+            {
+
+                LogServer.WriteLog($"error json {info.StockNo} url:{url},detial:{currentInfo},ex:{ex.Message}",
+                    "StockDetial");
+            }
+
+
+        }
         public void GetStockDetial()
         {
             LogServer.WriteLog("dayRepord start..." + "stock");

@@ -82,6 +82,7 @@
     <Compile Include="Analysis\Taoxie.cs" />
     <Compile Include="Analysis\Suning.cs" />
     <Compile Include="Analysis\Unieclub.cs" />
+    <Compile Include="Analysis\Dusun.cs" />
     <Compile Include="Analysis\VipShop.cs" />
     <Compile Include="Analysis\Vmei.cs" />
     <Compile Include="Analysis\Yaofangwang.cs" />
