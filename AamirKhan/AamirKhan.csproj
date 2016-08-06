@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastVerCode">
+      <HintPath>..\libs\FastVerCode.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -61,6 +64,7 @@
     <Compile Include="Domain.Designer.cs">
       <DependentUpon>Domain.cs</DependentUpon>
     </Compile>
+    <Compile Include="JdOrderSystem.cs" />
     <Compile Include="MessageCenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.txtUrl = new System.Windows.Forms.TextBox();
             this.tbnGo = new System.Windows.Forms.Button();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
@@ -35,7 +36,8 @@
             this.lblAgent = new System.Windows.Forms.Label();
             this.txtCookies = new System.Windows.Forms.TextBox();
             this.lblcookie = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnJDLogin = new System.Windows.Forms.Button();
+            this.JdLoginTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // txtUrl
@@ -97,22 +99,26 @@
             this.lblcookie.TabIndex = 10;
             this.lblcookie.Text = "Cookies";
             // 
-            // button1
+            // btnJDLogin
             // 
-            this.button1.Location = new System.Drawing.Point(387, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(64, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "京东登录";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnJDLogin.Location = new System.Drawing.Point(387, 10);
+            this.btnJDLogin.Name = "btnJDLogin";
+            this.btnJDLogin.Size = new System.Drawing.Size(64, 23);
+            this.btnJDLogin.TabIndex = 14;
+            this.btnJDLogin.Text = "京东登录";
+            this.btnJDLogin.UseVisualStyleBackColor = true;
+            this.btnJDLogin.Click += new System.EventHandler(this.btnJDLogin_Click);
+            // 
+            // JdLoginTimer
+            // 
+            this.JdLoginTimer.Tick += new System.EventHandler(this.JdLoginTimer_Tick);
             // 
             // webBrowserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(478, 477);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnJDLogin);
             this.Controls.Add(this.txtUserAgent);
             this.Controls.Add(this.lblAgent);
             this.Controls.Add(this.txtCookies);
@@ -135,6 +141,7 @@
         private System.Windows.Forms.Label lblAgent;
         private System.Windows.Forms.TextBox txtCookies;
         private System.Windows.Forms.Label lblcookie;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnJDLogin;
+        private System.Windows.Forms.Timer JdLoginTimer;
     }
 }

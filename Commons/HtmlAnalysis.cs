@@ -63,7 +63,7 @@ namespace Commons
         {
             "Accept", "Connection", "Content-Length","Content-Type","Expect","Date","Host","If-Modified-Since","Range","Referer","Transfer-Encoding","User-Agent"
         };
-        private Dictionary<string, string> httpHead { get; set; }
+        public Dictionary<string, string> ResultResponseHeader { get; set; }
         private object HEAD_LOCK = new object();
         /// <summary>
         /// GET 或者 POST
@@ -126,8 +126,7 @@ namespace Commons
         /// 设置代理信息
         /// </summary>
         public WebProxy RequesProxy { get; set; }
-
-
+        
 
         static int _nonius;
         static readonly Regex IpPortReg = new Regex("(?<ip>\\d+\\.\\d+\\.\\d+\\.\\d+):(?<port>\\d*)");
@@ -181,6 +180,27 @@ namespace Commons
         private static readonly Random Rang = new Random();
 
         #endregion
+
+        public static string GetResponseHeader(string url,string key)
+        {
+            try
+            {
+                WebRequest myRequest = WebRequest.Create(url);
+                using (WebResponse myResponse = myRequest.GetResponse())
+                {
+                    return myResponse.Headers.Get(key);
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        public static string GetResponseCookies(string url)
+        {
+            return GetResponseHeader(url, "Set-Cookie");
+        }
 
         /// <summary>
         /// GET 方式抓取网页信息
@@ -236,9 +256,9 @@ namespace Commons
                     }
                     //CookieContainer cookieContainer = new CookieContainer();
                     //CookieCollection cookies = cookieContainer.GetCookies(new Uri(url));
-                    if (httpHead != null)
+                    if (ResultResponseHeader != null)
                     {
-                        foreach (var item in httpHead)
+                        foreach (var item in ResultResponseHeader)
                         {
                             mywr.Headers.Add(item.Key, item.Value);
                         }
@@ -255,22 +275,22 @@ namespace Commons
                     }
 
                     HttpWebResponse mywrp = (HttpWebResponse)mywr.GetResponse();
-
+                    //mywrp.Headers.ToString();
                     if (mywrp.ResponseUri.AbsoluteUri != url)
                     {
                         LogServer.WriteLog("url old:" + url + "new " + mywrp.ResponseUri, "UrlChange");
                         //return "";
                     }
 
-                    if (HttpRuntime.Cache["httpHead"] == null && (httpHead == null || httpHead.Count == 0))
+                    if (HttpRuntime.Cache["httpHead"] == null && (ResultResponseHeader == null || ResultResponseHeader.Count == 0))
                     {
                         lock (HEAD_LOCK)
                         {
                             HttpRuntime.Cache.Add("httpHead", "httpHead", null, DateTime.Now.AddMinutes(30),
                                System.Web.Caching.Cache.NoSlidingExpiration,
                                System.Web.Caching.CacheItemPriority.NotRemovable, null);
-                            httpHead = new Dictionary<string, string>();
-                            if (httpHead == null || httpHead.Count == 0)
+                            ResultResponseHeader = new Dictionary<string, string>();
+                            if (ResultResponseHeader == null || ResultResponseHeader.Count == 0)
                             {
                                 for (int i = 0; i < mywrp.Headers.Count; i++)
                                 {
@@ -278,11 +298,11 @@ namespace Commons
                                         continue;
                                     if (mywrp.Headers.Keys[i] == "Set-Cookie")
                                     {
-                                        httpHead.Add("Cookie", mywrp.Headers.Get(i));
+                                        ResultResponseHeader.Add("Cookie", mywrp.Headers.Get(i));
                                     }
                                     else
                                     {
-                                        httpHead.Add(mywrp.Headers.Keys[i], mywrp.Headers.Get(i));
+                                        ResultResponseHeader.Add(mywrp.Headers.Keys[i], mywrp.Headers.Get(i));
                                     }
                                 }
                             }
@@ -368,6 +388,189 @@ namespace Commons
                         {
                             url = url + "?" + paraminfo;
                         }
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
+                    if (ex is WebException)
+                    {
+                        var webEx = ex as WebException;
+                        if (RequesProxy != null)
+                        {
+                            LogServer.WriteLog("url:" + url + "Proxy:" + RequesProxy.Address + "\t" + webEx.Message, "HtmlAnalysis");
+                        }
+                        else
+                            LogServer.WriteLog("url:" + url + "" + webEx.Message, "HtmlAnalysis");
+                        return "";
+                    }
+
+                    LogServer.WriteLog("get url:" + url + ex, "HtmlAnalysis");
+                    return "";
+                }
+            }
+        }
+
+        public string HttpRequest(string url,string param)
+        {
+            if (string.IsNullOrEmpty(url) || (!url.Contains("http://") && !url.Contains("https://")))
+                return "";
+            int retry = 0;
+            while (true)
+            {
+                string paraminfo = "";
+                string strGethtml = "";
+                try
+                {
+
+                    if (!string.IsNullOrEmpty(param))
+                    {
+                        if (RequestMethod.ToUpper() == "POST")
+                            paraminfo = param;
+                        else
+                            url = url + "?" + param;
+
+                    }
+
+                    HttpWebRequest mywr = (HttpWebRequest)WebRequest.Create(url);
+                    mywr.Proxy = RequesProxy;
+                    mywr.Method = RequestMethod;
+                    mywr.Accept = RequestAccept;
+                    mywr.ContentType = RequestContentType;
+                    mywr.AllowAutoRedirect = RequestAutoRedirect;
+                    if (!string.IsNullOrEmpty(RequestReferer))
+                        mywr.Referer = RequestReferer;
+                    mywr.UserAgent = RanAgent
+                        ? UserAgentList[Rang.Next(0, UserAgentList.Length)]
+                        : RequestUserAgent;
+                    if (Headers != null && Headers.Count > 0)
+                    {
+                        foreach (KeyValuePair<string, string> item in Headers)
+                        {
+                            mywr.Headers.Add(item.Key, item.Value);
+                        }
+                    }
+                    mywr.KeepAlive = RequestKeepAlive;
+                    mywr.Timeout = RequestTimeout;
+                    if (RequestCookies.Count > 0)
+                        mywr.CookieContainer = RequestCookies;
+                    if (HasCookies)
+                    {
+                        if (mywr.CookieContainer == null)
+                        {
+                            mywr.CookieContainer = new CookieContainer();
+                        }
+                        SimulationCookie.GetCookie(mywr.Host, cookie => mywr.CookieContainer.Add(cookie));
+                    }
+                 
+                    //把参数用流对象写入request对象中
+                    if (paraminfo != "")
+                    {
+                        byte[] postbyte = Encoding.ASCII.GetBytes(paraminfo);
+                        mywr.ContentLength = postbyte.Length;
+                        Stream newStream = mywr.GetRequestStream();
+                        newStream.Write(postbyte, 0, postbyte.Length);
+                        newStream.Close();
+                    }
+
+                    HttpWebResponse mywrp = (HttpWebResponse)mywr.GetResponse();
+                    //mywrp.Headers.ToString();
+                    if (mywrp.ResponseUri.AbsoluteUri != url)
+                    {
+                        LogServer.WriteLog("url old:" + url + "new " + mywrp.ResponseUri, "UrlChange");
+                        //return "";
+                    }
+                    if(ResultResponseHeader==null)
+                        ResultResponseHeader=new Dictionary<string, string>();
+                    else if (ResultResponseHeader.Count > 0)
+                    {
+                        ResultResponseHeader.Clear();
+                    }
+            
+                    for (int i = 0; i < mywrp.Headers.Count; i++)
+                    {
+                        if (headKey.Contains(mywrp.Headers.Keys[i]))
+                            continue;
+                       
+                        ResultResponseHeader.Add(mywrp.Headers.Keys[i], mywrp.Headers.Get(i));
+                    }
+
+                    //SimulationCookie.SetCookie(mywr.Host, mywrp.Cookies);
+                    Stream responseStream = mywrp.GetResponseStream();
+                    if (mywrp.ContentEncoding.ToLower().Contains("gzip"))
+                    {
+                        if (responseStream != null)
+                            responseStream = new GZipStream(responseStream, CompressionMode.Decompress);
+                    }
+
+                    int scode = (Int32)mywrp.StatusCode;
+                    if (scode != 200)
+                        return "Error StatusCode:" + scode;
+
+                    Encoding encodingType;
+                    string tempType = mywrp.Headers["Content-Type"] ?? "";
+                    tempType = tempType.ToLower();
+                    if (tempType.Contains("gbk") || tempType.Contains("gb2312") || tempType.Contains("utf-8"))
+                    {
+
+                        if (tempType.Contains("gbk") || tempType.Contains("gb2312"))
+                            encodingType = Encoding.GetEncoding("GBK");
+                        else
+                            encodingType = Encoding.UTF8;
+
+                        if (responseStream == null) return strGethtml;
+                        StreamReader sr = new StreamReader(responseStream, encodingType);
+                        strGethtml = sr.ReadToEnd().Trim();
+                        mywrp.Close();
+                        sr.Close();
+                        return strGethtml;
+                    }
+                    else
+                    {
+                        #region 将html文件流转换成字节
+                        List<byte> blist = new List<byte>();
+                        byte[] buff = new byte[2048];
+                        int read;
+                        while (responseStream != null && (read = responseStream.Read(buff, 0, buff.Length)) > 0)
+                        {
+                            blist.AddRange(buff.Take(read));
+                        }
+                        var bytes = blist.ToArray();
+                        #endregion
+                        ICharsetDetector cdet = new CharsetDetector();
+                        cdet.Feed(bytes, 0, bytes.Length);
+                        cdet.DataEnd();
+                        //如果自动识别程序未能识别页面编码，则使用程序指定
+                        if (string.IsNullOrEmpty(cdet.Charset))
+                        {
+                            encodingType = RequestEncoding;
+                        }
+                        else
+                        {
+                            encodingType = Encoding.GetEncoding(cdet.Charset);
+                        }
+                        strGethtml = encodingType.GetString(bytes);
+                    }
+
+                    if (mywrp.StatusCode == HttpStatusCode.Redirect)
+                    {
+                        strGethtml += string.Format("ResponseUri:{0}", mywrp.ResponseUri);
+                    }
+
+                    mywrp.Close();
+                    return strGethtml;
+
+                    //if (responseStream == null) return strGethtml;
+                    //StreamReader sr = new StreamReader(responseStream, RequestEncoding);
+                    //strGethtml = sr.ReadToEnd().Trim();
+                    //mywrp.Close();
+                    //sr.Close();
+                }
+                catch (Exception ex)
+                {
+                    if (retry < 3)
+                    {
+                        retry++;
+                   
                         Thread.Sleep(1000);
                         continue;
                     }
@@ -518,8 +721,6 @@ namespace Commons
                 }
             }
         }
-
- 
 
         /// <summary>
         /// GET方式抓取网页信息
@@ -894,6 +1095,20 @@ namespace Commons
                 }
             }
         }
+
+
+
+
+        public static void AsyncHttpRequest(string maiurl, string paramurl)
+        {
+            using (WebClient client = new WebClient())
+            {
+                var Postbyte = Encoding.ASCII.GetBytes(paramurl);
+                client.UploadDataAsync(new Uri(maiurl), "POST", Postbyte);
+            }
+        }
+
+
 
         ////http://www.2cto.com/kf/201208/149159.html
         ///// <summary>

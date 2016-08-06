@@ -25,7 +25,7 @@ namespace WebAppClinet
         protected void Page_Load(object sender, EventArgs e)
         {
             //new SpriderSystem().SaveSitePromo();
-
+            //loadjdUser();
             //new SpriderSystem().SendWeibo();
             //WeiboFactory factory = new WeiboFactory { Domain = "sina" };
             //factory.Auth("3ad593b75a3f603cc68aa7e7edeed8cb");
@@ -36,10 +36,10 @@ namespace WebAppClinet
             //new SiteClassBll().UpdatemmbsiteClass(293);
             //UserAccountSystem();
             //test();
-            //jdlogion();
+            jdlogion();
             //new SiteClassBll().UpdatemmbsiteClass(10);
             //loadjdUser();
-            test();
+            //test();
             //var list = new MmbProductItemsBll().GetItem(1, 1000);
             //   new SpriderSystem().UpdateSiteCat(8);
             // jdwxPrice();
@@ -51,175 +51,32 @@ namespace WebAppClinet
 
         private void jdlogion()
         {
-
-           
-
-            var param = "";
-            var checkcodeTxt = "";
-            var checkCodeRid = "";
-            var payPassword = "";
-            var mobileForPresale = "";
-            var presalePayType = "";// 预售验证手机号
+            var user = new SiteUserInfoBll().GetOngeUser("人過三十天过午");
+            HtmlAnalysis req= new HtmlAnalysis();
+            req.Headers.Add("Cookie", user.LogCookies);
+            //var page2 = req.HttpRequest("http://details.jd.com/normal/item.action?orderid=20649813582&PassKey=8F52B426AEC301B57F080524A5D8C367");
 
 
-            if (!string.IsNullOrEmpty(checkcodeTxt))
-            {
-                param = param + "submitOrderParam.checkcodeTxt=" + checkcodeTxt;
-            }
-            param = param + "&overseaPurchaseCookies="; //+$("#overseaPurchaseCookies").val();
+            var url = "http://trade.jd.com/shopping/async/payAndShip/initSelfPick.action";
+            var param =
+                "shipParam.payId=4&shipParam.pickSiteId=0&shipParam.regionId=-1&shipParam.pickSiteNum=10&consigneeId=undefined&isAddrDefault=0&selectedAddressType=&isOpenConsignee=1";
 
-            //if (!isEmpty($("#checkCodeDiv").html()))
-            //{
-            //    checkCodeRid = $("#checkcodeRid").val();
-            //}
-            if (!string.IsNullOrEmpty(checkCodeRid)) //验证码
-            {
-                param = param + "&submitOrderParam.checkCodeRid=" + checkCodeRid;
-            }
-            if (!string.IsNullOrEmpty(payPassword)) //支付密码
-            {
-                param = param + "&submitOrderParam.payPassword=" + payPassword;
-                    //encodeURIComponent(stringToHex(payPassword));
-            }
-            var sopNotPutInvoice = ""; //必须
-            if (!string.IsNullOrEmpty(sopNotPutInvoice))
-            {
-                param = param + "&submitOrderParam.sopNotPutInvoice=" + sopNotPutInvoice;//$("#sopNotPutInvoice").val();
-            }
-            else {
-                param = param + "&submitOrderParam.sopNotPutInvoice=false";
-            }
-
-            if (!string.IsNullOrEmpty(mobileForPresale))
-            {
-                param = param + "&submitOrderParam.presaleMobile=" + mobileForPresale;
-            }
-            var trackID ="";
-            if (!string.IsNullOrEmpty(trackID))
-            {
-                param = param + "&submitOrderParam.trackID=" + trackID;
-            }
-            var regionId = "";
-            if (!string.IsNullOrEmpty(regionId))
-            {
-                param += "&regionId=" + regionId;
-            }
-
-            var easyBuyFlag = ""; //$("#easyBuyFlag").val(); 一键购
-            if (easyBuyFlag == "1" || easyBuyFlag == "2")
-            {
-                param += "&ebf=" + easyBuyFlag;
-            }
-
-            var ignorePriceChange = "0"; //$('#ignorePriceChange').val();
-            if (!string.IsNullOrEmpty(ignorePriceChange))
-            {
-                param += "&submitOrderParam.ignorePriceChange=" + ignorePriceChange;
-            }
-
-            var onlinepaytype = "0"; //$(".payment-item.item-selected").attr('onlinepaytype');
-            var paymentId = "4"; //$(".payment-item.item-selected").attr('payid');
-
-
-            //if ($(".payment-item[onlinepaytype=1]").length == 0 ||$(".payment-item[onlinepaytype=1]").hasClass("payment-item-disabled")){
-            //    param += "&submitOrderParam.btSupport=0";
-            //}else{
-            //    param += "&submitOrderParam.btSupport=1";
-            //}
-            param += "&submitOrderParam.btSupport=0";
-
-            var eid = ""; //$('#eid').val();
-            if (!string.IsNullOrEmpty(eid))
-            {
-                param += "&submitOrderParam.eid=" + eid;
-            }
-            var fp = ""; //$('#fp').val();
-            if (!string.IsNullOrEmpty(fp))
-            {
-                param += "&submitOrderParam.fp=" + fp;
-            }
-            var isBestCoupon = "";//$('#isBestCoupon').val();
-            if (!string.IsNullOrEmpty(isBestCoupon))
-            {
-                param += "&submitOrderParam.isBestCoupon=" + isBestCoupon;
-            }
-            string action = "http://trade.jd.com/shopping/order/submitOrder.action";
-
-
-            HtmlAnalysis req = new HtmlAnalysis();
-            //req.RequestMethod = "POST";
-
-            var cookies = new SiteCookiesBll().GetOneByDomain("www.jd.com");
-            if (cookies != null)
-            {
-                req.Headers.Add("Cookie", cookies.Cookies);
-                req.RequestUserAgent = cookies.UserAgent;
-            }
-            //string orderpage = req.HttpRequest("http://trade.jd.com/shopping/order/getOrderInfo.action");
-            //req.RequestMethod = "POST";
-            //var page = req.HttpRequest(action + param);
-
-            //string js1 = "https://payrisk.jd.com/fp.html";
-            //var page1= HtmlAnalysis.Gethtmlcode(js1);
-            //var jsres = JsContext.Responsejs(page1,"");
-            //string logionurl = "https://passport.jd.com/new/login.aspx?ReturnUrl=https%3A%2F%2Fwww.jd.com%2F";
-            //var page = new DownLoadServer().DownLoadpage(logionurl);
-            //string uuid = Regex.Match(page, "name=\"uuid\" value=\"(?<x>.*?)\"/>", RegexOptions.RightToLeft).Groups["x"].Value;
-            //string token = Regex.Match(page, "name=\"_t\" id=\"token\" value=\"(?<x>.*?)\"").Groups["x"].Value;
-            //string lgkey = Regex.Match(page, "<input type=name=\"hidden\" name=\"(?<x>.*?)\" value=\"(?<y>.*?)\" />", RegexOptions.RightToLeft).Groups["x"].Value;
-            //string lgvalue = Regex.Match(page, "<input type=name=\"hidden\" name=\"(?<x>.*?)\" value=\"(?<y>.*?)\" />", RegexOptions.RightToLeft).Groups["y"].Value;
-            //string logionpage = HtmlAnalysis.Gethtmlcode(logionurl);<input type="hidden" name="ZjKEwOTQFR" value="nDhTc" />
-
-
-            //string url = "https://passport.jd.com/uc/loginService";
-            //Dictionary<string, string> paramlist = new Dictionary<string, string>();
-            //paramlist.Add("uuid", uuid);
-            //paramlist.Add("machineNet", "");
-            //paramlist.Add("machineCpu", "");
-            //paramlist.Add("machineDisk", "");
-            //paramlist.Add("eid", "053618F3B3A99AA10BBC005C578D0400A15A7ACB6D570B43ACEBBC908FA3581EE25724D49A76544C8A01D658B9DE278B");
-            //paramlist.Add("fp", "39c8c858e06c01164b9c5aa46580c703");
-            //paramlist.Add("_t", token);
-            //paramlist.Add(lgkey, lgvalue);
-            //paramlist.Add("loginname", "地狱狂壟");
-            //paramlist.Add("nloginpwd", "chengzho347");
-            //paramlist.Add("loginpwd", "chengzho347");
-            //paramlist.Add("chkRememberMe", "on");
-
-            //string param = "";
-
-            //foreach (var item in paramlist)
-            //{
-            //    param += item.Key + "=" + item.Value + "&";
-            //}
-
-            //var Page =  req.HttpRequest(url+"?"+param);
-            var page2 = req.HttpRequest("http://order.jd.com/center/list.action");
-
-            var url = "";
-            //  url=  "http://cart.jd.com/cart/dynamic/reBuyForOrderCenter.action?action=AddSkus&wids=10108554443&nums=1";
-            //var page3 = req.HttpRequest(url);  //addcat
-
-
-            //url = "http://trade.jd.com/shopping/dynamic/payAndShip/getAdditShipment.action?paymentId=4&shipParam.reset311=0&resetFlag=0000000000&shipParam.onlinePayType=0";
-
-            url = "http://trade.jd.com/shopping/order/getOrderInfo.action?rid=0.49538216742194985";
-            var page = req.HttpRequest(url);
-            //url = "http://trade.jd.com/shopping/order/getOrderInfo.action";
-
-
-            url = "http://trade.jd.com/shopping/dynamic/payAndShip/getVenderInfo.action?shipParam.payId=1&shipParam.pickShipmentItemCurr=false&shipParam.onlinePayType=0";
-            req.RequestMethod = "POST";
-            req.RequestAccept = "text/plain, */*; q=0.01";
+            req.RequestAccept = "application/json, text/javascript, */*; q=0.01";
             req.RequestContentType = "application/x-www-form-urlencoded";
-            req.RequestReferer = "http://trade.jd.com/shopping/order/getOrderInfo.action?rid=1469494481688";
-            req.Headers.Add("Origin", "http://trade.jd.com");
-            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
-            var page5 = req.HttpRequest(url); //选择支付方式
+            var address = req.HttpRequest(url, param);
 
-            url =
-                "http://trade.jd.com/shopping/dynamic/payAndShip/getAdditShipment.action?paymentId=1&shipParam.reset311=0&resetFlag=0000000000&shipParam.onlinePayType=0";
-            var page6 = req.HttpRequest(url);
+            //url = "http://trade.jd.com/shopping/dynamic/payAndShip/getVenderInfo.action?shipParam.payId=1&shipParam.pickShipmentItemCurr=false&shipParam.onlinePayType=0";
+            //req.RequestMethod = "POST";
+            //req.RequestAccept = "text/plain, */*; q=0.01";
+            //req.RequestContentType = "application/x-www-form-urlencoded";
+            //req.RequestReferer = "http://trade.jd.com/shopping/order/getOrderInfo.action?rid=1469494481688";
+            //req.Headers.Add("Origin", "http://trade.jd.com");
+            //req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            //var page5 = req.HttpRequest(url); //选择支付方式
+
+            //url =
+            //    "http://trade.jd.com/shopping/dynamic/payAndShip/getAdditShipment.action?paymentId=1&shipParam.reset311=0&resetFlag=0000000000&shipParam.onlinePayType=0";
+            //var page6 = req.HttpRequest(url);
 
 
         }
@@ -247,7 +104,9 @@ namespace WebAppClinet
                     EmailName = templist[4],
                     EmailPwd = templist[5],
                     Remark = templist[6]+" " +templist[7],
-                    CreateDate=DateTime.Now
+                    LogCookies = "",
+                    LogCookiesUpdatetime = DateTime.Now,
+                    CreateDate =DateTime.Now
 
                 };
                 newlist.Add(userinfo);
@@ -255,22 +114,11 @@ namespace WebAppClinet
             new SiteUserInfoBll().addUser(newlist);
         }
 
-
-        private void test3()
-        {
-            string url = "http://www.joyj.com/go/411040";
-            url =
-                "http://union.click.jd.com/jda?e=&p=AyIOZRlfEgMTBVcaXyUCEQZUG14cMlZYDUUEJVtXQhQQRQtaV1MJBABAHUBZCQVbFgMTB1ASRExHTlplThBCAhp%2BB2A7aVprUDNyDBV%2BYXcLXVcZMhUCUx5bFQIRN1UfUxMAEwdcK2t0cCJROxtaFAMTBlUcWRcyEzdVHl8VBBAAXBteEgIWN1I%3D&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsWAxMHUBJETEdOWg%3D%3D&a=fCg9UgoiAwwHO1BcXkQYFFlhc3l8c1FdQ1wzVRBSUll%2bAQAPDSwjLw%3d%3d&refer=norefer";
-
-            PhantomjsBase.PhantomjsPath = Request.PhysicalApplicationPath;
-            string page = new DownLoadServer().DownLoadbuycmd("http://www.jd.com/");
-           var aa = page;
-        }
-
-
-
         private void test()
         {
+          
+            
+
             var pageinfo1 = HtmlAnalysis.Gethtmlcode("http://d.10jqka.com.cn/v2/time/hs_600662/last.js");
 
 
@@ -332,7 +180,8 @@ namespace WebAppClinet
 
             //new SiteFactory().StockInfoManager.GetALlStockInfo();
             //return;17074858678
-            string tempurl = "https://xueqiu.com/v4/stock/quote.json?code=SZ000002&_=1465259721266";
+            string tempurl = "https://xueqiu.com/v4/stock/quote.json?code=SZ300104";
+                              
 
             var cookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
             //PhantomjsBase.PhantomjsPath = Request.PhysicalApplicationPath;
@@ -349,13 +198,17 @@ namespace WebAppClinet
             //request.Headers.Add("Origin", "http://licaike.hexun.com");
             //request.RequestContentType = "application/x-www-form-urlencoded";
             //request.RequestReferer = "http://licaike.hexun.com";
-            request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
-            request.Headers.Add("X-Requested-With","XMLHttpRequest");
-            request.RequestReferer = "https://xueqiu.com/s/SZ000002";
+            request.RequestAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+            //request.RequestReferer = "https://xueqiu.com/s/SZ000002";
             if (cookies != null)
+            {
                 request.Headers.Add("Cookie", cookies.Cookies);
+                request.RequestUserAgent = cookies.UserAgent;
+            }
+         
            // request.Headers.Add("Cookie", "s=n4v12ge0yu; webp=0; bid=dfa57ca958de46f53568cc28e1762269_ipbu7hld; xq_a_token=ed3a6f41cd40749a7026f25f4f3e936379e415ed; xq_r_token=d54ca76f529ff87e19b08c546ed16a464caa90ef; __utmt=1; Hm_lvt_1db88642e346389874251b5a1eded6e3=1468887873,1469001779; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1469001795; __utma=1.2122399928.1465259166.1468888024.1469001780.4; __utmb=1.4.9.1469001795053; __utmc=1; __utmz=1.1465259166.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)");
-            request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+            //request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/5";
             //{"SH603288":{"symbol":"SH603288","exchange":"SH","code":"603288","name":"海天味业","current":"30.09","percentage 跌幅百分比":"-0.59","change （下跌或者上涨）价格":"-0.18","open":"30.39","high":"30.85","low":"29.83","close 收盘价":"30.09","last_close上次收盘价":"30.27","high52week >52周最高":"38.38","low52week52周最低":"24.4","volume成交（手 1/100股）":"3541015.0","volumeAverage":"3826996","marketCapital":"8.143094214E10","eps":"0.3","pe_ttm":"31.4916","pe_lyr":"32.4474","beta":"0.0","totalShares":"2706246000","time":"Mon Jun 06 14:59:47 +0800 2016","afterHours":"0.0","afterHoursPct":"0.0","afterHoursChg":"0.0","updateAt":"1465214405369","dividend":"0.6","yield":"1.99","turnover_rate":"1.31","instOwn":"0.0","rise_stop":"33.3","fall_stop":"27.24","currency_unit":"CNY","amount":"1.07284402E8","net_assets":"2.9381","hasexist":"","has_warrant":"0","type":"11","flag":"1","rest_day":"","amplitude":"3.37","lot_size":"100","min_order_quantity":"0","max_order_quantity":"0","tick_size":"0.01","kzz_stock_symbol":"","kzz_stock_name":"","kzz_stock_current":"0.0","kzz_convert_price":"0.0","kzz_covert_value":"0.0","kzz_cpr":"0.0","kzz_putback_price":"0.0","kzz_convert_time":"","kzz_redempt_price":"0.0","kzz_straight_price":"0.0","kzz_stock_percent":"","pb":"10.24","benefit_before_tax":"0.0","benefit_after_tax":"0.0","convert_bond_ratio":"","totalissuescale":"","outstandingamt":"","maturitydate":"","remain_year":"","convertrate":"0.0","interestrtmemo":"","release_date":"","circulation":"0.0","par_value":"0.0","due_time":"0.0","value_date":"","due_date":"","publisher":"","redeem_type":"F","issue_type":"1","bond_type":"","warrant":"","sale_rrg":"","rate":"","after_hour_vol":"0","float_shares":"269460000","float_market_capital":"8.1080514E9","disnext_pay_date":"","convert_rate":"0.0","psr":"7.0653"}}
             var Page = request.HttpRequest(tempurl);
             

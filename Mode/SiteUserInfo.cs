@@ -18,6 +18,11 @@ namespace Mode
         public string PhoneNum { get; set; }
         public string EmailName { get; set; }
         public string EmailPwd { get; set; }
+
+        public string LogCookies { get; set; }
+
+        public DateTime LogCookiesUpdatetime { get; set; }
+
         public string Remark { get; set; }
         public DateTime CreateDate { get; set; }
     }

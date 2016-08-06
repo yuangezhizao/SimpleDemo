@@ -256,6 +256,18 @@ namespace BLL.Sprider.Stock
             string url = $"https://xueqiu.com/v4/stock/quote.json?code={code}&_=1465259721266";
 
             var cookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
+
+            if (cookies.UpdateTime.AddMinutes(30) < DateTime.Now)
+            {
+               var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/");
+                if (!string.IsNullOrEmpty(result))
+                {
+                    cookies.Cookies = result;
+                    new SiteCookiesBll().SaveCookies(cookies);
+                }
+    
+            }
+
             HtmlAnalysis request = new HtmlAnalysis();
             request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
             request.Headers.Add("X-Requested-With", "XMLHttpRequest");
@@ -311,7 +323,21 @@ namespace BLL.Sprider.Stock
                 xq.Risestop = xqItem["rise_stop"].Value<float>();
                 xq.FallStop = xqItem["fall_stop"].Value<float>();
                 xq.CurrencyUnit = xqItem["currency_unit"].Value<string>();
-                xq.Amount = xqItem["amount"].Value<string>();
+                if (xqItem["amount"].ToString() != "")
+                {
+                    var  tempat= xqItem["amount"].Value<string>();
+                    if (tempat.Contains("E"))
+                    {
+                        xq.Amount =float.Parse(tempat, System.Globalization.NumberStyles.Float);
+                    }
+                    else
+                    {
+                        float tempft = 0;
+                        float.TryParse(tempat, out tempft);
+                        xq.Amount = tempft;
+                    }
+          
+                }
                 xq.NetAssets = xqItem["net_assets"].Value<float>();
                 xq.Hasexist = xqItem["hasexist"].Value<string>();
                 xq.HasWarrant = xqItem["has_warrant"].Value<string>();
@@ -358,7 +384,24 @@ namespace BLL.Sprider.Stock
                 xq.Rate = xqItem["rate"].Value<string>();
                 xq.AfterHourVol = xqItem["after_hour_vol"].Value<int>();
                 xq.FloatShares = xqItem["float_shares"].Value<float>();
-                xq.FloatMarketCapital = xqItem["float_market_capital"].Value<string>();
+
+                if (xqItem["float_market_capital"].ToString() != "")
+                {
+                    var tempat = xqItem["float_market_capital"].Value<string>();
+                    if (tempat.Contains("E"))
+                    {
+                        xq.FloatMarketCapital = float.Parse(tempat, System.Globalization.NumberStyles.Float);
+                    }
+                    else
+                    {
+                        float tempft = 0;
+                        float.TryParse(tempat, out tempft);
+                        xq.FloatMarketCapital = tempft;
+                    }
+
+                }
+
+                //xq.FloatMarketCapital = xqItem["float_market_capital"].Value<string>();
                 xq.DisnextPayDate = xqItem["disnext_pay_date"].Value<string>();
                 //xq.ConvertRate = xqItem["convert_rate"].Value<float>();
                 if (xqItem["psr"].ToString() != "")

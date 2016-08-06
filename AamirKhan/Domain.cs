@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
+using BLL;
 using BLL.Sprider.Stock;
 using Commons;
 using Mode;
@@ -110,8 +112,10 @@ namespace AamirKhan
         private void webBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
             webBrowserForm pst = new webBrowserForm();
-            pst.login();
             pst.ShowDialog();
+          
+    
+  
            
         }
 

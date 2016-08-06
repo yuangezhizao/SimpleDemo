@@ -64,9 +64,9 @@ namespace DataBase.Stock
                 {
                     using (var db = _dbFactory.OpenDbConnection())
                     {
-                      return  db.SqlList<StockInfo>(
-                            "select * from stockinfo where stockno not in(select stockno from XqStockDayReport)");
-                        //return db.Select<StockInfo>().ToList();
+                        //return  db.SqlList<StockInfo>(
+                        //      "select * from stockinfo where stockno not in(select stockno from XqStockDayReport)");
+                        return db.Select<StockInfo>().ToList();
                     }
                 }
                 catch (Exception ex)

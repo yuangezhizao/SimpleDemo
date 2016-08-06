@@ -37,6 +37,22 @@ namespace DataBase
             }
         }
 
+        public void UpdateUser(SiteUserInfo user)
+        {
+            try
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    db.Save(user);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogServer.WriteLog(ex);
+            }
+        }
+
         public void addUser(List<SiteUserInfo> users)
         {
             try
@@ -59,6 +75,24 @@ namespace DataBase
             {
                 return db.Select<SiteUserInfo>();
             }
+        }
+
+        public SiteUserInfo GetOngeUser(string name)
+        {
+            try
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    return db.Single<SiteUserInfo>(c => c.UserName == name);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogServer.WriteLog(ex);
+                return null;
+            }
+        
         }
 
     }

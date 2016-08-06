@@ -18,5 +18,14 @@ namespace BLL
         {
             return new SiteUserInfoDB().GetAllUser();
         }
+        public void UpdateUser(SiteUserInfo user)
+        {
+            new SiteUserInfoDB().UpdateUser(user);
+        }
+        
+        public SiteUserInfo GetOngeUser(string name)
+        {
+            return new SiteUserInfoDB().GetOngeUser(name);
+        }
     }
 }

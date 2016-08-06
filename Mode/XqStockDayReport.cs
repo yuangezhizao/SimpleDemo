@@ -28,9 +28,21 @@ namespace Mode
         public decimal Minprice { get; set; }
         public decimal Closeprice { get; set; }
         /// <summary>
+        /// 涨停价
+        /// </summary>
+        public float Risestop { get; set; }
+        /// <summary>
+        /// 跌停价
+        /// </summary>
+        public float FallStop { get; set; }
+        /// <summary>
         /// 昨天收盘价
         /// </summary>
         public decimal LastCloseprice { get; set; }
+        /// <summary>
+        /// 振幅%
+        /// </summary>
+        public float Amplitude { get; set; }
         /// <summary>
         /// high52week 52周最高
         /// </summary>
@@ -43,35 +55,69 @@ namespace Mode
         //volume成交（手 1/100股）
         public float Volume { get; set; }
         /// <summary>
+        /// 成交额
+        /// </summary>
+        public float Amount { get; set; }
+        /// <summary>
         /// 成交量
         /// </summary>
         public float VolumeAverage { get; set; }
-        public float MarketCapital { get; set; }
-        public float Eps { get; set; }
-        public float Pettm { get; set; }
-        public float PElyr { get; set; }
-
-        public float Beta { get; set; }
+        /// <summary>
+        /// 总股本
+        /// </summary>
         public float TotalShares { get; set; }
+        /// <summary>
+        /// 总市值（元）
+        /// </summary>
+        public float MarketCapital { get; set; }
+        /// <summary>
+        /// 每股收益
+        /// </summary>
+        public float Eps { get; set; }
+        /// <summary>
+        ///每股股息
+        /// </summary>
+        public float Dividend { get; set; }
+        /// <summary>
+        /// 每股净资产
+        /// </summary>
+        public float NetAssets { get; set; }
+        /// <summary>
+        /// 市盈率TTM是价格除以最近四个季度每股盈利计算的市盈率，这个是动态市盈率
+        /// </summary>
+        public float Pettm { get; set; }
+        /// <summary>
+        /// 市盈率LYR是价格除以上一年度每股盈利计算的静态市盈率，这个是静态市盈率
+        /// </summary>
+        public float PElyr { get; set; }
+        /// <summary>
+        /// 市销率TTM
+        /// </summary>
+        public float Psr { get; set; }
+        /// <summary>
+        /// 市净率TTM
+        /// </summary>
+        public float Pb { get; set; }
+        public float Beta { get; set; }
+
         public float AfterHours { get; set; }
         public float AfterHoursPct { get; set; }
         public float AfterHoursChg { get; set; }
         public float UpdateAt { get; set; }
-        public float Dividend { get; set; }
+
         public float Yield { get; set; }
         public float Turnoverrate { get; set; }
         public float InstOwn { get; set; }
-        public float Risestop { get; set; }
-        public float FallStop { get; set; }
+
         public string CurrencyUnit { get; set; }
-        public string Amount { get; set; }
-        public float NetAssets { get; set; }
+    
+ 
         public string Hasexist { get; set; }
         public string HasWarrant { get; set; }
         public float Type { get; set; }
         public int Flag { get; set; }
         public string RestDay { get; set; }
-        public float Amplitude { get; set; }
+
         public float LotSize { get; set; }
         public float MinOrderQuantity { get; set; }
         public float MaxOrderQuantity { get; set; }
@@ -87,7 +133,7 @@ namespace Mode
         public float KzzRedemptPrice { get; set; }
         public float KzzStraightPrice { get; set; }
         public string KzzStockPercent { get; set; }
-        public float Pb  { get; set; }
+     
         public float BenefitBeforeTax { get; set; }
         public float BenefitAfterTax { get; set; }
         public string ConvertBondRatio { get; set; }
@@ -112,10 +158,10 @@ namespace Mode
         public string Rate { get; set; }
         public int AfterHourVol { get; set; }
         public float FloatShares { get; set; }
-        public string FloatMarketCapital { get; set; }
+        public float FloatMarketCapital { get; set; }
         public string DisnextPayDate { get; set; }
         public float ConvertRate { get; set; }
-        public float Psr { get; set; }
+    
         public DateTime CreateDate { get; set; }
     }
 }
