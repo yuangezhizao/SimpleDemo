@@ -186,12 +186,13 @@ namespace Commons
             try
             {
                 WebRequest myRequest = WebRequest.Create(url);
+                
                 using (WebResponse myResponse = myRequest.GetResponse())
                 {
                     return myResponse.Headers.Get(key);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return "";
             }
@@ -256,14 +257,14 @@ namespace Commons
                     }
                     //CookieContainer cookieContainer = new CookieContainer();
                     //CookieCollection cookies = cookieContainer.GetCookies(new Uri(url));
-                    if (ResultResponseHeader != null)
-                    {
-                        foreach (var item in ResultResponseHeader)
-                        {
-                            mywr.Headers.Add(item.Key, item.Value);
-                        }
+                    //if (ResultResponseHeader != null)
+                    //{
+                    //    foreach (var item in ResultResponseHeader)
+                    //    {
+                    //        mywr.Headers.Add(item.Key, item.Value);
+                    //    }
 
-                    }
+                    //}
                     //把参数用流对象写入request对象中
                     if (paraminfo != "")
                     {
@@ -282,32 +283,21 @@ namespace Commons
                         //return "";
                     }
 
-                    if (HttpRuntime.Cache["httpHead"] == null && (ResultResponseHeader == null || ResultResponseHeader.Count == 0))
+                    if (ResultResponseHeader == null)
+                        ResultResponseHeader = new Dictionary<string, string>();
+                    else if (ResultResponseHeader.Count > 0)
                     {
-                        lock (HEAD_LOCK)
-                        {
-                            HttpRuntime.Cache.Add("httpHead", "httpHead", null, DateTime.Now.AddMinutes(30),
-                               System.Web.Caching.Cache.NoSlidingExpiration,
-                               System.Web.Caching.CacheItemPriority.NotRemovable, null);
-                            ResultResponseHeader = new Dictionary<string, string>();
-                            if (ResultResponseHeader == null || ResultResponseHeader.Count == 0)
-                            {
-                                for (int i = 0; i < mywrp.Headers.Count; i++)
-                                {
-                                    if (headKey.Contains(mywrp.Headers.Keys[i]))
-                                        continue;
-                                    if (mywrp.Headers.Keys[i] == "Set-Cookie")
-                                    {
-                                        ResultResponseHeader.Add("Cookie", mywrp.Headers.Get(i));
-                                    }
-                                    else
-                                    {
-                                        ResultResponseHeader.Add(mywrp.Headers.Keys[i], mywrp.Headers.Get(i));
-                                    }
-                                }
-                            }
-                        }
+                        ResultResponseHeader.Clear();
                     }
+
+                    for (int i = 0; i < mywrp.Headers.Count; i++)
+                    {
+                        if (headKey.Contains(mywrp.Headers.Keys[i]))
+                            continue;
+
+                        ResultResponseHeader.Add(mywrp.Headers.Keys[i], mywrp.Headers.Get(i));
+                    }
+
                     //SimulationCookie.SetCookie(mywr.Host, mywrp.Cookies);
                     Stream responseStream = mywrp.GetResponseStream();
                     if (mywrp.ContentEncoding.ToLower().Contains("gzip"))

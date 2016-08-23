@@ -85,6 +85,7 @@
     <Compile Include="Sprider\classInfo\JxdyfClassInfo.cs" />
     <Compile Include="Sprider\classInfo\KadClassInfo.cs" />
     <Compile Include="Sprider\classInfo\KaixinrenClassInfo.cs" />
+    <Compile Include="Sprider\classInfo\KaolaClassInfo.cs" />
     <Compile Include="Sprider\classInfo\KjtClassinfo.cs" />
     <Compile Include="Sprider\classInfo\LbxcnClassInfo.cs" />
     <Compile Include="Sprider\classInfo\MiaClassInfo.cs" />

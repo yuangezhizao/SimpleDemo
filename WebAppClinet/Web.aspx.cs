@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading;
 using BLL.Sprider.Stock;
 using FastVerCode;
 using Mode;
@@ -24,63 +25,50 @@ namespace WebAppClinet
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //new SpriderSystem().SaveSitePromo();
-            //loadjdUser();
-            //new SpriderSystem().SendWeibo();
-            //WeiboFactory factory = new WeiboFactory { Domain = "sina" };
-            //factory.Auth("3ad593b75a3f603cc68aa7e7edeed8cb");
-            //new SiteClassBll().SaveTommbData();
-
-            //new SpriderSystem().SaveSiteCate(293);
+            // new SpriderSystem().SaveSiteCate(241);
             //new SpriderSystem().UpdateSiteCat(161);
-            //new SiteClassBll().UpdatemmbsiteClass(293);
-            //UserAccountSystem();
+            //new SiteClassBll().UpdatemmbsiteClass(241);
+            // new StockInfoBll().GetNewStockInfo();
+            SubmitOrder("");
             //test();
-            jdlogion();
-            //new SiteClassBll().UpdatemmbsiteClass(10);
-            //loadjdUser();
-            //test();
-            //var list = new MmbProductItemsBll().GetItem(1, 1000);
-            //   new SpriderSystem().UpdateSiteCat(8);
-            // jdwxPrice();
-
-
-
         }
 
 
-        private void jdlogion()
+        private void smsServer()
         {
-            var user = new SiteUserInfoBll().GetOngeUser("人過三十天过午");
-            HtmlAnalysis req= new HtmlAnalysis();
-            req.Headers.Add("Cookie", user.LogCookies);
-            //var page2 = req.HttpRequest("http://details.jd.com/normal/item.action?orderid=20649813582&PassKey=8F52B426AEC301B57F080524A5D8C367");
+            var smsmanger = new SiteFactory().SmsApiManager;
+            string catid = "121";
 
+            string phone = smsmanger.GetPhoneNum(catid);
 
-            var url = "http://trade.jd.com/shopping/async/payAndShip/initSelfPick.action";
-            var param =
-                "shipParam.payId=4&shipParam.pickSiteId=0&shipParam.regionId=-1&shipParam.pickSiteNum=10&consigneeId=undefined&isAddrDefault=0&selectedAddressType=&isOpenConsignee=1";
+            var msm = smsmanger.GetValidateMsg(phone, catid);
+        }
 
-            req.RequestAccept = "application/json, text/javascript, */*; q=0.01";
-            req.RequestContentType = "application/x-www-form-urlencoded";
-            var address = req.HttpRequest(url, param);
+        private void SubmitOrder(string skuid)
+        {
+            JdOrderServer server = new JdOrderServer();
+            var JuserInfo = new SiteUserInfoBll().GetAllUser();
+            foreach (var user in JuserInfo)
+            {
 
-            //url = "http://trade.jd.com/shopping/dynamic/payAndShip/getVenderInfo.action?shipParam.payId=1&shipParam.pickShipmentItemCurr=false&shipParam.onlinePayType=0";
-            //req.RequestMethod = "POST";
-            //req.RequestAccept = "text/plain, */*; q=0.01";
-            //req.RequestContentType = "application/x-www-form-urlencoded";
-            //req.RequestReferer = "http://trade.jd.com/shopping/order/getOrderInfo.action?rid=1469494481688";
-            //req.Headers.Add("Origin", "http://trade.jd.com");
-            //req.Headers.Add("X-Requested-With", "XMLHttpRequest");
-            //var page5 = req.HttpRequest(url); //选择支付方式
+               server.Login(user.UserName, user.UserPwd);
 
-            //url =
-            //    "http://trade.jd.com/shopping/dynamic/payAndShip/getAdditShipment.action?paymentId=1&shipParam.reset311=0&resetFlag=0000000000&shipParam.onlinePayType=0";
-            //var page6 = req.HttpRequest(url);
+                server.SetUserInfo(user.UserName);
+                //server.SaveAddress();
 
+                //server.AddCat($"{skuid},2477473", "1,1");
+                server.ClearCat();
+                server.AddCat("2644340,1569856,2477473", "1,1,1");
+                server.CatDetial();
+                server.SubmitOrder();
+                //server.ClearCat();
+              
+
+            }
 
         }
 
+ 
         private void loadjdUser()
         {
             var page = DocumentServer.ReadFileInfo(@"C:\Users\Administrator\Downloads\20160722200040011100980004303485_10_jdwmsbzh.txt","default");
@@ -104,8 +92,14 @@ namespace WebAppClinet
                     EmailName = templist[4],
                     EmailPwd = templist[5],
                     Remark = templist[6]+" " +templist[7],
-                    LogCookies = "",
-                    LogCookiesUpdatetime = DateTime.Now,
+                    LoginCookies = "",
+                    AddJdCode = "",
+                    AddJdDetial = "",
+                    AddJdid = "",
+                    Fp ="",
+                    Eid = "",
+                    UserAgent = "",
+                    LoginUpdatetime = DateTime.Now,
                     CreateDate =DateTime.Now
 
                 };
@@ -116,30 +110,6 @@ namespace WebAppClinet
 
         private void test()
         {
-          
-            
-
-            var pageinfo1 = HtmlAnalysis.Gethtmlcode("http://d.10jqka.com.cn/v2/time/hs_600662/last.js");
-
-
-            var head =
-                HtmlAnalysis.Gethtmlcode("http://stockpage.10jqka.com.cn/spService/002801/Header/realHeader");
-            //                                                                                                                            现价         涨跌百分比     涨跌金额            成交量                         成交额         开盘价      昨收           最高        最低        换手            市盈率(动) 内盘         外盘        均价           振幅       涨停         跌停                          委比      委差
-            //{"stockcode":"600662","stockname":"\u5f3a\u751f\u63a7\u80a1","fieldcode":"1150","fieldname":"\u516c\u4ea4","fieldjp":"gj","xj":"11.21","zdf":"-3.69%","zde":"-0.43","cjl":"34.81 \u4e07\u624b","cje":"3.92 \u4ebf\u5143","kp":"11.46","zs":"11.64","zg":"11.49","zd":"11.00","hs":"3.31%","syl":"81.26","np":189715,"wp":150836,"jj":"11.27","zf":"4.21%","zt":"12.80","dt":"10.48","field":"0.00","wb":"7.86","wc":132,"buy1":"11.20","buy1data":20,"buy2":"11.19","buy2data":185,"buy3":"11.18","buy3data":143,"buy4":"11.17","buy4data":230,"buy5":"11.16","buy5data":328,"sell1":"11.21","sell1data":111,"sell2":"11.22","sell2data":185,"sell3":"11.23","sell3data":196,"sell4":"11.24","sell4data":81,"sell5":"11.25","sell5data":201}
-            //CookieContainer list = new CookieContainer();
-            //SimulationCookie.GetCookie("https://passport.jd.com/new/login.aspx?ReturnUrl=http://www.jd.com/",
-            //    cookie =>
-            //    {
-            //        list.Add(cookie);
-            //    });
-
-            //new SiteFactory().StockInfoManager.GetALlStockInfo();
-            //string loginurl =
-            //    "https://passport.jd.com/uc/loginService?uuid=bc069405-c238-4af6-90b4-98162ea88ae9&&r=0.376717114952144&version=2015";
-            ////http://a.jd.com/coupons.html
-            //var loginpage =HtmlAnalysis.Gethtmlcode(loginurl);
-
-
             //string feiniuurl = "https://reg.feiniu.com/patcha/image";
             //WebClient myWebClient = new WebClient();
             //var imge = myWebClient.DownloadData(feiniuurl);
@@ -181,8 +151,8 @@ namespace WebAppClinet
             //new SiteFactory().StockInfoManager.GetALlStockInfo();
             //return;17074858678
             string tempurl = "https://xueqiu.com/v4/stock/quote.json?code=SZ300104";
-                              
 
+            string codedetial = "https://xueqiu.com/s/SZ000002";
             var cookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
             //PhantomjsBase.PhantomjsPath = Request.PhysicalApplicationPath;
             //var page = new DownLoadServer().DownLoadpage(tempurl);
@@ -206,8 +176,8 @@ namespace WebAppClinet
                 request.Headers.Add("Cookie", cookies.Cookies);
                 request.RequestUserAgent = cookies.UserAgent;
             }
-         
-           // request.Headers.Add("Cookie", "s=n4v12ge0yu; webp=0; bid=dfa57ca958de46f53568cc28e1762269_ipbu7hld; xq_a_token=ed3a6f41cd40749a7026f25f4f3e936379e415ed; xq_r_token=d54ca76f529ff87e19b08c546ed16a464caa90ef; __utmt=1; Hm_lvt_1db88642e346389874251b5a1eded6e3=1468887873,1469001779; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1469001795; __utma=1.2122399928.1465259166.1468888024.1469001780.4; __utmb=1.4.9.1469001795053; __utmc=1; __utmz=1.1465259166.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)");
+            var codedetialpage = request.HttpRequest(codedetial);
+            // request.Headers.Add("Cookie", "s=n4v12ge0yu; webp=0; bid=dfa57ca958de46f53568cc28e1762269_ipbu7hld; xq_a_token=ed3a6f41cd40749a7026f25f4f3e936379e415ed; xq_r_token=d54ca76f529ff87e19b08c546ed16a464caa90ef; __utmt=1; Hm_lvt_1db88642e346389874251b5a1eded6e3=1468887873,1469001779; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1469001795; __utma=1.2122399928.1465259166.1468888024.1469001780.4; __utmb=1.4.9.1469001795053; __utmc=1; __utmz=1.1465259166.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)");
             //request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/5";
             //{"SH603288":{"symbol":"SH603288","exchange":"SH","code":"603288","name":"海天味业","current":"30.09","percentage 跌幅百分比":"-0.59","change （下跌或者上涨）价格":"-0.18","open":"30.39","high":"30.85","low":"29.83","close 收盘价":"30.09","last_close上次收盘价":"30.27","high52week >52周最高":"38.38","low52week52周最低":"24.4","volume成交（手 1/100股）":"3541015.0","volumeAverage":"3826996","marketCapital":"8.143094214E10","eps":"0.3","pe_ttm":"31.4916","pe_lyr":"32.4474","beta":"0.0","totalShares":"2706246000","time":"Mon Jun 06 14:59:47 +0800 2016","afterHours":"0.0","afterHoursPct":"0.0","afterHoursChg":"0.0","updateAt":"1465214405369","dividend":"0.6","yield":"1.99","turnover_rate":"1.31","instOwn":"0.0","rise_stop":"33.3","fall_stop":"27.24","currency_unit":"CNY","amount":"1.07284402E8","net_assets":"2.9381","hasexist":"","has_warrant":"0","type":"11","flag":"1","rest_day":"","amplitude":"3.37","lot_size":"100","min_order_quantity":"0","max_order_quantity":"0","tick_size":"0.01","kzz_stock_symbol":"","kzz_stock_name":"","kzz_stock_current":"0.0","kzz_convert_price":"0.0","kzz_covert_value":"0.0","kzz_cpr":"0.0","kzz_putback_price":"0.0","kzz_convert_time":"","kzz_redempt_price":"0.0","kzz_straight_price":"0.0","kzz_stock_percent":"","pb":"10.24","benefit_before_tax":"0.0","benefit_after_tax":"0.0","convert_bond_ratio":"","totalissuescale":"","outstandingamt":"","maturitydate":"","remain_year":"","convertrate":"0.0","interestrtmemo":"","release_date":"","circulation":"0.0","par_value":"0.0","due_time":"0.0","value_date":"","due_date":"","publisher":"","redeem_type":"F","issue_type":"1","bond_type":"","warrant":"","sale_rrg":"","rate":"","after_hour_vol":"0","float_shares":"269460000","float_market_capital":"8.1080514E9","disnext_pay_date":"","convert_rate":"0.0","psr":"7.0653"}}
             var Page = request.HttpRequest(tempurl);

@@ -6,12 +6,31 @@ using Commons;
 using DataBase.Stock;
 using Mode;
 using NetDimension.Json.Linq;
-using SpriderProxy.Analysis;
+
 
 namespace BLL.Sprider.Stock
 {
-    public class StockInfoBll: HeXun, IStockInfoBll
+    public class StockInfoBll: IStockInfoBll
     {
+
+        private static SiteCookies xqCookies;
+        public static SiteCookies XqCookies {
+            get
+            {
+                if (xqCookies == null)
+                {
+                    xqCookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
+
+                    if (xqCookies.UpdateTime.AddMinutes(30) >= DateTime.Now) return xqCookies;
+                    var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/");
+                    if (string.IsNullOrEmpty(result)) return xqCookies;
+                    xqCookies.Cookies = result;
+                    new SiteCookiesBll().SaveCookies(xqCookies);
+                }
+                return xqCookies;
+            }
+        }
+
         private List<StockInfo> oldlist;
         public void GetALlStockInfo()
         {
@@ -30,30 +49,27 @@ namespace BLL.Sprider.Stock
             //{
             //    GetStockExcel(@"F:\s\"+i+".xls");
             //}
-            return;
-            for (int j = 0; j < 3; j++)
-            {
-                int totalpage = 1;
-                for (int i = 1; i < totalpage + 1; i++)
-                {
-                    string url = $"http://quote.tool.hexun.com/hqzx/quote.aspx?type=2&market={j}&sorttype=3&updown=up&page={i}&count=50&time=080540";
-                    var page = HtmlAnalysis.Gethtmlcode(url);
-                    if (i == 1)
-                        totalpage = RegGroupsX<int>(page, "dataArr,(?<x>\\d+),");
-                    page = page.Replace("\r\n", "");
-                    page = RegGroupsX<string>(page, "dataArr =(?<x>.*?);StockListPage");
+            //return;
+            //for (int j = 0; j < 3; j++)
+            //{
+            //    int totalpage = 1;
+            //    for (int i = 1; i < totalpage + 1; i++)
+            //    {
+            //        string url = $"http://quote.tool.hexun.com/hqzx/quote.aspx?type=2&market={j}&sorttype=3&updown=up&page={i}&count=50&time=080540";
+            //        var page = HtmlAnalysis.Gethtmlcode(url);
+            //        if (i == 1)
+            //            totalpage = RegGroupsX<int>(page, "dataArr,(?<x>\\d+),");
+            //        page = page.Replace("\r\n", "");
+            //        page = RegGroupsX<string>(page, "dataArr =(?<x>.*?);StockListPage");
 
-                    if (string.IsNullOrEmpty(page))
-                        return;
-                    GetStockInfo(page);
-                }
-            }
+            //        if (string.IsNullOrEmpty(page))
+            //            return;
+            //        GetStockInfo(page);
+            //    }
+            //}
         }
 
-        public void DayReport()
-        {
-            GetStockDetial();
-        }
+
 
         public void GetStockInfo(string page)
         {
@@ -159,120 +175,106 @@ namespace BLL.Sprider.Stock
             return new StockinfoDB().GetAllinfo();
         }
 
-        public void GetStockDetial(StockInfo info)
-        {
-            var cnum = RegGroupsX<string>(info.StockNo, "(?<x>[A-Za-z]{2})");
-            var num = RegGroupsX<string>(info.StockNo, "(?<x>\\d+)");
-            var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
-            var mainurl = $"http://www.windin.com/home/stock/html/{num}.{cnum.ToUpper()}.shtml?&t=1&q={num}";
-            //var hq = $"http://hq.sinajs.cn/rn=&list={info.StockNo},{info.StockNo}_i,bk_new_dzxx";
-            //var hqpage = HtmlAnalysis.Gethtmlcode(hq);
-            var dpage = HtmlAnalysis.Gethtmlcode(durl);
-            var mpage = HtmlAnalysis.Gethtmlcode(mainurl);
+        //public void GetStockDetial(StockInfo info)
+        //{
+        //    var cnum = RegGroupsX<string>(info.StockNo, "(?<x>[A-Za-z]{2})");
+        //    var num = RegGroupsX<string>(info.StockNo, "(?<x>\\d+)");
+        //    var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
+        //    var mainurl = $"http://www.windin.com/home/stock/html/{num}.{cnum.ToUpper()}.shtml?&t=1&q={num}";
+        //    //var hq = $"http://hq.sinajs.cn/rn=&list={info.StockNo},{info.StockNo}_i,bk_new_dzxx";
+        //    //var hqpage = HtmlAnalysis.Gethtmlcode(hq);
+        //    var dpage = HtmlAnalysis.Gethtmlcode(durl);
+        //    var mpage = HtmlAnalysis.Gethtmlcode(mainurl);
         
-            string hy = (RegGroupsX<string>(mpage, "相关行业板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
-            string dq = (RegGroupsX<string>(mpage, "相关地域板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
-            string ix = (RegGroupsX<string>(mpage, "所属指数成分</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+        //    string hy = (RegGroupsX<string>(mpage, "相关行业板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+        //    string dq = (RegGroupsX<string>(mpage, "相关地域板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+        //    string ix = (RegGroupsX<string>(mpage, "所属指数成分</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
 
-            var dconn = RegGroupsX<string>(dpage, "(?<x>\\{.*?\\})");
-            if (string.IsNullOrEmpty(dconn))
-                return;
-            var winItem = JObject.Parse(dconn);
+        //    var dconn = RegGroupsX<string>(dpage, "(?<x>\\{.*?\\})");
+        //    if (string.IsNullOrEmpty(dconn))
+        //        return;
+        //    var winItem = JObject.Parse(dconn);
 
-            try
-            {
-                StockDayReport sdr = new StockDayReport
-                {
-                    StockNo = num,
-                    StockName = info.StockName,
-                    Amount = winItem["Amount"].Value<float>(),
-                    CurrentPrice = winItem["Price"].Value<decimal>(),
-                    MarketValue = winItem["MarketValue"].Value<float>(),
-                    Maxprice = winItem["High"].Value<decimal>(),
-                    Minprice = winItem["Low"].Value<decimal>(),
-                    Volume = winItem["Volumn"].Value<int>(),
-                    Exchange = winItem["Exchange"].Value<float>(),
-                    Pe = winItem["PE"].Value<decimal>(),
-                    Pb = winItem["PB"].Value<decimal>(),
-                    Range = winItem["Range"].Value<float>(),
-                    RangeRatio = winItem["RangeRatio"].Value<float>(),
-                    ZhenFu = winItem["ZhenFu"].Value<decimal>(),
-                    OpenPrice = winItem["Open"].Value<decimal>(),
-                    Zdf5 = winItem["zdf5"].Value<float>(),
-                    Zdf10 = winItem["zdf10"].Value<float>(),
-                    Zdf20 = winItem["zdf20"].Value<float>(),
-                    Zdf60 = winItem["zdf60"].Value<float>(),
-                    Zdf120 = winItem["zdf120"].Value<float>(),
-                    Zdf250 = winItem["zdf250"].Value<float>(),
-                    PElyr = winItem["PElyr"].Value<decimal>(),
-                    IndexNumber = ix,
-                    Industry = hy,
-                    Area = dq,
-                    IsStop = winItem["IsStop"].Value<bool>(),
-                    CreateDate = DateTime.Now.Date
+        //    try
+        //    {
+        //        StockDayReport sdr = new StockDayReport
+        //        {
+        //            StockNo = num,
+        //            StockName = info.StockName,
+        //            Amount = winItem["Amount"].Value<float>(),
+        //            CurrentPrice = winItem["Price"].Value<decimal>(),
+        //            MarketValue = winItem["MarketValue"].Value<float>(),
+        //            Maxprice = winItem["High"].Value<decimal>(),
+        //            Minprice = winItem["Low"].Value<decimal>(),
+        //            Volume = winItem["Volumn"].Value<int>(),
+        //            Exchange = winItem["Exchange"].Value<float>(),
+        //            Pe = winItem["PE"].Value<decimal>(),
+        //            Pb = winItem["PB"].Value<decimal>(),
+        //            Range = winItem["Range"].Value<float>(),
+        //            RangeRatio = winItem["RangeRatio"].Value<float>(),
+        //            ZhenFu = winItem["ZhenFu"].Value<decimal>(),
+        //            OpenPrice = winItem["Open"].Value<decimal>(),
+        //            Zdf5 = winItem["zdf5"].Value<float>(),
+        //            Zdf10 = winItem["zdf10"].Value<float>(),
+        //            Zdf20 = winItem["zdf20"].Value<float>(),
+        //            Zdf60 = winItem["zdf60"].Value<float>(),
+        //            Zdf120 = winItem["zdf120"].Value<float>(),
+        //            Zdf250 = winItem["zdf250"].Value<float>(),
+        //            PElyr = winItem["PElyr"].Value<decimal>(),
+        //            IndexNumber = ix,
+        //            Industry = hy,
+        //            Area = dq,
+        //            IsStop = winItem["IsStop"].Value<bool>(),
+        //            CreateDate = DateTime.Now.Date
 
-                };
+        //        };
 
-                new StockDayReportDb().AddStockinfo(sdr);
+        //        new StockDayReportDb().AddStockinfo(sdr);
 
-            }
+        //    }
 
-            catch (Exception ex)
-            {
-                LogServer.WriteLog(ex);
+        //    catch (Exception ex)
+        //    {
+        //        LogServer.WriteLog(ex);
                 
-            }
-        }
+        //    }
+        //}
 
-        public void GetThsStockDetial(StockInfo info)
-        {
-            //var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
-            var number = RegGroupsX<int>(info.StockNo, "(?<x>\\d+)");
-            if (number < 1)
-            {
-                LogServer.WriteLog("error number"+ info.StockNo, "StockDetial");
-                return;
-            }
-            var url = $"http://stockpage.10jqka.com.cn/spService/{number}/Header/realHeader";
-            var currentInfo = HtmlAnalysis.Gethtmlcode(url);
-            if (string.IsNullOrEmpty(currentInfo))
-            {
-                LogServer.WriteLog($"error detial {info.StockNo} url:{url}" , "StockDetial");
-                return;
-            }
-            var Item = JObject.Parse(currentInfo);
-            if (Item == null)
-            {
-                LogServer.WriteLog($"error json {info.StockNo} url:{url},detial:{currentInfo}", "StockDetial");
-            }
+        //public void GetThsStockDetial(StockInfo info)
+        //{
+        //    //var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
+        //    var number = RegGroupsX<int>(info.StockNo, "(?<x>\\d+)");
+        //    if (number < 1)
+        //    {
+        //        LogServer.WriteLog("error number"+ info.StockNo, "StockDetial");
+        //        return;
+        //    }
+        //    var url = $"http://stockpage.10jqka.com.cn/spService/{number}/Header/realHeader";
+        //    var currentInfo = HtmlAnalysis.Gethtmlcode(url);
+        //    if (string.IsNullOrEmpty(currentInfo))
+        //    {
+        //        LogServer.WriteLog($"error detial {info.StockNo} url:{url}" , "StockDetial");
+        //        return;
+        //    }
+        //    var Item = JObject.Parse(currentInfo);
+        //    if (Item == null)
+        //    {
+        //        LogServer.WriteLog($"error json {info.StockNo} url:{url},detial:{currentInfo}", "StockDetial");
+        //    }
 
-            var pageingo = HtmlAnalysis.Gethtmlcode("$http://stockpage.10jqka.com.cn/{number}/");
+        //    var pageingo = HtmlAnalysis.Gethtmlcode("$http://stockpage.10jqka.com.cn/{number}/");
       
-        }
+        //}
 
         public void GetXueqiuStockDetial(StockInfo info)
         {
             var code = info.StockNo.ToUpper();
             string url = $"https://xueqiu.com/v4/stock/quote.json?code={code}&_=1465259721266";
-
-            var cookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
-
-            if (cookies.UpdateTime.AddMinutes(30) < DateTime.Now)
-            {
-               var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/");
-                if (!string.IsNullOrEmpty(result))
-                {
-                    cookies.Cookies = result;
-                    new SiteCookiesBll().SaveCookies(cookies);
-                }
-    
-            }
-
             HtmlAnalysis request = new HtmlAnalysis();
             request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
             request.Headers.Add("X-Requested-With", "XMLHttpRequest");
-            if (cookies != null)
-                request.Headers.Add("Cookie", cookies.Cookies);
+            if (XqCookies != null)
+                request.Headers.Add("Cookie", XqCookies.Cookies);
             request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
          
 
@@ -422,84 +424,173 @@ namespace BLL.Sprider.Stock
 
 
         }
-        public void GetStockDetial()
-        {
-            LogServer.WriteLog("dayRepord start..." + "stock");
-            var skdb = new StockinfoDB();
-            var allskif = skdb.GetAllinfo();
-            List<StockDayReport> list = new List<StockDayReport>();
-            foreach (var item in allskif)
-            {
-                var cnum = RegGroupsX<string>(item.StockNo, "(?<x>[A-Za-z]{2})");
-                var num = RegGroupsX<string>(item.StockNo, "(?<x>\\d+)");
-                var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
-                var mainurl = $"http://www.windin.com/home/stock/html/{num}.{cnum.ToUpper()}.shtml?&t=1&q={num}";
-                var dpage = HtmlAnalysis.Gethtmlcode(durl);
-                var mpage = HtmlAnalysis.Gethtmlcode(mainurl);
-                string hy = (RegGroupsX<string>(mpage, "相关行业板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
-                string dq = (RegGroupsX<string>(mpage, "相关地域板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
-                string ix = (RegGroupsX<string>(mpage, "所属指数成分</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+        //public void GetStockDetial()
+        //{
+        //    LogServer.WriteLog("dayRepord start..." + "stock");
+        //    var skdb = new StockinfoDB();
+        //    var allskif = skdb.GetAllinfo();
+        //    List<StockDayReport> list = new List<StockDayReport>();
+        //    foreach (var item in allskif)
+        //    {
+        //        var cnum = RegGroupsX<string>(item.StockNo, "(?<x>[A-Za-z]{2})");
+        //        var num = RegGroupsX<string>(item.StockNo, "(?<x>\\d+)");
+        //        var durl = $"http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode={num}.{cnum.ToUpper()}";
+        //        var mainurl = $"http://www.windin.com/home/stock/html/{num}.{cnum.ToUpper()}.shtml?&t=1&q={num}";
+        //        var dpage = HtmlAnalysis.Gethtmlcode(durl);
+        //        var mpage = HtmlAnalysis.Gethtmlcode(mainurl);
+        //        string hy = (RegGroupsX<string>(mpage, "相关行业板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+        //        string dq = (RegGroupsX<string>(mpage, "相关地域板块</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
+        //        string ix = (RegGroupsX<string>(mpage, "所属指数成分</td><td>(?<x>.*?)</td>") ?? "").Replace("\r", "");
                 
-                var dconn = RegGroupsX<string>(dpage, "(?<x>\\{.*?\\})");
-                if(string.IsNullOrEmpty(dconn))
-                    continue;
-                var winItem = JObject.Parse(dconn);
+        //        var dconn = RegGroupsX<string>(dpage, "(?<x>\\{.*?\\})");
+        //        if(string.IsNullOrEmpty(dconn))
+        //            continue;
+        //        var winItem = JObject.Parse(dconn);
              
-                try
-                {
-                    StockDayReport sdr = new StockDayReport
-                    {
-                        StockNo = num,
-                        StockName = item.StockName,
-                        Amount = winItem["Amount"].Value<float>(),
-                        CurrentPrice = winItem["Price"].Value<decimal>(),
-                        MarketValue = winItem["MarketValue"].Value<float>(),
-                        Maxprice = winItem["High"].Value<decimal>(),
-                        Minprice = winItem["Low"].Value<decimal>(),
-                        Volume = winItem["Volumn"].Value<int>(),
-                        Exchange = winItem["Exchange"].Value<float>(),
-                        Pe = winItem["PE"].Value<decimal>(),
-                        Pb = winItem["PB"].Value<decimal>(),
-                        Range = winItem["Range"].Value<float>(),
-                        RangeRatio = winItem["RangeRatio"].Value<float>(),
-                        ZhenFu = winItem["ZhenFu"].Value<decimal>(),
-                        OpenPrice = winItem["Open"].Value<decimal>(),
-                        Zdf5 = winItem["zdf5"].Value<float>(),
-                        Zdf10 = winItem["zdf10"].Value<float>(),
-                        Zdf20 = winItem["zdf20"].Value<float>(),
-                        Zdf60 = winItem["zdf60"].Value<float>(),
-                        Zdf120 = winItem["zdf120"].Value<float>(),
-                        Zdf250 = winItem["zdf250"].Value<float>(),
-                        PElyr = winItem["PElyr"].Value<decimal>(),
-                        IndexNumber = ix,
-                        Industry = hy,
-                        Area = dq,
-                        IsStop = winItem["IsStop"].Value<bool>(),
-                        CreateDate = DateTime.Now.Date
+        //        try
+        //        {
+        //            StockDayReport sdr = new StockDayReport
+        //            {
+        //                StockNo = num,
+        //                StockName = item.StockName,
+        //                Amount = winItem["Amount"].Value<float>(),
+        //                CurrentPrice = winItem["Price"].Value<decimal>(),
+        //                MarketValue = winItem["MarketValue"].Value<float>(),
+        //                Maxprice = winItem["High"].Value<decimal>(),
+        //                Minprice = winItem["Low"].Value<decimal>(),
+        //                Volume = winItem["Volumn"].Value<int>(),
+        //                Exchange = winItem["Exchange"].Value<float>(),
+        //                Pe = winItem["PE"].Value<decimal>(),
+        //                Pb = winItem["PB"].Value<decimal>(),
+        //                Range = winItem["Range"].Value<float>(),
+        //                RangeRatio = winItem["RangeRatio"].Value<float>(),
+        //                ZhenFu = winItem["ZhenFu"].Value<decimal>(),
+        //                OpenPrice = winItem["Open"].Value<decimal>(),
+        //                Zdf5 = winItem["zdf5"].Value<float>(),
+        //                Zdf10 = winItem["zdf10"].Value<float>(),
+        //                Zdf20 = winItem["zdf20"].Value<float>(),
+        //                Zdf60 = winItem["zdf60"].Value<float>(),
+        //                Zdf120 = winItem["zdf120"].Value<float>(),
+        //                Zdf250 = winItem["zdf250"].Value<float>(),
+        //                PElyr = winItem["PElyr"].Value<decimal>(),
+        //                IndexNumber = ix,
+        //                Industry = hy,
+        //                Area = dq,
+        //                IsStop = winItem["IsStop"].Value<bool>(),
+        //                CreateDate = DateTime.Now.Date
                         
-                    };
-                    list.Add(sdr);
-                    if (list.Count == 200)
-                    {
-                        new StockDayReportDb().AddStockinfo(list);
-                        list.Clear();
-                    }
+        //            };
+        //            list.Add(sdr);
+        //            if (list.Count == 200)
+        //            {
+        //                new StockDayReportDb().AddStockinfo(list);
+        //                list.Clear();
+        //            }
 
-                }
-                catch (Exception ex)
-                {
-                    LogServer.WriteLog(ex);
-                    continue;
-                }
-            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            LogServer.WriteLog(ex);
+        //            continue;
+        //        }
+        //    }
 
-            if (list.Count >0)
+        //    if (list.Count >0)
+        //    {
+        //        new StockDayReportDb().AddStockinfo(list);
+        //        list.Clear();
+        //    }
+        //    LogServer.WriteLog("dayRepord finshed..."+"stock");
+
+        //}
+
+
+        public void GetNewStockInfo()
+        {
+
+            int totalpage = 2;
+            for (int i = 1; i <= totalpage; i++)
             {
-                new StockDayReportDb().AddStockinfo(list);
-                list.Clear();
+                string url = $"https://xueqiu.com/proipo/query.json?page={i}&size=30&order=desc&orderBy=list_date&stockType=&column=symbol%2Cname%2Conl_subcode%2Clist_date%2Cactissqty%2Conl_actissqty%2Conl_submaxqty%2Conl_subbegdate%2Conl_unfrozendate%2Conl_refunddate%2Ciss_price%2Conl_frozenamt%2Conl_lotwinrt%2Conl_lorwincode%2Conl_lotwiner_stpub_date%2Conl_effsubqty%2Conl_effsubnum%2Conl_onversubrt%2Coffl_lotwinrt%2Coffl_effsubqty%2Coffl_planum%2Coffl_oversubrt%2Cnapsaft%2Ceps_dilutedaft%2Cleaduwer%2Clist_recomer%2Cacttotraiseamt%2Conl_rdshowweb%2Conl_rdshowbegdate%2Conl_distrdate%2Conl_drawlotsdate%2Cfirst_open_price%2Cfirst_close_price%2Cfirst_percent%2Cfirst_turnrate%2Cstock_income%2Conl_lotwin_amount%2Clisted_percent%2Ccurrent%2Cpe_ttm%2Cpb%2Cpercent%2Chasexist&type=quote&_=1471824353300";
+
+                HtmlAnalysis request = new HtmlAnalysis();
+                request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
+                request.Headers.Add("X-Requested-With", "XMLHttpRequest");
+                if (XqCookies != null)
+                    request.Headers.Add("Cookie", XqCookies.Cookies);
+                request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+                var currentInfo = request.HttpRequest(url);
+                var item = JObject.Parse(currentInfo);
+
+                if (item?["data"] == null)
+                {
+                    LogServer.WriteLog($"error GetNewStockInfo url:{url},detial:{currentInfo}", "StockDetial");
+                    return;
+                }
+                if (i == 1)
+                {
+                    int total = item["count"].Value<int>();
+                    if (total%30 == 0)
+                        totalpage = total/30;
+                    else
+                    {
+                        totalpage = total/30 + 1;
+                    }
+                }
+
+                var oldlist = GetAllinfo();
+                var stocks = new List<StockInfo>();
+                foreach (var obj in item["data"])
+                {
+                    var scode = obj[0].Value<string>().ToLower();
+                    if (oldlist.Exists(c => c.StockNo == scode))
+                        continue;
+                    StockInfo newski = new StockInfo
+                    {
+                        StockNo = scode,
+                        StockName = obj[1].Value<string>(),
+                        CurrentPrice = 0,
+                        Amplitude = 0,
+                        Huanshou = 0,
+                        Liangbi = 0,
+                        Maxprice = 0,
+                        Minprice = 0,
+                        Oldprice = 0,
+                        Startprice = 0,
+                        Volume = 0,
+                        Turnover = 0,
+                        Zhenfu = 0
+                    };
+                    stocks.Add(newski);
+
+                }
+                if (stocks.Count > 0)
+                    new StockinfoDB().AddStockinfo(stocks);
             }
-            LogServer.WriteLog("dayRepord finshed..."+"stock");
+          
+
+
+
+
 
         }
+
+        //v_sh600886="1~国投电力~600886~7.01~7.05~7.03~418294~203031~215263~7.01~1148~7.00~13534~6.99~1901~6.98~2972~6.97~1799~7.02~1700~7.03~1423~7.04~13370~7.05~2649~7.06~4457~14:59:56/7.02/230/B/161440/11919|14:59:56/7.01/120/S/84120/11916|14:59:51/7.01/53/S/37203/11911|14:59:46/7.01/96/S/67296/11908|14:59:41/7.01/11/S/7711/11905|14:59:31/7.01/69/S/48369/11901~20160811150546~-0.04~-0.57~7.08~6.99~7.02/418294成交量/294236426成交额~418294~29424成交额~0.62（换手率）~8.74（市盈率）~~7.08最高价~6.99最低价~1.28震幅~475.70流通市值 ~475.70总市值  ~1.71（市净率）~7.76涨停价 ~6.35跌停价  ~";
+        //v_sh600886="1~国投电力~600886~当前价~昨收~今开~成交量~盘外~盘内~买一价~买一量 卖一 价量6.99~1901~6.98~2972~6.97~1799~7.02~1700~7.03~1423~7.04~13370~7.05~2649~7.06~4457~逐笔（时间价格成交量买入）40/11919|14:59:56/7.01/120/S/84120/11916|14:59:51/7.01/53/S/37203/11911|14:59:46/7.01/96/S/67296/11908|14:59:41/7.01/11/S/7711/11905|14:59:31/7.01/69/S/48369/11901~日期~涨价额~涨跌幅~最高~最低
+        //var testpage = HtmlAnalysis.Gethtmlcode("http://web.sqt.gtimg.cn/q=sh600886?r=0.2674542577107566");
+
+        //var pageinfo1 = HtmlAnalysis.Gethtmlcode("http://d.10jqka.com.cn/v2/time/hs_600662/last.js");
+
+
+        //var head =
+        //    HtmlAnalysis.Gethtmlcode("http://stockpage.10jqka.com.cn/spService/002801/Header/realHeader");
+        //                                                                                                                            现价         涨跌百分比     涨跌金额            成交量                         成交额         开盘价      昨收           最高        最低        换手            市盈率(动) 内盘         外盘        均价           振幅       涨停         跌停                          委比      委差
+        //{"stockcode":"600662","stockname":"\u5f3a\u751f\u63a7\u80a1","fieldcode":"1150","fieldname":"\u516c\u4ea4","fieldjp":"gj","xj":"11.21","zdf":"-3.69%","zde":"-0.43","cjl":"34.81 \u4e07\u624b","cje":"3.92 \u4ebf\u5143","kp":"11.46","zs":"11.64","zg":"11.49","zd":"11.00","hs":"3.31%","syl":"81.26","np":189715,"wp":150836,"jj":"11.27","zf":"4.21%","zt":"12.80","dt":"10.48","field":"0.00","wb":"7.86","wc":132,"buy1":"11.20","buy1data":20,"buy2":"11.19","buy2data":185,"buy3":"11.18","buy3data":143,"buy4":"11.17","buy4data":230,"buy5":"11.16","buy5data":328,"sell1":"11.21","sell1data":111,"sell2":"11.22","sell2data":185,"sell3":"11.23","sell3data":196,"sell4":"11.24","sell4data":81,"sell5":"11.25","sell5data":201}
+        //CookieContainer list = new CookieContainer();
+        //SimulationCookie.GetCookie("https://passport.jd.com/new/login.aspx?ReturnUrl=http://www.jd.com/",
+        //    cookie =>
+        //    {
+        //        list.Add(cookie);
+        //    });
     }
 }

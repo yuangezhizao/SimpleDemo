@@ -63,10 +63,19 @@ namespace DataBase
             {
                 foreach (SiteClassInfo item in lits)
                 {
-                    int haschild = item.HasChild ? 1 : 0;
-                    string sql = "insert into JD_Shop_Class (siteid,classid,classname,parentclass,parentname,classCrumble,parentUrl,urlinfo,HasChild,procount ,IsBind ,isshow , UpdateTime, CreateDate)values({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}',{8},{9},{10},{11},'{12}','{13}')";
-                    string addsql = string.Format(sql, item.SiteId, item.ClassId, item.ClassName, item.ParentClass, item.ParentName, item.ClassCrumble, item.ParentUrl, item.Urlinfo, haschild, item.TotalProduct, 0, 1, item.CreateDate, item.UpdateTime);
-                    int count = db.ExecuteNonQuery(addsql);
+                    try
+                    {
+                        int haschild = item.HasChild ? 1 : 0;
+                        string sql = "insert into JD_Shop_Class (siteid,classid,classname,parentclass,parentname,classCrumble,parentUrl,urlinfo,HasChild,procount ,IsBind ,isshow , UpdateTime, CreateDate)values({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}',{8},{9},{10},{11},'{12}','{13}')";
+                        string addsql = string.Format(sql, item.SiteId, item.ClassId, item.ClassName.Replace("'", "\'"), item.ParentClass.Replace("'", "\'"), item.ParentName, item.ClassCrumble, item.ParentUrl, item.Urlinfo, haschild, item.TotalProduct, 0, 1, item.CreateDate, item.UpdateTime);
+                        int count = db.ExecuteNonQuery(addsql);
+                    }
+                    catch (Exception)
+                    {
+                        
+                     continue;
+                    }
+
                 }
 
             }

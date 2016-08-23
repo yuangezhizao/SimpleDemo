@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
 using BLL.Sprider.Stock;
@@ -51,6 +52,11 @@ namespace AamirKhan
 
             progressBar.Minimum = 0;
             progressBar.Step = 1;
+        }
+
+        private void getNewStock()
+        {
+            new TaskFactory().StartNew(new StockInfoBll().GetNewStockInfo);
         }
 
 
@@ -129,6 +135,7 @@ namespace AamirKhan
                         return;
                     LogServer.WriteLog("定时任务开始执行", "StockDayReport");
                     StockDayReport();
+                    getNewStock();
                 }
             }
           

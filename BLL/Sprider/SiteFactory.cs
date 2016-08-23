@@ -88,6 +88,8 @@ namespace BLL
                         return new HaierClassInfo();
                     case 196:
                         return new ShopRobamClassInfo();
+                    case 241:
+                        return new KaolaClassInfo();
                     case 243:
                         return new YIerYaoClass();
                     case 246:

@@ -18,10 +18,15 @@ namespace Mode
         public string PhoneNum { get; set; }
         public string EmailName { get; set; }
         public string EmailPwd { get; set; }
+        public string AddJdid { get; set; }
+        public string AddJdCode { get; set; }
+        public string AddJdDetial { get; set; }
+        public string Eid { get; set; }
+        public string Fp { get; set; }
+        public string UserAgent { get; set; }
+        public string LoginCookies { get; set; }
 
-        public string LogCookies { get; set; }
-
-        public DateTime LogCookiesUpdatetime { get; set; }
+        public DateTime LoginUpdatetime { get; set; }
 
         public string Remark { get; set; }
         public DateTime CreateDate { get; set; }

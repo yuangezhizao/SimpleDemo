@@ -74,6 +74,7 @@ namespace BLL.Sprider.classInfo
                     shopClasslist.Add(iteminfo);
                 }
             }
+
             if (shopClasslist.Count > 0)
             {
                 new SiteClassInfoDB().AddSiteClass(shopClasslist);

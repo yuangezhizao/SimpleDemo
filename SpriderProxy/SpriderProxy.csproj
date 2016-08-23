@@ -65,6 +65,7 @@
     <Compile Include="Analysis\Jxdyf.cs" />
     <Compile Include="Analysis\Kad.cs" />
     <Compile Include="Analysis\Kaixinren.cs" />
+    <Compile Include="Analysis\Kaola.cs" />
     <Compile Include="Analysis\Kfzj.cs" />
     <Compile Include="Analysis\Kjt.cs" />
     <Compile Include="Analysis\Lbxcn.cs" />

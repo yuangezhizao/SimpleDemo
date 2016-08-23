@@ -73,7 +73,7 @@ namespace DataBase
         {
             using (var db = _dbFactory.OpenDbConnection())
             {
-                return db.Select<SiteUserInfo>();
+                return db.Select<SiteUserInfo>().OrderBy(c=>c.LoginUpdatetime).ToList();
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -14,6 +15,7 @@ using BLL;
 using Commons;
 using FastVerCode;
 using Mode;
+using Servers;
 
 namespace AamirKhan
 {
@@ -232,22 +234,25 @@ namespace AamirKhan
 
             uname = JuserInfo[CurrentUserIndex].UserName;
             upwd = JuserInfo[CurrentUserIndex].UserPwd;
-            webBrowser.Navigate(jdloginUrl);
+            new JdOrderServer().Login(uname, upwd);
+            //webBrowser.Navigate(jdloginUrl);
             CurrentUserIndex++;
         }
 
         private void btnJDLogin_Click(object sender, EventArgs e)
         {
-            JuserInfo = new SiteUserInfoBll().GetAllUser();
-            CurrentUserIndex = 0;
-            JdLoginTimer.Interval = 10000;
+
+            //CurrentUserIndex = 0;
+            //JdLoginTimer.Interval = 60000*10;
             //JdLoginTimer.Start();
 
-            uname = JuserInfo[0].UserName;
-            upwd = JuserInfo[0].UserPwd;
+            JuserInfo = new SiteUserInfoBll().GetAllUser();
+            uname = JuserInfo[3].UserName;
+            upwd = JuserInfo[3].UserPwd;
+            webBrowser.Navigate(jdloginUrl);
 
-            new JdOrderSystem().Login(uname,upwd);
-            //webBrowser.Navigate(jdloginUrl);
+            //new JdOrderServer().Login(uname,upwd);
+
 
         }
     }

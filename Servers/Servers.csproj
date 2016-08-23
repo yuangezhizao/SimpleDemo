@@ -38,9 +38,15 @@
     <Reference Include="DotNetOpenAuth">
       <HintPath>..\libs\DotNetOpenAuth.dll</HintPath>
     </Reference>
+    <Reference Include="FastVerCode">
+      <HintPath>..\libs\FastVerCode.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\huruntang\trunk\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\libs\ServiceStack.dll</HintPath>
@@ -70,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HostProxyServer.cs" />
+    <Compile Include="JdOrderServer.cs" />
     <Compile Include="SmsServer.cs" />
     <Compile Include="SpriderSystem.cs" />
     <Compile Include="SqlMonitorSystem.cs" />
