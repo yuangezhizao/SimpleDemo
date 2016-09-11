@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
+using System.Threading;
 using Commons;
 using DataBase.Stock;
 using Mode;
@@ -275,21 +277,70 @@ namespace BLL.Sprider.Stock
             request.Headers.Add("X-Requested-With", "XMLHttpRequest");
             if (XqCookies != null)
                 request.Headers.Add("Cookie", XqCookies.Cookies);
-            request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
-         
+            request.RequestUserAgent =
+                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
 
-            var currentInfo = request.HttpRequest(url);
-            var Item = JObject.Parse(currentInfo);
+            int error = 0;
+            var currentInfo = "";
+            do
+            {
+                try
+                {
+                    currentInfo = request.HttpRequest(url);
+                    if (string.IsNullOrEmpty(currentInfo))
+                    {
+                        error++;
+                        Thread.Sleep(3000);
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(3000);
+                    error++;
+                }    
+               
+
+
+            } while (error>10);
+     
+
+            JObject Item=new JObject();
+            try
+            {
+                Item = JObject.Parse(currentInfo);
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog("url="+url+"page="+ currentInfo + ex.Message,"StockDetial");
+                Item = null;
+            }
+          
             if (Item == null)
             {
                 LogServer.WriteLog($"error json {info.StockNo} url:{url},detial:{currentInfo}", "StockDetial");
             }
             var xqItem = Item[code];
+            if (xqItem == null)
+            {
+                LogServer.WriteLog($"error json code not find {info.StockNo} url:{url},detial:{currentInfo}",
+                    "StockDetial");
+                return;
+            }
             try
             {
                 XqStockDayReport xq = new XqStockDayReport();
                 xq.StockNo = code;
-                xq.Exchange = xqItem["exchange"].Value<string>();
+
+
+                if (xqItem["exchange"].ToString() != "")
+                    xq.Exchange = xqItem["exchange"].Value<string>();
+
                 xq.Code = xqItem["code"].Value<string>();
                 xq.StockName = xqItem["name"].Value<string>();
                 xq.CurrentPrice = xqItem["current"].Value<decimal>();
@@ -311,26 +362,36 @@ namespace BLL.Sprider.Stock
                     xq.Pettm = xqItem["pe_ttm"].Value<float>();
                 if (xqItem["pe_lyr"].ToString() != "")
                     xq.PElyr = xqItem["pe_lyr"].Value<float>();
-                xq.Beta = xqItem["beta"].Value<float>();
-                xq.TotalShares = xqItem["totalShares"].Value<float>();
-                xq.AfterHours = xqItem["afterHours"].Value<float>();
-                xq.AfterHoursPct = xqItem["afterHoursPct"].Value<float>();
-                xq.AfterHoursChg = xqItem["afterHoursChg"].Value<float>();
-                xq.UpdateAt = xqItem["updateAt"].Value<float>();
+                if (xqItem["beta"].ToString() != "")
+                    xq.Beta = xqItem["beta"].Value<float>();
+                xq.TotalShares = xqItem["totalShares"] != null ? xqItem["totalShares"].Value<float>() : 0;
+                    //xqItem["totalShares"].Value<float>();
+                if (xqItem["afterHours"].ToString() != "")
+                    xq.AfterHours = xqItem["afterHours"].Value<float>();
+                if (xqItem["afterHoursPct"].ToString() != "")
+                    xq.AfterHoursPct = xqItem["afterHoursPct"].Value<float>();
+                if (xqItem["afterHoursChg"].ToString() != "")
+                    xq.AfterHoursChg = xqItem["afterHoursChg"].Value<float>();
+                xq.UpdateAt = xqItem["updateAt"].ToString() != "" ? xqItem["updateAt"].Value<float>() : 0;
+                    // xqItem["updateAt"].Value<float>();
                 if (xqItem["dividend"].ToString() != "")
                     xq.Dividend = xqItem["dividend"].Value<float>();
-                xq.Yield = xqItem["yield"].Value<float>();
-                xq.Turnoverrate = xqItem["turnover_rate"].Value<float>();
-                xq.InstOwn = xqItem["instOwn"].Value<float>();
-                xq.Risestop = xqItem["rise_stop"].Value<float>();
-                xq.FallStop = xqItem["fall_stop"].Value<float>();
+                xq.Yield = xqItem["yield"].ToString() != "" ? xqItem["yield"].Value<float>() : 0;
+                xq.Turnoverrate = xqItem["turnover_rate"].ToString() != "" ? xqItem["turnover_rate"].Value<float>() : 0;
+                    //xqItem["turnover_rate"].Value<float>();
+                xq.InstOwn = xqItem["instOwn"].ToString() != "" ? xqItem["instOwn"].Value<float>() : 0;
+                    // xqItem["instOwn"].Value<float>();
+                xq.Risestop = xqItem["rise_stop"].ToString() != "" ? xqItem["rise_stop"].Value<float>() : 0;
+                    //  xqItem["rise_stop"].Value<float>();
+                xq.FallStop = xqItem["fall_stop"].ToString() != "" ? xqItem["fall_stop"].Value<float>() : 0;
+                    // xqItem["fall_stop"].Value<float>();
                 xq.CurrencyUnit = xqItem["currency_unit"].Value<string>();
                 if (xqItem["amount"].ToString() != "")
                 {
-                    var  tempat= xqItem["amount"].Value<string>();
+                    var tempat = xqItem["amount"].Value<string>();
                     if (tempat.Contains("E"))
                     {
-                        xq.Amount =float.Parse(tempat, System.Globalization.NumberStyles.Float);
+                        xq.Amount = float.Parse(tempat, System.Globalization.NumberStyles.Float);
                     }
                     else
                     {
@@ -338,44 +399,71 @@ namespace BLL.Sprider.Stock
                         float.TryParse(tempat, out tempft);
                         xq.Amount = tempft;
                     }
-          
+
                 }
                 xq.NetAssets = xqItem["net_assets"].Value<float>();
                 xq.Hasexist = xqItem["hasexist"].Value<string>();
                 xq.HasWarrant = xqItem["has_warrant"].Value<string>();
                 xq.Type = xqItem["type"].Value<float>();
-                xq.Flag = xqItem["flag"].Value<int>();
+                xq.Flag = xqItem["flag"]?.Value<int>() ?? 0; //xqItem["flag"].Value<int>();
                 xq.RestDay = xqItem["rest_day"].Value<string>();
-                xq.Amplitude = xqItem["amplitude"].Value<float>();
-                xq.LotSize = xqItem["lot_size"].Value<float>();
-                xq.MinOrderQuantity = xqItem["min_order_quantity"].Value<float>();
-                xq.MaxOrderQuantity = xqItem["max_order_quantity"].Value<float>();
-                xq.TickSize = xqItem["tick_size"].Value<float>();
+                xq.Amplitude = xqItem["amplitude"]?.Value<float>() ?? 0; // xqItem["amplitude"].Value<float>();
+                xq.LotSize = xqItem["lot_size"].ToString() != "" ? xqItem["lot_size"].Value<float>() : 0;
+                    //xqItem["lot_size"].Value<float>();
+                xq.MinOrderQuantity = xqItem["min_order_quantity"].ToString() != ""
+                    ? xqItem["min_order_quantity"].Value<float>()
+                    : 0; // xqItem["min_order_quantity"].Value<float>();
+                xq.MaxOrderQuantity = xqItem["max_order_quantity"].ToString() != ""
+                    ? xqItem["max_order_quantity"].Value<float>()
+                    : 0; // xqItem["max_order_quantity"].Value<float>();
+                xq.TickSize = xqItem["tick_size"].ToString() != "" ? xqItem["tick_size"].Value<float>() : 0;
+                    // xqItem["tick_size"].Value<float>();
                 xq.KzzStockSymbol = xqItem["kzz_stock_symbol"].Value<string>();
                 xq.KzzStockName = xqItem["kzz_stock_name"].Value<string>();
-                xq.KzzStockCurrent = xqItem["kzz_stock_current"].Value<float>();
-                xq.KzzConvertPrice = xqItem["kzz_convert_price"].Value<float>();
-                xq.kzzcovertValue = xqItem["kzz_covert_value"].Value<float>();
-                xq.KzzCpr = xqItem["kzz_cpr"].Value<float>();
-                xq.KzzPutbackPrice = xqItem["kzz_putback_price"].Value<float>();
+                xq.KzzStockCurrent = xqItem["kzz_stock_current"].ToString() != ""
+                    ? xqItem["kzz_stock_current"].Value<float>()
+                    : 0; //xqItem["kzz_stock_current"].Value<float>();
+                xq.KzzConvertPrice = xqItem["kzz_convert_price"].ToString() != ""
+                    ? xqItem["kzz_convert_price"].Value<float>()
+                    : 0; //xqItem["kzz_convert_price"].Value<float>();
+                xq.kzzcovertValue = xqItem["kzz_covert_value"].ToString() != ""
+                    ? xqItem["kzz_covert_value"].Value<float>()
+                    : 0; // xqItem["kzz_covert_value"].Value<float>();
+                xq.KzzCpr = xqItem["kzz_cpr"].ToString() != "" ? xqItem["kzz_cpr"].Value<float>() : 0;
+                    //xqItem["kzz_cpr"].Value<float>();
+                xq.KzzPutbackPrice = xqItem["kzz_putback_price"].ToString() != ""
+                    ? xqItem["kzz_putback_price"].Value<float>()
+                    : 0; // xqItem["kzz_putback_price"].Value<float>();
                 xq.KzzConvertTime = xqItem["kzz_convert_time"].Value<string>();
-                xq.KzzRedemptPrice = xqItem["kzz_redempt_price"].Value<float>();
-                xq.KzzStraightPrice = xqItem["kzz_straight_price"].Value<float>();
+                xq.KzzRedemptPrice = xqItem["kzz_redempt_price"].ToString() != ""
+                    ? xqItem["kzz_redempt_price"].Value<float>()
+                    : 0; //xqItem["kzz_redempt_price"].Value<float>();
+                xq.KzzStraightPrice = xqItem["kzz_straight_price"].ToString() != ""
+                    ? xqItem["kzz_straight_price"].Value<float>()
+                    : 0; // xqItem["kzz_straight_price"].Value<float>();
                 xq.KzzStockPercent = xqItem["kzz_stock_percent"].Value<string>();
-                xq.Pb = xqItem["pb"].Value<float>();
-                xq.BenefitBeforeTax = xqItem["benefit_before_tax"].Value<float>();
-                xq.BenefitAfterTax = xqItem["benefit_after_tax"].Value<float>();
+                xq.Pb = xqItem["pb"].ToString() != "" ? xqItem["pb"].Value<float>() : 0; // xqItem["pb"].Value<float>();
+                xq.BenefitBeforeTax = xqItem["benefit_before_tax"].ToString() != ""
+                    ? xqItem["benefit_before_tax"].Value<float>()
+                    : 0; // xqItem["benefit_before_tax"].Value<float>();
+                xq.BenefitAfterTax = xqItem["benefit_after_tax"].ToString() != ""
+                    ? xqItem["benefit_after_tax"].Value<float>()
+                    : 0; //  xqItem["benefit_after_tax"].Value<float>();
                 xq.ConvertBondRatio = xqItem["convert_bond_ratio"].Value<string>();
                 xq.Totalissuescale = xqItem["totalissuescale"].Value<string>();
                 xq.Outstandingamt = xqItem["outstandingamt"].Value<string>();
                 xq.Maturitydate = xqItem["maturitydate"].Value<string>();
                 xq.RemainYear = xqItem["remain_year"].Value<string>();
-                xq.ConvertRate = xqItem["convertrate"].Value<float>();
+                xq.ConvertRate = xqItem["convertrate"].ToString() != "" ? xqItem["convertrate"].Value<float>() : 0;
+                    // xqItem["convertrate"].Value<float>();
                 xq.Interestrtmemo = xqItem["interestrtmemo"].Value<string>();
                 xq.ReleaseDate = xqItem["release_date"].Value<string>();
-                xq.Circulation = xqItem["circulation"].Value<float>();
-                xq.ParValue = xqItem["par_value"].Value<float>();
-                xq.DueTime = xqItem["due_time"].Value<float>();
+                xq.Circulation = xqItem["circulation"].ToString() != "" ? xqItem["circulation"].Value<float>() : 0;
+                    // xqItem["circulation"].Value<float>();
+                xq.ParValue = xqItem["par_value"].ToString() != "" ? xqItem["par_value"].Value<float>() : 0;
+                    //  xqItem["par_value"].Value<float>();
+                xq.DueTime = xqItem["due_time"].ToString() != "" ? xqItem["due_time"].Value<float>() : 0;
+                    // xqItem["due_time"].Value<float>();
                 xq.ValueDate = xqItem["value_date"].Value<string>();
                 xq.DueDate = xqItem["due_date"].Value<string>();
                 xq.Publisher = xqItem["publisher"].Value<string>();
@@ -384,8 +472,10 @@ namespace BLL.Sprider.Stock
                 xq.Warrant = xqItem["warrant"].Value<string>();
                 xq.SaleRrg = xqItem["sale_rrg"].Value<string>();
                 xq.Rate = xqItem["rate"].Value<string>();
-                xq.AfterHourVol = xqItem["after_hour_vol"].Value<int>();
-                xq.FloatShares = xqItem["float_shares"].Value<float>();
+                xq.AfterHourVol = xqItem["after_hour_vol"].ToString() != "" ? xqItem["after_hour_vol"].Value<int>() : 0;
+                    // xqItem["after_hour_vol"].Value<int>();
+                xq.FloatShares = xqItem["float_shares"].ToString() != "" ? xqItem["float_shares"].Value<float>() : 0;
+                    //xqItem["float_shares"].Value<float>();
 
                 if (xqItem["float_market_capital"].ToString() != "")
                 {
@@ -396,7 +486,7 @@ namespace BLL.Sprider.Stock
                     }
                     else
                     {
-                        float tempft = 0;
+                        float tempft;
                         float.TryParse(tempat, out tempft);
                         xq.FloatMarketCapital = tempft;
                     }
@@ -424,6 +514,7 @@ namespace BLL.Sprider.Stock
 
 
         }
+
         //public void GetStockDetial()
         //{
         //    LogServer.WriteLog("dayRepord start..." + "stock");
@@ -539,6 +630,8 @@ namespace BLL.Sprider.Stock
                 }
 
                 var oldlist = GetAllinfo();
+                if(oldlist==null||oldlist.Count==0)
+                    return;
                 var stocks = new List<StockInfo>();
                 foreach (var obj in item["data"])
                 {
@@ -568,11 +661,6 @@ namespace BLL.Sprider.Stock
                     new StockinfoDB().AddStockinfo(stocks);
             }
           
-
-
-
-
-
         }
 
         //v_sh600886="1~国投电力~600886~7.01~7.05~7.03~418294~203031~215263~7.01~1148~7.00~13534~6.99~1901~6.98~2972~6.97~1799~7.02~1700~7.03~1423~7.04~13370~7.05~2649~7.06~4457~14:59:56/7.02/230/B/161440/11919|14:59:56/7.01/120/S/84120/11916|14:59:51/7.01/53/S/37203/11911|14:59:46/7.01/96/S/67296/11908|14:59:41/7.01/11/S/7711/11905|14:59:31/7.01/69/S/48369/11901~20160811150546~-0.04~-0.57~7.08~6.99~7.02/418294成交量/294236426成交额~418294~29424成交额~0.62（换手率）~8.74（市盈率）~~7.08最高价~6.99最低价~1.28震幅~475.70流通市值 ~475.70总市值  ~1.71（市净率）~7.76涨停价 ~6.35跌停价  ~";
@@ -581,6 +669,10 @@ namespace BLL.Sprider.Stock
 
         //var pageinfo1 = HtmlAnalysis.Gethtmlcode("http://d.10jqka.com.cn/v2/time/hs_600662/last.js");
 
+        public void stockMonitor()
+        {
+            var head = HtmlAnalysis.Gethtmlcode("http://stockpage.10jqka.com.cn/spService/002801/Header/realHeader");
+        }
 
         //var head =
         //    HtmlAnalysis.Gethtmlcode("http://stockpage.10jqka.com.cn/spService/002801/Header/realHeader");

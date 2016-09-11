@@ -29,9 +29,19 @@ namespace WebAppClinet
             //new SpriderSystem().UpdateSiteCat(161);
             //new SiteClassBll().UpdatemmbsiteClass(241);
             // new StockInfoBll().GetNewStockInfo();
-            SubmitOrder("");
+           SubmitOrder("");
+            //var aa = ranCode();
             //test();
+
         }
+        //static Random ran = new Random();
+        //private string ranCode()
+        //{
+        //    float rannum = ran.Next(0, 1000) / 1000;
+        //    int num = int.Parse(Math.Round(2147483647 * rannum).ToString());
+        //    var res = num ^ 2147483647 & 47427992;
+        //    return res.ToString();
+        //}
 
 
         private void smsServer()
@@ -58,7 +68,7 @@ namespace WebAppClinet
 
                 //server.AddCat($"{skuid},2477473", "1,1");
                 server.ClearCat();
-                server.AddCat("2644340,1569856,2477473", "1,1,1");
+                server.AddCat("1010278,2477374", "1,1");
                 server.CatDetial();
                 server.SubmitOrder();
                 //server.ClearCat();

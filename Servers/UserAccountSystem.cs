@@ -13,9 +13,10 @@ namespace Servers
         {
             new UserAccountBll().SaveAccount(account);
         }
-        public void AddNewTransaction( UserTransaction transaction)
+
+        public void AddNewTransaction(UserTransaction transaction)
         {
-     
+
             OrderInfo order = new OrderInfo
             {
                 NickName = transaction.NickName,
@@ -25,12 +26,15 @@ namespace Servers
                 TotalCount = transaction.StockCount,
                 TotalAmount = transaction.Positions,
                 OrderStatus = "已下单",
-                Transactionfees=transaction.Transactionfees,
-                CreateTime=DateTime.Now
+                Transactionfees = transaction.Transactionfees,
+                CreateTime = DateTime.Now
             };
-            new OrderBll().SaveOrderInfo(order);
-            new UserTransactionBll().SaveTransaction(transaction);
-
+            int orderid = new OrderBll().SaveOrderInfo(order);
+            if (orderid > 0)
+            {
+                transaction.OrderId = orderid;
+                new UserTransactionBll().SaveTransaction(transaction);
+            }
         }
     }
 }

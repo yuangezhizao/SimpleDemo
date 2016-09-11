@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 
 using DotRas;
+using MHttpHelper;
 
 namespace ChangeIPTool
 {
@@ -16,7 +18,7 @@ namespace ChangeIPTool
 
 
         /// <summary>
-        /// ip转换
+        /// 宽带ip转换
         /// </summary>
         /// <param name="kdlj">宽带连接名称 如：本地连接，宽带连接</param>
         /// <param name="userName">帐号</param>
@@ -142,6 +144,62 @@ namespace ChangeIPTool
                 }
             }
         }
+
+        /// <summary>
+        /// 路由器拨号转换ip
+        /// </summary>
+        /// <param name="rouseurl"></param>
+        /// <param name="rouseuname"></param>
+        /// <param name="rouseupwd"></param>
+        public void Roustreconnect(string rouseurl, string rouseuname, string rouseupwd)
+        {
+
+            HttpItem item = new HttpItem();
+            HttpHelper httper = new HttpHelper();
+
+            try
+            {
+                string post ="{\"network\":{\"change_wan_status\":{\"proto\":\"pppoe\",\"operate\":\"disconnect\"}},\"method\":\"do \"}\"";
+                string posturl = "http://192.168.6.1/stok=a812351afe23c79530df897ec180/ds";
+                item.Accept = "application/json, text/javascript, */*; q=0.01";
+                item.ContentType = "application/json; charset=UTF-8";
+                item.Referer = "http://192.168.6.1/";
+                item.URL = posturl;
+                item.Method = "POST";
+                item.Postdata = post;
+                item.ContentType = "application/x-www-form-urlencoded";
+                item.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko";
+                item.Header.Add("X-Requested-With", "XMLHttpRequest");
+                var stopresult = httper.GetHtml(item);
+
+                LogServer.WriteLog(stopresult.Html, "changeIp");
+                return;
+                byte[] bytes = Encoding.Default.GetBytes(rouseuname + ":" + rouseupwd);
+                string base64str = Convert.ToBase64String(bytes);
+                string url = rouseurl.IndexOf("http") >= 0 ? rouseurl : ("http://" + rouseurl) + "/userRpm/StatusRpm.htm";
+                string urltxt = url + "?Disconnect=" + System.Web.HttpUtility.UrlEncode("断 线", System.Text.Encoding.GetEncoding("gb2312")) + "&wan=1";
+                string urltxtc = url + "?Connect=" + System.Web.HttpUtility.UrlEncode("连 接", System.Text.Encoding.GetEncoding("gb2312")) + "&wan=1";
+                string cookie = "Authorization=Basic%20" + base64str + "; ChgPwdSubTag=";
+                item.Referer = urltxt;
+                item.ContentType = "textml;charset=gb2312";
+
+                item.URL = urltxt;
+                item.Cookie = cookie;
+
+                var page = httper.GetHtml(item);
+                Thread.Sleep(1000);
+                item.URL = urltxtc;
+                var pagelj = httper.GetHtml(item);
+                LogServer.WriteLog("断开url:"+ urltxt + "\t" + page.Html + "\t链接url:" + urltxtc+"\t"+ pagelj, "changeIp");
+                LogServer.WriteLog("路由器拨号完成", "changeIp");
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex, "changeIp");
+                //Log4Logger.Error(ex.Source + ":" + ex.Message + "--:" + ex.StackTrace);
+            }
+        }
+
 
         public static DateTime lastUpdate;
         public void TimerDoing(string kdlj, string userName, string pwd)

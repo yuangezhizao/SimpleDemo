@@ -48,5 +48,10 @@ namespace ChangeIPTool
         {
             new Server().ChangeIp(txtLinkName.Text, txtUserName.Text, txtpwd.Text);
         }
+
+        private void btnlySubmit_Click(object sender, EventArgs e)
+        {
+            new Server().Roustreconnect(txtLyUrl.Text, txtlyName.Text, txtlyPwd.Text);
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace AamirKhan
             catch (Exception ex)
             {
                 LogServer.WriteLog(ex, "StockDayReportError");
-                return DoWorkResult.AbortCurrentThread;//有异常,可以终止当前线程.当然.也可以继续,
+                return DoWorkResult.ContinueThread;//有异常,可以终止当前线程.当然.也可以继续,
                 //return  DoWorkResult.AbortAllThread; //特殊情况下 ,有异常终止所有的线程...
             }
 
