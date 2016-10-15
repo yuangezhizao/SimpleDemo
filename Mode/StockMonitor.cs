@@ -24,6 +24,7 @@ namespace Mode
         public decimal MinRange { get; set; }
         public decimal MaxRange { get; set; }
         public string CurrentInfo { get; set; }
+        public DateTime CreateDate { get; set; }
 
     }
 }
