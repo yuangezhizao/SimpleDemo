@@ -34,8 +34,8 @@ namespace Servers
                 Eid = "ED743BE582053C240F57BED2A721971997408F3D8C96D43F75CF85E78B35F755D881606EFF3F83340C8CC2105F73B493";
             if (string.IsNullOrEmpty(jdUserAgent))
             {
-                //jdUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0";
-                jdUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25";
+                jdUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0";
+                // jdUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25";
             }
         }
 
@@ -75,6 +75,55 @@ namespace Servers
             return req.HttpRequest(url, param);
         }
 
+
+        public void gotoUrl(string url)
+        {
+            JdOrderServer server = new JdOrderServer();
+            var JuserInfo = new SiteUserInfoBll().GetAllUser();
+            foreach (var user in JuserInfo)
+            {
+
+                server.Login(user.UserName, user.UserPwd);
+
+                server.SetUserInfo(user.UserName);
+
+                HtmlAnalysis req = new HtmlAnalysis();
+                //req.RequestMethod = "POST";
+
+                if (user != null && !string.IsNullOrEmpty(user.LoginCookies))
+                {
+                    req.Headers.Add("Cookie", user.LoginCookies);
+                }
+                if (user != null && !string.IsNullOrEmpty(user.UserAgent))
+                {
+                    req.RequestUserAgent = user.UserAgent;
+                }
+
+                //req.RequestMethod = "POST";
+                //req.RequestReferer = "http://trade.jd.com/shopping/order/getOrderInfo.action?rid=1470279644415";
+                //req.RequestAccept = "application/json, text/javascript, */*; q=0.01";
+
+                var reqpage = req.HttpRequest("http://sale.jd.com/act/L1Y2V6ERZePab4.html?cpdad=1DLSUE");
+
+                var youhuiurl= Regex.Match(reqpage, "coords=\"741, 5, 1005, 110\" href=\"(?<x>.*?)\"", ro).Groups["x"].Value;
+                if(string.IsNullOrEmpty(youhuiurl))
+                    continue;
+                var reqpage1 = req.HttpRequest(youhuiurl);
+
+
+                //server.SaveAddress();
+
+                //server.AddCat($"{skuid},2477473", "1,1");
+                //server.ClearCat();
+                //server.AddCat("1010278,2477374", "1,1");
+                //server.CatDetial();
+                //server.SubmitOrder();
+                //server.ClearCat();
+
+
+            }
+
+        }
 
         #region 公共方法
         /// <summary>
