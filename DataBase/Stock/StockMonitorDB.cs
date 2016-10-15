@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Commons;
 using Mode;
@@ -48,6 +49,22 @@ namespace DataBase.Stock
                 using (var db = DbFactory.OpenDbConnection())
                 {
                     return db.Single<StockMonitor>(c => c.StockNo == skNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex.Message, "DBError");
+                return null;
+            }
+        }
+
+        public List<StockMonitor> GetALlStockMonitor()
+        {
+            try
+            {
+                using (var db = DbFactory.OpenDbConnection())
+                {
+                    return db.Select<StockMonitor>();
                 }
             }
             catch (Exception ex)
