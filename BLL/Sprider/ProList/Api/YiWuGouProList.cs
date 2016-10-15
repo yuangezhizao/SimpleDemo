@@ -48,7 +48,6 @@ namespace BLL.Sprider.ProList.Api
         private void GetShopList(string page,string catid,string catName,string parentName)
         {
          
-
             string shopArea = RegGroupsX<string>(page, "<!-- 广告商品 list end-->(?<x>.*?)<!--page start -->");
             if (string.IsNullOrEmpty(shopArea))
                 return;

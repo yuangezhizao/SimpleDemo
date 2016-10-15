@@ -16,7 +16,7 @@ namespace AamirKhan
             InitializeComponent();
             MessageCenter.ProgressBarControl(progressBar);
             MessageCenter.RegisterMessageControl(rtbMsg);
-            SpiderTimer.Interval = 1000*60;
+            SpiderTimer.Interval = 5000;
             SpiderTimer.Start();
         }
 
@@ -44,8 +44,7 @@ namespace AamirKhan
                 lvTheadDetial.Items.Add(li);
             }
 
-            StockInfoThread dqt = new StockInfoThread(prolist);
-            dqt.ThreadCount = count;
+            var dqt = new StockInfoThread(prolist) {ThreadCount = count};
             dqt.AllCompleted += AllCompleted;
             dqt.OneCompleted += Onecompleted;
             dqt.Start();
@@ -127,18 +126,22 @@ namespace AamirKhan
 
         private void SpiderTimer_Tick(object sender, EventArgs e)
         {
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                return;
             if (dtpTime.Text != @"0:00:00")
             {
-                if (DateTime.Now.Hour == dtpTime.Value.Hour && DateTime.Now.Minute == dtpTime.Value.Minute)
+                if (DateTime.Now.Hour == dtpTime.Value.Hour && DateTime.Now.Minute == dtpTime.Value.Minute &&
+                  DateTime.Now.Second > 30&& DateTime.Now.Second < 36 )
                 {
-                    if(DateTime.Now.DayOfWeek== DayOfWeek.Saturday|| DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-                        return;
+
                     LogServer.WriteLog("定时任务开始执行", "StockDayReport");
                     StockDayReport();
                     getNewStock();
                 }
             }
-          
+            if (DateTime.Now < Convert.ToDateTime("09:30") || DateTime.Now > Convert.ToDateTime("15:00")) return;
+            if (DateTime.Now > Convert.ToDateTime("11:30") && DateTime.Now < Convert.ToDateTime("13:30")) return;
+            new TaskFactory().StartNew(new StockInfoBll().stockMonitor);
         }
 
         private void cbxTime_CheckedChanged(object sender, EventArgs e)

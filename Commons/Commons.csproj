@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Compression.cs" />
     <Compile Include="DocumentServer.cs" />
+    <Compile Include="EmailServer.cs" />
     <Compile Include="ImageServer.cs" />
     <Compile Include="JsContext.cs" />
     <Compile Include="SimulationCookie.cs" />

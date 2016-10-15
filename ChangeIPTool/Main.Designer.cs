@@ -98,7 +98,7 @@
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(130, 21);
             this.txtUserName.TabIndex = 4;
-            this.txtUserName.Text = "057405668838";
+            this.txtUserName.Text = "057475426335";
             // 
             // txtpwd
             // 
@@ -107,7 +107,7 @@
             this.txtpwd.PasswordChar = '*';
             this.txtpwd.Size = new System.Drawing.Size(130, 21);
             this.txtpwd.TabIndex = 5;
-            this.txtpwd.Text = "zj104910";
+            this.txtpwd.Text = "718285";
             // 
             // btnSubmit
             // 

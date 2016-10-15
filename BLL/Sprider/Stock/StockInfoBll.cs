@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Threading;
@@ -8,6 +9,7 @@ using Commons;
 using DataBase.Stock;
 using Mode;
 using NetDimension.Json.Linq;
+using ServiceStack.Text.Common;
 
 
 namespace BLL.Sprider.Stock
@@ -24,7 +26,7 @@ namespace BLL.Sprider.Stock
                     xqCookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
 
                     if (xqCookies.UpdateTime.AddMinutes(30) >= DateTime.Now) return xqCookies;
-                    var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/");
+                    var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/s/SZ000002");
                     if (string.IsNullOrEmpty(result)) return xqCookies;
                     xqCookies.Cookies = result;
                     new SiteCookiesBll().SaveCookies(xqCookies);
@@ -669,9 +671,93 @@ namespace BLL.Sprider.Stock
 
         //var pageinfo1 = HtmlAnalysis.Gethtmlcode("http://d.10jqka.com.cn/v2/time/hs_600662/last.js");
 
+
+
         public void stockMonitor()
         {
-            var head = HtmlAnalysis.Gethtmlcode("http://stockpage.10jqka.com.cn/spService/002801/Header/realHeader");
+            var list =new StockMonitorBll().GetALlStockMonitor();
+            if(list==null|| list.Count==0)
+                return;
+            foreach (var item in list)
+            {
+                SkMonitor(item);
+            }
+            LogServer.WriteLog("finished ", "StockMonitor");
+           
+        }
+
+        private const string Email = "195896636@qq.com";
+
+       public static Dictionary<string,DateTime> monitList = new Dictionary<string, DateTime>();
+
+        private void SkMonitor(StockMonitor item)
+        {
+            string detial = getCurrentStock(item.StockNo);
+            if (string.IsNullOrEmpty(detial))
+                return;
+            var jtk = JToken.Parse(detial);
+            if (jtk[item.StockNo] == null)
+                return;
+            string cprice = jtk[item.StockNo]["current"].ToString();
+            decimal ctprice;
+            decimal.TryParse(cprice, out ctprice);
+            if(ctprice <= 0)
+                return;
+
+            item.CtPrice = ctprice;
+            sendMsg(item,detial);
+
+
+        }
+
+        private void sendMsg(StockMonitor item,string detial)
+        {
+            if (monitList.ContainsKey(item.StockNo))
+            {
+                //确保在3个小时之内只会发送一条信息
+                var sendtime = monitList[item.StockNo];
+                if(sendtime.AddHours(3)>DateTime.Now)
+                    return;
+            }
+            else
+            {
+                monitList.Add(item.StockNo, DateTime.Now);
+            }
+
+            if (item.CtPrice < item.MinPrice)
+            {
+                string title = item.StockNo + "价格监控 currect:" + item.CtPrice + " MinPrice:" + item.MinPrice;
+                string body = item.StockNo + " currect:" + item.CtPrice + " MinPrice:" + item.MinPrice + "\r\n" + detial;
+
+                EmailServer.SendMail(body, title, new[] { Email });
+            }
+            else if (item.CtPrice > item.MaxPrice)
+            {
+                string title = item.StockNo + "价格监控 currect:" + item.CtPrice + " MaxPrice:" + item.MaxPrice;
+                string body = item.StockNo + " currect:" + item.CtPrice + " MaxPrice:" + item.MaxPrice + "\r\n" + detial;
+
+                EmailServer.SendMail(body, title, new[] { Email });
+            }
+
+            LogServer.WriteLog(item.StockNo + "价格监控 currect:" + item.CtPrice + " MaxPrice:" + item.MaxPrice, "StockSendMsg");
+        }
+
+
+
+        public string getCurrentStock(string num)
+        {
+            string tempurl = $"https://xueqiu.com/v4/stock/quote.json?code={num}";
+            HtmlAnalysis request = new HtmlAnalysis();
+        
+            if (XqCookies != null)
+            {
+                request.Headers.Add("Cookie", XqCookies.Cookies);
+                request.RequestUserAgent = XqCookies.UserAgent;
+            }
+            request.RequestAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+            return request.HttpRequest(tempurl);
+            
         }
 
         //var head =

@@ -46,7 +46,15 @@ namespace ChangeIPTool
 
         private void timerIpChang_Tick(object sender, EventArgs e)
         {
-            new Server().ChangeIp(txtLinkName.Text, txtUserName.Text, txtpwd.Text);
+            try
+            {
+                new Server().ChangeIp(txtLinkName.Text, txtUserName.Text, txtpwd.Text);
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex);
+            }
+
         }
 
         private void btnlySubmit_Click(object sender, EventArgs e)

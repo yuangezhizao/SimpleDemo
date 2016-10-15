@@ -118,8 +118,6 @@ namespace BLL
                         return new ZmmmClassInfo();
                     case 293:
                         return new DusunClassInfo();
-
-
                     default:
                         return null;
                 }

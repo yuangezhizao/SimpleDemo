@@ -154,6 +154,7 @@
     <Compile Include="Sprider\SmsApi\ISmsApi.cs" />
     <Compile Include="Sprider\Stock\IStockInfoBll.cs" />
     <Compile Include="Sprider\Stock\StockInfoBll.cs" />
+    <Compile Include="Sprider\Stock\StockMonitorBll.cs" />
     <Compile Include="SqlMonitorBll.cs" />
     <Compile Include="WeiBo\IWeiboBll.cs" />
     <Compile Include="WeiBo\TengXunBll.cs" />

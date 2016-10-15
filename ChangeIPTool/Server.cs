@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
@@ -13,7 +14,7 @@ namespace ChangeIPTool
     class Server
     {
         List<string> historyIps = new List<string>();
-        private int IPLoopCount = 3;//允许重复次数  拨号3次还是重复的ip 
+        private int IPLoopCount = 3; //允许重复次数  拨号3次还是重复的ip 
         private int DialFaildSleepTime = 30000;
 
 
@@ -39,11 +40,11 @@ namespace ChangeIPTool
                 try
                 {
                     entryName = oldConn.EntryName;
-                    RasIPInfo ipAddresses = (RasIPInfo)oldConn.GetProjectionInfo(RasProjectionType.IP);
+                    RasIPInfo ipAddresses = (RasIPInfo) oldConn.GetProjectionInfo(RasProjectionType.IP);
                     string oldIp = ipAddresses.IPAddress.ToString();
                     LogServer.WriteLog("现在名称:" + entryName + "IP是" + oldIp, "changeIp");
                     LogServer.WriteLog("开始挂断", "changeIp");
-                    oldConn.HangUp(10 * 1000);
+                    oldConn.HangUp(10*1000);
                     //Thread.Sleep(hx.Mset.RasHangUpSleepTime);
                     if (RasConnection.GetActiveConnectionById(oldConn.EntryId) != null)
                     {
@@ -67,7 +68,7 @@ namespace ChangeIPTool
                     RasDialer rs = new RasDialer();
                     if (entryName == "")
                     {
-                        entryName = kdlj;// dt.Rows[0]["SC_NetEntryName"].ToString();
+                        entryName = kdlj; // dt.Rows[0]["SC_NetEntryName"].ToString();
                     }
                     rs.EntryName = entryName;
                     rs.PhoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.AllUsers);
@@ -135,7 +136,7 @@ namespace ChangeIPTool
             {
                 try
                 {
-                    RasIPInfo ipAddresses = (RasIPInfo)oldConn.GetProjectionInfo(RasProjectionType.IP);
+                    RasIPInfo ipAddresses = (RasIPInfo) oldConn.GetProjectionInfo(RasProjectionType.IP);
                     ipAddress = ipAddresses.IPAddress.ToString();
                 }
                 catch (Exception ex)
@@ -159,7 +160,8 @@ namespace ChangeIPTool
 
             try
             {
-                string post ="{\"network\":{\"change_wan_status\":{\"proto\":\"pppoe\",\"operate\":\"disconnect\"}},\"method\":\"do \"}\"";
+                string post =
+                    "{\"network\":{\"change_wan_status\":{\"proto\":\"pppoe\",\"operate\":\"disconnect\"}},\"method\":\"do \"}\"";
                 string posturl = "http://192.168.6.1/stok=a812351afe23c79530df897ec180/ds";
                 item.Accept = "application/json, text/javascript, */*; q=0.01";
                 item.ContentType = "application/json; charset=UTF-8";
@@ -176,9 +178,15 @@ namespace ChangeIPTool
                 return;
                 byte[] bytes = Encoding.Default.GetBytes(rouseuname + ":" + rouseupwd);
                 string base64str = Convert.ToBase64String(bytes);
-                string url = rouseurl.IndexOf("http") >= 0 ? rouseurl : ("http://" + rouseurl) + "/userRpm/StatusRpm.htm";
-                string urltxt = url + "?Disconnect=" + System.Web.HttpUtility.UrlEncode("断 线", System.Text.Encoding.GetEncoding("gb2312")) + "&wan=1";
-                string urltxtc = url + "?Connect=" + System.Web.HttpUtility.UrlEncode("连 接", System.Text.Encoding.GetEncoding("gb2312")) + "&wan=1";
+                string url = rouseurl.IndexOf("http") >= 0
+                    ? rouseurl
+                    : ("http://" + rouseurl) + "/userRpm/StatusRpm.htm";
+                string urltxt = url + "?Disconnect=" +
+                                System.Web.HttpUtility.UrlEncode("断 线", System.Text.Encoding.GetEncoding("gb2312")) +
+                                "&wan=1";
+                string urltxtc = url + "?Connect=" +
+                                 System.Web.HttpUtility.UrlEncode("连 接", System.Text.Encoding.GetEncoding("gb2312")) +
+                                 "&wan=1";
                 string cookie = "Authorization=Basic%20" + base64str + "; ChgPwdSubTag=";
                 item.Referer = urltxt;
                 item.ContentType = "textml;charset=gb2312";
@@ -190,7 +198,8 @@ namespace ChangeIPTool
                 Thread.Sleep(1000);
                 item.URL = urltxtc;
                 var pagelj = httper.GetHtml(item);
-                LogServer.WriteLog("断开url:"+ urltxt + "\t" + page.Html + "\t链接url:" + urltxtc+"\t"+ pagelj, "changeIp");
+                LogServer.WriteLog("断开url:" + urltxt + "\t" + page.Html + "\t链接url:" + urltxtc + "\t" + pagelj,
+                    "changeIp");
                 LogServer.WriteLog("路由器拨号完成", "changeIp");
             }
             catch (Exception ex)
@@ -202,6 +211,7 @@ namespace ChangeIPTool
 
 
         public static DateTime lastUpdate;
+
         public void TimerDoing(string kdlj, string userName, string pwd)
         {
             DateTime logTime = LogServer.ReadLogRowNo("shieldSpider");
@@ -210,7 +220,7 @@ namespace ChangeIPTool
                 try
                 {
                     ChangeIp(kdlj, userName, pwd);
-                    lastUpdate = DateTime.Now.AddMinutes(5);
+                    lastUpdate = DateTime.Now.AddMinutes(3);
                 }
                 catch (Exception ex)
                 {
@@ -218,6 +228,33 @@ namespace ChangeIPTool
                 }
 
             }
+            else
+            {
+                //当前是否能够联网
+                if (!IsConnectedToInternet())
+                {
+                    try
+                    {
+                        ChangeIp(kdlj, userName, pwd);
+                        lastUpdate = DateTime.Now.AddMinutes(3);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogServer.WriteLog(ex, "changeIp");
+                    }
+                }
+            }
+
+        }
+
+        [DllImport("wininet.dll", EntryPoint = "InternetGetConnectedState")]
+        public static extern bool InternetGetConnectedState(out int conState, int reder);
+
+        //参数说明 constate 连接说明 ，reder保留值
+        public static bool IsConnectedToInternet()
+        {
+            int Desc = 0;
+            return InternetGetConnectedState(out Desc, 0);
         }
 
     }
