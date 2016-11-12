@@ -57,7 +57,7 @@ namespace SpriderProxy
 
                 return (T)Convert.ChangeType(result, typeof(T));
             }
-            catch
+            catch (Exception ex)
             {
                 return default(T);
             }

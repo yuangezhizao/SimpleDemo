@@ -99,6 +99,7 @@
     <Compile Include="Analysis\Yiyao.cs" />
     <Compile Include="Analysis\ymatou.cs" />
     <Compile Include="Analysis\Zmmm.cs" />
+    <Compile Include="Eastmoney.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseSiteInfo.cs" />
     <Compile Include="Analysis\Sfbest.cs" />

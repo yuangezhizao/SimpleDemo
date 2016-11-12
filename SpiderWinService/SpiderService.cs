@@ -32,11 +32,11 @@ namespace SpiderWinService
         {
             LogServer.WriteLog(DateTime.Now.ToString(),"timeinfo");
 
-            if ((DateTime.Now.Hour == 20 ||DateTime.Now.Hour == 20) &&
-                DateTime.Now.Minute == 1)
-            {
-                getItemsByApi();
-            }
+            //if ((DateTime.Now.Hour == 20 ||DateTime.Now.Hour == 20) &&
+            //    DateTime.Now.Minute == 1)
+            //{
+            //    getItemsByApi();
+            //}
 
             //在高峰期发送
             //if ((DateTime.Now.Hour == 7 || DateTime.Now.Hour == 11 || DateTime.Now.Hour == 17 || DateTime.Now.Hour == 20) && DateTime.Now.Minute == 1)
@@ -59,8 +59,8 @@ namespace SpiderWinService
                 LogServer.WriteLog("商城分类更新开始执行 siteid：" + num, "RunInfo");
                 try
                 {
-                    new SiteFactory { SiteId = num }.ProIApiManager.AddNewProducts();
-                    //new SiteFactory { SiteId = num }.ProIApiManager.GetAllProducts();
+                    // new SiteFactory { SiteId = num }.ProIApiManager.AddNewProducts();
+                    new SiteFactory { SiteId = num }.ProIApiManager.GetAllProducts();
                 }
                 catch (Exception ex)
                 {

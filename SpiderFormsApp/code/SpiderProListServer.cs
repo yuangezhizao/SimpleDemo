@@ -339,7 +339,7 @@ namespace SpiderFormsApp.code
    
         public void getItemsByApi()
         {
-            int[] Sites = {999};
+            int[] Sites = {2};
             Parallel.ForEach(Sites, num =>
             {
                 Stopwatch t1 = new Stopwatch();
@@ -347,8 +347,8 @@ namespace SpiderFormsApp.code
                 LogServer.WriteLog("商城分类更新开始执行 siteid：" + num, "RunInfo");
                 try
                 {
-                    new SiteFactory { SiteId = num }.ProIApiManager.AddNewProducts();
-                    //new SiteFactory { SiteId = num }.ProIApiManager.GetAllProducts();
+                    // new SiteFactory { SiteId = num }.ProIApiManager.AddNewProducts();
+                    new SiteFactory { SiteId = num }.ProIApiManager.GetAllProducts();
                 }
                 catch (Exception ex)
                 {
