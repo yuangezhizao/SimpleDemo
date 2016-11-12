@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
 using BLL.Sprider.Stock;
 using Commons;
 using Mode;
+using Servers;
 
 namespace AamirKhan
 {
@@ -14,6 +14,7 @@ namespace AamirKhan
         public Domain()
         {
             InitializeComponent();
+          
             MessageCenter.ProgressBarControl(progressBar);
             MessageCenter.RegisterMessageControl(rtbMsg);
             SpiderTimer.Interval = 5000;
@@ -22,6 +23,7 @@ namespace AamirKhan
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+
             StockDayReport();
         }
 
@@ -44,7 +46,7 @@ namespace AamirKhan
                 lvTheadDetial.Items.Add(li);
             }
 
-            var dqt = new StockInfoThread(prolist) {ThreadCount = count};
+            var dqt = new StockSpiderServer(prolist) {ThreadCount = count};
             dqt.AllCompleted += AllCompleted;
             dqt.OneCompleted += Onecompleted;
             dqt.Start();
@@ -55,7 +57,7 @@ namespace AamirKhan
 
         private void getNewStock()
         {
-            new TaskFactory().StartNew(new StockInfoBll().GetNewStockInfo);
+            new TaskFactory().StartNew(new SiteFactory().StockInfoManager.GetALlStockInfo);
         }
 
 
@@ -77,6 +79,7 @@ namespace AamirKhan
 
         private void Domain_Load(object sender, EventArgs e)
         {
+     
             lvTheadDetial.GridLines = true;
             lvTheadDetial.FullRowSelect = true;
             lvTheadDetial.View = View.Details;
@@ -141,7 +144,7 @@ namespace AamirKhan
             }
             if (DateTime.Now < Convert.ToDateTime("09:30") || DateTime.Now > Convert.ToDateTime("15:00")) return;
             if (DateTime.Now > Convert.ToDateTime("11:30") && DateTime.Now < Convert.ToDateTime("13:30")) return;
-            new TaskFactory().StartNew(new StockInfoBll().stockMonitor);
+            new TaskFactory().StartNew(new StockInfoBll().StockMonitor);
         }
 
         private void cbxTime_CheckedChanged(object sender, EventArgs e)

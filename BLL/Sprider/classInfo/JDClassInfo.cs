@@ -345,7 +345,7 @@ namespace BLL.Sprider.classInfo
                         {
                             var tempurl = li.Groups["y"].Value;
                             if (!tempurl.Contains("http:"))
-                                tempurl = "http:" + tempurl;
+                                tempurl = "http://channel.jd.com" + tempurl;
                             var tempid = (RegGroupsX<string>(tempurl, Regid) ?? "").Replace('-', ',');
                             catslist.Add(new SiteClassInfo { TotalProduct = total, ClassName = curr, ClassId = tempid ,Urlinfo=tempurl});
                         }

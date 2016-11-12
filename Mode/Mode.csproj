@@ -62,6 +62,7 @@
     <Compile Include="ApiConfig.cs" />
     <Compile Include="APIRequstHistroy.cs" />
     <Compile Include="BandInfo.cs" />
+    <Compile Include="BondInfo.cs" />
     <Compile Include="ClassInfo.cs" />
     <Compile Include="CommentInfo.cs" />
     <Compile Include="JdCoupons.cs" />

@@ -115,6 +115,7 @@
     <Compile Include="SmsHistoryDB.cs" />
     <Compile Include="SpiderConfigDB.cs" />
     <Compile Include="SqlMonitorDB.cs" />
+    <Compile Include="Stock\BondInfoDB.cs" />
     <Compile Include="Stock\StockMonitorDb.cs" />
     <Compile Include="Stock\XqStockDayReportDB.cs" />
     <Compile Include="Stock\StockDayReportDB.cs" />

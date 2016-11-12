@@ -5,18 +5,20 @@ using BLL.Sprider.Stock;
 using Commons;
 using Mode;
 
-namespace AamirKhan
+namespace Servers
 {
+
+
     /// <summary>
     /// 下载线程对了.
     /// </summary>
-    public class StockInfoThread : QueueThreadPlusBase<StockInfo>
+    public class StockSpiderServer : QueueThreadPlusBase<StockInfo>
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="list">下载的列表ID</param>
-        public StockInfoThread(IEnumerable<StockInfo> list) : base(list)
+        public StockSpiderServer(IEnumerable<StockInfo> list) : base(list)
         {
         }
 
@@ -30,12 +32,12 @@ namespace AamirKhan
         {
             try
             {
-                Thread.Sleep(1000 * 1);
-                if(item==null)
+              
+                if (item == null|| string.IsNullOrEmpty(item.StockTypeAdd))
                     return DoWorkResult.ContinueThread;
                 new StockInfoBll().GetXueqiuStockDetial(item);
                 //new StockInfoBll().GetStockDetial(item);
-                LogServer.WriteLog("线程："+ index +"编号："+ item.StockNo+"正在执行中", "StockDayReport");
+                LogServer.WriteLog("线程：" + index + "编号：" + item.StockNo + "正在执行中", "StockDayReport");
                 return DoWorkResult.ContinueThread;//没有异常让线程继续跑..
             }
             catch (Exception ex)
@@ -48,5 +50,4 @@ namespace AamirKhan
             //return base.DoWork(pendingValue);
         }
     }
-
 }

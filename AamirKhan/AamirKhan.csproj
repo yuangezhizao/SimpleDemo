@@ -37,6 +37,9 @@
     <Reference Include="FastVerCode">
       <HintPath>..\libs\FastVerCode.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\libs\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -68,9 +71,6 @@
     <Compile Include="MessageCenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueThreadPlusBase.cs" />
-    <Compile Include="QueueThreadBase.cs" />
-    <Compile Include="StockInfoThread.cs" />
     <Compile Include="webBrowserForm.cs">
       <SubType>Form</SubType>
     </Compile>

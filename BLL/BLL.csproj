@@ -152,6 +152,7 @@
     <Compile Include="Sprider\SitePromo\ISitePromo.cs" />
     <Compile Include="Sprider\SmsApi\Hellotrue.cs" />
     <Compile Include="Sprider\SmsApi\ISmsApi.cs" />
+    <Compile Include="Sprider\Stock\BondInfoBll.cs" />
     <Compile Include="Sprider\Stock\IStockInfoBll.cs" />
     <Compile Include="Sprider\Stock\StockInfoBll.cs" />
     <Compile Include="Sprider\Stock\StockMonitorBll.cs" />

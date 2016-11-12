@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Commons;
 using Mode;
@@ -8,40 +9,43 @@ using ServiceStack.OrmLite;
 
 namespace DataBase.Stock
 {
-    public class StockinfoDB : OrmLiteFactory
+   public class BondInfoDB : OrmLiteFactory
     {
         private static OrmLiteConnectionFactory _dbFactory;
-        public StockinfoDB()
+        public BondInfoDB()
         {
-            // _dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
-            _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
+             _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
+           // _dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
-                db.CreateTable<StockInfo>();
+                db.CreateTable<BondInfo>();
             }
         }
-        public void AddStockinfo(List<StockInfo> list)
+        public void AddBondInfo(List<BondInfo> list)
         {
 
             using (var db = _dbFactory.OpenDbConnection())
             {
-
                 try
                 {
                     db.InsertAll(list);
                 }
                 catch (Exception ex)
                 {
-                    foreach (StockInfo info in list)
+
+                    foreach (BondInfo info in list)
                     {
                         try
                         {
-                            db.Insert(info);
+                            using (var db1 = _dbFactory.OpenDbConnection())
+                            {
+                                db1.Insert(info);
+                            }
                         }
                         catch (Exception ex1)
                         {
 
-                            LogServer.WriteLog( ex1.Message, "DBError");
+                            LogServer.WriteLog(ex1.Message, "DBError");
                         }
 
                     }
@@ -50,10 +54,11 @@ namespace DataBase.Stock
 
                 }
             }
-         
+
 
         }
-        public List<StockInfo> GetAllinfo()
+
+        public List<BondInfo> GetAllinfo()
         {
             int error = 0;
             do
@@ -62,9 +67,7 @@ namespace DataBase.Stock
                 {
                     using (var db = _dbFactory.OpenDbConnection())
                     {
-
-                        // return db.SqlList<StockInfo>("select * from dbo.StockInfo with(nolock) where stockno not in(select Code from dbo.XqStockDayReport with(nolock) )");
-                        return db.Select<StockInfo>().ToList();
+                        return db.Select<BondInfo>().ToList();
                     }
                 }
                 catch (Exception ex)
@@ -73,7 +76,7 @@ namespace DataBase.Stock
                     Thread.Sleep(10000);
                     error++;
                 }
-            } while (error<5);
+            } while (error < 5);
             return null;
 
         }

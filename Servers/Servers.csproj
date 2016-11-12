@@ -46,7 +46,7 @@
       <HintPath>..\libs\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\huruntang\trunk\lib\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\libs\ServiceStack.dll</HintPath>
@@ -75,11 +75,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BondSpiderServer.cs" />
     <Compile Include="HostProxyServer.cs" />
     <Compile Include="JdOrderServer.cs" />
+    <Compile Include="QueueThreadBase.cs" />
+    <Compile Include="QueueThreadPlusBase.cs" />
     <Compile Include="SmsServer.cs" />
     <Compile Include="SpriderSystem.cs" />
     <Compile Include="SqlMonitorSystem.cs" />
+    <Compile Include="StockSpiderServer.cs" />
     <Compile Include="UserAccountSystem.cs" />
     <Compile Include="WebServer\AuthProviders\GoogleOAuth2Provider.cs" />
     <Compile Include="WebServer\AuthProviders\QQOAuth2Provider.cs" />

@@ -13,8 +13,8 @@ namespace DataBase
         private static OrmLiteConnectionFactory _dbFactory;
         public DomainCookiesDb()
         {
-            //_dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
-            _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
+            _dbFactory = new OrmLiteConnectionFactory(ConnectionString, SqliteDialect.Provider);
+            // _dbFactory = new OrmLiteConnectionFactory(ZnmDbConnectionString, SqlServerDialect.Provider);
             using (var db = _dbFactory.OpenDbConnection())
             {
                 db.CreateTable<SiteCookies>();

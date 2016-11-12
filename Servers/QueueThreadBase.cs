@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
-namespace AamirKhan
+using System.Threading;
+namespace Servers
 {
     /// <summary>
     /// 队列多线程,T 代表处理的单个类型~
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class QueueThreadPlusBase<T>
+    public abstract class QueueThreadBase<T>
     {
         #region 变量&属性
         /// <summary>
@@ -42,7 +41,7 @@ namespace AamirKhan
         /// <summary>
         /// 线程列表
         /// </summary>
-        //List<Thread> _mThreadList;
+        List<Thread> _mThreadList;
         /// <summary>
         /// 完成队列个数
         /// </summary>
@@ -50,7 +49,7 @@ namespace AamirKhan
         /// <summary>
         /// 队列总数
         /// </summary>
-        private  int _mQueueCount;
+        private int _mQueueCount;
         /// <summary>
         /// 全部完成锁
         /// </summary>
@@ -75,7 +74,7 @@ namespace AamirKhan
         /// <summary>
         /// 单个完成事件
         /// </summary>
-        public event Action<int,T, CompetedEventArgs> OneCompleted;
+        public event Action<T, CompetedEventArgs> OneCompleted;
         /// <summary>
         /// 引发全部完成事件
         /// </summary>
@@ -96,13 +95,13 @@ namespace AamirKhan
         /// </summary>
         /// <param name="pendingValue"></param>
         /// <param name="args"></param>
-        private void OnOneCompleted(int index, T pendingValue, CompetedEventArgs args)
+        private void OnOneCompleted(T pendingValue, CompetedEventArgs args)
         {
             if (OneCompleted != null)
             {
                 try
                 {
-                    OneCompleted(index,pendingValue, args);
+                    OneCompleted(pendingValue, args);
                 }
                 catch { }
 
@@ -111,7 +110,7 @@ namespace AamirKhan
         #endregion
 
         #region 构造
-        public QueueThreadPlusBase(IEnumerable<T> collection)
+        public QueueThreadBase(IEnumerable<T> collection)
         {
             m_InnerQueue = new Queue<T>(collection);
             _mQueueCount = m_InnerQueue.Count;
@@ -124,7 +123,7 @@ namespace AamirKhan
         /// <param name="collection"></param>
         public void addBindDate(IEnumerable<T> collection)
         {
-            if(addcollection == null)
+            if (addcollection == null)
                 addcollection = collection;
             addcollection.Intersect(collection);
             _mQueueCount += collection.Count();
@@ -138,12 +137,13 @@ namespace AamirKhan
         /// </summary>
         private void InitThread()
         {
-            //_mThreadList = new List<Thread>();
-            for (var i = 0; i < ThreadCount; i++)
+            _mThreadList = new List<Thread>();
+            for (int i = 0; i < ThreadCount; i++)
             {
-                Task task = new Task(obj => InnerDoWork((int)obj), i);
-                task.Start();
-                //Task.Factory.StartNew(obj => Start((int)obj), i);
+                Thread t = new Thread(InnerDoWork);
+                _mThreadList.Add(t);
+                t.IsBackground = true;
+                t.Start();
             }
         }
         /// <summary>
@@ -156,21 +156,18 @@ namespace AamirKhan
         /// <summary>
         /// 线程工作
         /// </summary>
-        private void InnerDoWork(int index)
+        private void InnerDoWork()
         {
             try
             {
                 Exception doWorkEx = null;
                 DoWorkResult doworkResult = DoWorkResult.ContinueThread;
-
-              
                 var t = CurrentPendingQueue;
                 while (!Cancel && t.IsHad)
                 {
                     try
                     {
-                        doworkResult = DoWork(index,t.PendingValue);
-                       
+                        doworkResult = DoWork(t.PendingValue);
                     }
                     catch (Exception ex)
                     {
@@ -178,7 +175,7 @@ namespace AamirKhan
                     }
                     _mCompletedCount++;
                     int precent = _mCompletedCount * 100 / _mQueueCount;
-                    OnOneCompleted(index,t.PendingValue, new CompetedEventArgs() { CompetedPrecent = precent,CompletedCount = _mCompletedCount, QueueCount= _mQueueCount, InnerException = doWorkEx });
+                    OnOneCompleted(t.PendingValue, new CompetedEventArgs() { CompetedPrecent = precent, CompletedCount = _mCompletedCount, QueueCount = _mQueueCount, InnerException = doWorkEx });
                     if (doworkResult == DoWorkResult.AbortAllThread)
                     {
                         Cancel = true;
@@ -194,7 +191,7 @@ namespace AamirKhan
                 lock (_mAllCompletedLock)
                 {
                     _mCompetedCount++;
-                    if (_mCompetedCount == ThreadCount)
+                    if (_mCompetedCount == _mThreadList.Count)
                     {
                         OnAllCompleted(new CompetedEventArgs() { CompetedPrecent = 100 });
                     }
@@ -211,7 +208,7 @@ namespace AamirKhan
         /// </summary>
         /// <param name="pendingId"></param>
         /// <returns></returns>
-        protected virtual DoWorkResult DoWork(int index,T pendingId)
+        protected virtual DoWorkResult DoWork(T pendingId)
         {
             return DoWorkResult.ContinueThread;
         }
@@ -244,7 +241,7 @@ namespace AamirKhan
                             t.PendingValue = default(T);
                             t.IsHad = false;
                         }
-                   
+
                     }
                     return t;
                 }
@@ -293,7 +290,7 @@ namespace AamirKhan
             /// 总队列数
             /// </summary>
             public int QueueCount { get; set; }
-            
+
 
             /// <summary>
             /// 异常信息
