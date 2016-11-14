@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{25DA6845-8C8C-41B9-B36E-D829B20B1990}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GuardSystem</RootNamespace>
+    <AssemblyName>GuardSystem</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CompressServer.cs" />
+    <Compile Include="GuardSystem.cs" />
+    <Compile Include="LogServer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemConfig.cs" />
+    <Compile Include="Text\AssemblyUtils.cs" />
+    <Compile Include="Text\AutoMappingUtils.cs" />
+    <Compile Include="Text\Build.Silverlight.cs" />
+    <Compile Include="Text\CollectionExtensions.cs" />
+    <Compile Include="Text\Common\DateTimeSerializer.cs" />
+    <Compile Include="Text\Common\DeserializeArray.cs" />
+    <Compile Include="Text\Common\DeserializeBuiltin.cs" />
+    <Compile Include="Text\Common\DeserializeCollection.cs" />
+    <Compile Include="Text\Common\DeserializeDictionary.cs" />
+    <Compile Include="Text\Common\DeserializeKeyValuePair.cs" />
+    <Compile Include="Text\Common\DeserializeListWithElements.cs" />
+    <Compile Include="Text\Common\DeserializeSpecializedCollections.cs" />
+    <Compile Include="Text\Common\DeserializeType.cs" />
+    <Compile Include="Text\Common\DeserializeTypeRef.cs" />
+    <Compile Include="Text\Common\DeserializeTypeRefJson.cs" />
+    <Compile Include="Text\Common\DeserializeTypeRefJsv.cs" />
+    <Compile Include="Text\Common\DeserializeTypeUtils.cs" />
+    <Compile Include="Text\Common\ITypeSerializer.cs" />
+    <Compile Include="Text\Common\JsDelegates.cs" />
+    <Compile Include="Text\Common\JsReader.cs" />
+    <Compile Include="Text\Common\JsState.cs" />
+    <Compile Include="Text\Common\JsWriter.cs" />
+    <Compile Include="Text\Common\ParseUtils.cs" />
+    <Compile Include="Text\Common\StaticParseMethod.cs" />
+    <Compile Include="Text\Common\WriteDictionary.cs" />
+    <Compile Include="Text\Common\WriteLists.cs" />
+    <Compile Include="Text\Common\WriteType.cs" />
+    <Compile Include="Text\Controller\CommandProcessor.cs" />
+    <Compile Include="Text\Controller\PathInfo.cs" />
+    <Compile Include="Text\CsvAttribute.cs" />
+    <Compile Include="Text\CsvConfig.cs" />
+    <Compile Include="Text\CsvSerializer.cs" />
+    <Compile Include="Text\CsvStreamExtensions.cs" />
+    <Compile Include="Text\CsvWriter.cs" />
+    <Compile Include="Text\DateTimeExtensions.cs" />
+    <Compile Include="Text\Env.cs" />
+    <Compile Include="Text\HashSet.cs" />
+    <Compile Include="Text\HttpUtils.cs" />
+    <Compile Include="Text\IStringSerializer.cs" />
+    <Compile Include="Text\ITracer.cs" />
+    <Compile Include="Text\ITypeSerializer.Generic.cs" />
+    <Compile Include="Text\JsConfig.cs" />
+    <Compile Include="Text\JsConfigScope.cs" />
+    <Compile Include="Text\JsonObject.cs" />
+    <Compile Include="Text\JsonSerializer.cs" />
+    <Compile Include="Text\JsonSerializer.Generic.cs" />
+    <Compile Include="Text\Json\JsonReader.Generic.cs" />
+    <Compile Include="Text\Json\JsonTypeSerializer.cs" />
+    <Compile Include="Text\Json\JsonUtils.cs" />
+    <Compile Include="Text\Json\JsonWriter.Generic.cs" />
+    <Compile Include="Text\JsvFormatter.cs" />
+    <Compile Include="Text\Jsv\JsvDeserializeType.cs" />
+    <Compile Include="Text\Jsv\JsvReader.Generic.cs" />
+    <Compile Include="Text\Jsv\JsvSerializer.Generic.cs" />
+    <Compile Include="Text\Jsv\JsvTypeSerializer.cs" />
+    <Compile Include="Text\Jsv\JsvWriter.Generic.cs" />
+    <Compile Include="Text\LicenseUtils.cs" />
+    <Compile Include="Text\ListExtensions.cs" />
+    <Compile Include="Text\MapExtensions.cs" />
+    <Compile Include="Text\Marc\Link.cs" />
+    <Compile Include="Text\PathUtils.cs" />
+    <Compile Include="Text\Pcl.Dynamic.cs" />
+    <Compile Include="Text\PclExport.cs" />
+    <Compile Include="Text\PclExport.Net40.cs" />
+    <Compile Include="Text\PclExport.Sl5.cs" />
+    <Compile Include="Text\PclExport.WinStore.cs" />
+    <Compile Include="Text\PclExport.WP.cs" />
+    <Compile Include="Text\PclExport.Xbox.cs" />
+    <Compile Include="Text\QueryStringSerializer.cs" />
+    <Compile Include="Text\ReflectionExtensions.cs" />
+    <Compile Include="Text\Reflection\StaticAccessors.cs" />
+    <Compile Include="Text\Rsa\BigInteger.cs" />
+    <Compile Include="Text\Rsa\Providers.cs" />
+    <Compile Include="Text\Rsa\RSACryptoServiceProvider.cs" />
+    <Compile Include="Text\Rsa\Scrypt.cs" />
+    <Compile Include="Text\Rsa\Utils.cs" />
+    <Compile Include="Text\StreamExtensions.cs" />
+    <Compile Include="Text\StringExtensions.cs" />
+    <Compile Include="Text\Support\AssemblyTypeDefinition.cs" />
+    <Compile Include="Text\Support\DoubleConverter.cs" />
+    <Compile Include="Text\Support\TypePair.cs" />
+    <Compile Include="Text\SystemTime.cs" />
+    <Compile Include="Text\TaskExtensions.cs" />
+    <Compile Include="Text\TextExtensions.cs" />
+    <Compile Include="Text\Tracer.cs" />
+    <Compile Include="Text\TranslateListWithElements.cs" />
+    <Compile Include="Text\TypeConfig.cs" />
+    <Compile Include="Text\TypeSerializer.cs" />
+    <Compile Include="Text\TypeSerializer.Generic.cs" />
+    <Compile Include="Text\XmlSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
