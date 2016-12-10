@@ -92,6 +92,8 @@
     <Compile Include="DomainCookiesDB.cs" />
     <Compile Include="ErrorInfoDB.cs" />
     <Compile Include="HostProxyDb.cs" />
+    <Compile Include="JdJosApiDB.cs" />
+    <Compile Include="Stock\MarginTradingDb.cs" />
     <Compile Include="MedicineSiteDB.cs" />
     <Compile Include="MedicineDB.cs" />
     <Compile Include="MmbProductItemsDB.cs" />

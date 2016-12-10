@@ -66,6 +66,7 @@
     <Compile Include="BenlaiShenhuo.cs" />
     <Compile Include="ClassInfoBll.cs" />
     <Compile Include="CommentBll.cs" />
+    <Compile Include="JdJosApiBll.cs" />
     <Compile Include="SiteCookiesBll.cs" />
     <Compile Include="HisSiteProInfoBll.cs" />
     <Compile Include="HostProxyBll.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Sprider\SmsApi\ISmsApi.cs" />
     <Compile Include="Sprider\Stock\BondInfoBll.cs" />
     <Compile Include="Sprider\Stock\IStockInfoBll.cs" />
+    <Compile Include="Sprider\Stock\MarginTradingBll.cs" />
     <Compile Include="Sprider\Stock\StockInfoBll.cs" />
     <Compile Include="Sprider\Stock\StockMonitorBll.cs" />
     <Compile Include="SqlMonitorBll.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Commons;
 using Newtonsoft.Json.Linq;
 
 namespace ChangeIPTool
@@ -13,7 +13,7 @@ namespace ChangeIPTool
             InitializeComponent();
             timerInfo.Interval = 30000;
             timerInfo.Start();
-            string config = DocumentServer.GetJsonConfig("IpConfig");
+            string config = GetJsonConfig("IpConfig");
             if (string.IsNullOrEmpty(config))
                 return;
             var conJson = JToken.Parse(config);
@@ -29,8 +29,53 @@ namespace ChangeIPTool
             StringBuilder config = new StringBuilder("{");
             config.AppendFormat("\"LinkName\":\"{0}\",\"UserName\":\"{1}\",\"Pwd\":\"{2}\",\"TimeSpan\":\"{3}\"", txtLinkName.Text, txtUserName.Text, txtpwd.Text,txtTimeSpan.Text);
             config.Append("}");
-            DocumentServer.SetJsonConfig(config.ToString(), "IpConfig");
+            SetJsonConfig(config.ToString(), "IpConfig");
             new Server().ChangeIp(txtLinkName.Text, txtUserName.Text, txtpwd.Text);
+        }
+
+        private string GetJsonConfig(string fileName)
+        {
+            string strFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase.Replace("\\", "/") + "/Config/";
+            if (!Directory.Exists(strFilePath))
+                return "";
+            if (fileName.IndexOf('.') == -1)
+                fileName += ".json";
+            string filefullName = strFilePath + fileName;
+            FileInfo file = new FileInfo(filefullName);
+            if (file.Exists)
+            {
+                var fileinfo = file.OpenText();
+                string content = fileinfo.ReadToEnd();
+                fileinfo.Close();
+                fileinfo.Dispose();
+                return content;
+            }
+            return "";
+
+        }
+        private void SetJsonConfig(string json, string fileName)
+        {
+
+            string strFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase.Replace("\\", "/") + "/Config/";
+            if (!Directory.Exists(strFilePath))
+            {
+                Directory.CreateDirectory(strFilePath);
+            }
+            if (fileName.IndexOf('.') == -1)
+                fileName += ".json";
+            string FileName = strFilePath + fileName;
+            FileInfo file = new FileInfo(FileName);
+            if (file.Exists)
+            { file.Delete(); }
+            FileStream stream = file.Open(FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            stream.Seek(0, SeekOrigin.End);
+            byte[] buffer1 = Encoding.UTF8.GetBytes(json);
+            stream.Write(buffer1, 0, buffer1.Length);
+            //byte[] buffer2 = new byte[] { Convert.ToByte('\r'), Convert.ToByte('\n') };
+            //stream.Write(buffer2, 0, 2);
+            stream.Flush();
+            stream.Close();
+
         }
 
         private void timerInfo_Tick(object sender, EventArgs e)

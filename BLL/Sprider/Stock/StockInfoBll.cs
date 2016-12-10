@@ -1,6 +1,8 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Commons;
 using DataBase.Stock;
@@ -21,10 +23,10 @@ namespace BLL.Sprider.Stock
                 if (_xqCookies == null)
                 {
                     _xqCookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
-                    if(_xqCookies==null)
+                    if(string.IsNullOrEmpty(_xqCookies?.Cookies))
                         _xqCookies=new SiteCookies();
                     if (_xqCookies.UpdateTime.AddMinutes(30) >= DateTime.Now) return _xqCookies;
-                    var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/s/SZ000002");
+                    var result = HtmlAnalysis.GetResponseCookies("https://xueqiu.com/");
                     if (string.IsNullOrEmpty(result)) return _xqCookies;
                     _xqCookies.Cookies = result;
                     new SiteCookiesBll().SaveCookies(_xqCookies);
@@ -133,8 +135,10 @@ namespace BLL.Sprider.Stock
         {
             //if(info.CurrentPrice==0)
             //    return;
-
+            GetRzrqInfo(info);
+  
             var code = (info.StockTypeAdd+ info.StockNo).ToUpper();
+        
             string url = $"https://xueqiu.com/v4/stock/quote.json?code={code}&_=1465259721266";
             HtmlAnalysis request = new HtmlAnalysis();
             request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
@@ -176,7 +180,7 @@ namespace BLL.Sprider.Stock
             JObject item;
             try
             {
-                item = JObject.Parse(currentInfo);
+                item = JObject.Parse(currentInfo.Replace("%",""));
             }
             catch (Exception ex)
             {
@@ -249,6 +253,7 @@ namespace BLL.Sprider.Stock
                     // xqItem["updateAt"].Value<float>();
                     if (xqItem["dividend"].ToString() != "")
                         xq.Dividend = xqItem["dividend"].Value<float>();
+                
                     xq.Yield = xqItem["yield"].ToString() != "" ? xqItem["yield"].Value<float>() : 0;
                     xq.Turnoverrate = xqItem["turnover_rate"].ToString() != "" ? xqItem["turnover_rate"].Value<float>() : 0;
                     //xqItem["turnover_rate"].Value<float>();
@@ -555,6 +560,68 @@ namespace BLL.Sprider.Stock
             request.Headers.Add("Upgrade-Insecure-Requests", "1");
             return request.HttpRequest(tempurl);
             
+        }
+
+
+        public void GetRzrqInfo(StockInfo info)
+        {
+           string code = Regex.Match(info.StockNo, "(?<x>\\d+)", RegexOptions.Singleline).Groups["x"].Value;// code.Substring(2);
+            string mkt = "1";
+            if (info.StockTypeAdd == "sz")
+            {
+                mkt = "2";
+            }
+
+            string url = "http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=FD&sty=MTE&mkt="+ mkt + "&code=" + code +
+                         "&st=0&sr=1&p=1&ps=50";
+            var page = HtmlAnalysis.Gethtmlcode(url).TrimStart('(').TrimEnd(')');
+            if(string.IsNullOrEmpty(page)|| page== "[{stats:false}]")
+                return;
+            JArray list = JArray.Parse(page);
+            List< MarginTrading> tlist = new List<MarginTrading>();
+
+            var olditem = new MarginTradingBll().GetNewestTrading(code);
+            DateTime starTime=DateTime.Parse("1900-01-01");
+            if (olditem != null)
+                starTime = olditem.ReportDate;
+            foreach (var item in list)
+            {
+                var templist = item.ToString().Split(',');
+                try
+                {
+                    MarginTrading mt = new MarginTrading();
+                    mt.StockNo = templist[0];
+                    mt.StockName = templist[2];
+                    mt.ReportDate = DateTime.Parse(templist[4]);
+
+                    if(mt.ReportDate<=starTime)
+                        continue;
+                    mt.Rqrz = decimal.Parse(templist[3]);
+
+                    mt.Rqchl = decimal.Parse(templist[5]);
+                    mt.Rqmcl = decimal.Parse(templist[6]);
+                    mt.Rqye = decimal.Parse(templist[7]);
+                    mt.Rqyl = decimal.Parse(templist[8]);
+                    mt.Rzchl = decimal.Parse(templist[9]);
+                    mt.Rzmre = decimal.Parse(templist[10]);
+                    mt.Rzrqye = decimal.Parse(templist[11]);
+                    mt.Rzye = decimal.Parse(templist[12]);
+                    mt.Rzjme = decimal.Parse(templist[13]);
+
+                    tlist.Add(mt);
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
+
+
+            }
+            new MarginTradingBll().AddMarginTrading(tlist);
+            //http://data.eastmoney.com/rzrq/detail/000420.html
+            //http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=FD&sty=MTE&mkt=1&code=600887&st=0&sr=1&p=1&ps=50&js=var%20YFMtmCig={pages:(pc),data:[(x)]}
+            //"600887,融资融券_沪证,伊利股份,2506196565,  2016/11/24,     247700.00,       1758784,        49453078.50,            2616565,        269369738.00,       517995741,              2605102721.50,          2555649643,       248626002"
+            //                                                            融券偿还量       融券卖出量      融券余额(元)            融券余量        融资偿还额(元)      融资买入额(元)          融资融券余额            融资余额(元)      融资净买额(元)
         }
 
         //var head =

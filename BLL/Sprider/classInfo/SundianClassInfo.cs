@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Commons;
 using DataBase;
@@ -28,15 +29,17 @@ namespace BLL.Sprider.classInfo
         private void GetCatInfo(string directoryHtml)
         {
             string catArea = RegGroupsX<string>(directoryHtml,
-                "<div class=\"leftmenu\">(?<x>.*?)<div class=\"mod-box best-goods\">");
+                "<div class=\"category-content\" id=\"category_box\"(?<x>.*?)var category");
             if (catArea == null)
                 return;
 
-            var list = RegGroupCollection(catArea, "<a href=\"(?<x>.*?)\">(?<y>.*?)<|<h4 ><a href=\"(?<x>.*?)\">(?<y>.*?)<|<a href=\"(?<x>.*?)\" class=\"biglink \">(?<y>.*?)</a>");
+            var list = RegGroupCollection(catArea, "<a href=\"(?<x>.*?)\" target=\"_blank\" class=\"level\\d+\">(?<y>.*?)</a>");
 
             foreach (Match item in list)
             {
                 string tempUrl = item.Groups["x"].Value;
+                if(!tempUrl.Contains("gallery"))
+                { continue;}
                 string tempName = item.Groups["y"].Value;
                 string tempid = RegGroupsX<string>(tempUrl, "gallery-(?<x>\\d+).html");
                 if (!HasBindClasslist.Exists(c => c.ClassId == tempid))
@@ -96,68 +99,44 @@ namespace BLL.Sprider.classInfo
         private void UpdateCat(SiteClassInfo siteClassInfo)
         {
             string page = HtmlAnalysis.Gethtmlcode(siteClassInfo.Urlinfo);
-            if (page.Contains("尊敬的顾客！暂时没有商品"))
+            if ( page.Contains("http://114.119.9.120/public/images/05/79/7c/12ca40f78adb89f3f29cbff1adf5255e4927baef.jpg"))
             {
                 new SiteClassInfoDB().SetIsDel(siteClassInfo);
                 return;
             }
-                
-            string cromb = RegGroupsX<string>(page, "您当前的位置(?<x>.*?)</div>");
-            if (cromb == null)
-                return;
-            var plist = RegGroupCollection(cromb, "<a href=\"(?<x>.*?)\" alt=\"\" title=\"\"><em>(?<y>.*?)</em></a>");
-            if (plist == null)
-                return;
-
-
-            string catName = RegGroupsX<string>(cromb, "<span>(?<x>.*?)</span>");
+            string catName = RegGroupsX<string>(page, "<meta name=\"description\" content=\"(?<x>.*?)\" />");
             if (!string.IsNullOrEmpty(catName))
             {
                 siteClassInfo.ClassName = catName;
             }
+
+            string cromb = RegGroupsX<string>(page, "您已选择：</dt>(?<x>.*?)</dl>");
+            if (cromb == null)
+                return;
+            var plist = RegGroupCollection(cromb, "<abbr>(?<x>.*?)</abbr>");
+            if (plist == null)
+                return;
+
             string parentUrl = "";
-            string parentName="";
+            string parentName = "";
             string parentId = "";
-            foreach (Match item in plist)
+
+
+            for (int i = 0; i < plist.Count-1; i++)
             {
-                if (item.ToString().Contains("首页"))
+                var tempName = plist[i].Groups["x"].Value;
+                var catitem = HasBindClasslist.FirstOrDefault(c => c.ClassName == tempName);
+                if (catitem == null)
                     continue;
-
-                parentUrl = item.Groups["x"].Value;
-                parentName = item.Groups["y"].Value;
+                parentName = catitem.ClassName;
+                parentUrl = catitem.Urlinfo;
                 parentId = RegGroupsX<string>(parentUrl, "gallery-(?<x>\\d+).html");
-                if (!HasBindClasslist.Exists(c => c.ClassId == parentId))
-                {
-                    SiteClassInfo iteminfo = new SiteClassInfo
-                    {
-                        ParentClass = "",
-                        ParentName = "",
-                        ClassName = parentName,
-                        ClassId = parentId,
-                        ParentUrl = "",
-                        IsDel = false,
-                        IsBind = false,
-                        IsHide = false,
-                        BindClassId = 0,
-                        BindClassName = "",
-                        HasChild = true,
-                        ClassCrumble = "",
-                        TotalProduct = 0,
-                        SiteId = Baseinfo.SiteId,
-                        Urlinfo = string.Format("http://www.sundan.com/gallery-{0}.html", parentId),
-                        UpdateTime = DateTime.Now,
-                        CreateDate = DateTime.Now
-                    };
-                    HasBindClasslist.Add(iteminfo);
-                    shopClasslist.Add(iteminfo);
-                }
-
             }
 
-            string brotherCat = RegGroupsX<string>(page, "<ul class=\"list ncate-list\">(?<x>.*?)</ul>");
+            string brotherCat = RegGroupsX<string>(page, "您已选择：(?<x>.*?)<div id=\"filter_lists\"");
             if (brotherCat != null)
             {
-                var blist = RegGroupCollection(brotherCat, "<a href=\"(?<x>.*?)\">(?<y>.*?)</a>");
+                var blist = RegGroupCollection(brotherCat, "<li id=\"\\d+\"><a href=\"(?<x>.*?)\">(?<y>.*?)</a></li>");
                 if (blist != null)
                 {
                     foreach (Match item in blist)
@@ -220,7 +199,7 @@ namespace BLL.Sprider.classInfo
                 siteClassInfo.ParentUrl = string.Format("http://www.sundan.com/gallery-{0}.html", parentId);
             }
             siteClassInfo.UpdateTime = DateTime.Now;
-            siteClassInfo.TotalProduct = RegGroupsX<int>(page, "<strong class=\"red\" id=\"totalgoodsnum\">(?<x>\\d+)</strong>");
+            siteClassInfo.TotalProduct = RegGroupsX<int>(page, "total:(?<x>\\d+), pagecurrent");
             new mmbSiteClassInfoDB().UpdateSiteClass(siteClassInfo);
 
         }
