@@ -3,8 +3,15 @@
     public class JdApiConfig
     {
 
-        public static string AppKey => System.Configuration.ConfigurationManager.AppSettings["JDAppKey"] ?? "";
-        public static string AppSecret => System.Configuration.ConfigurationManager.AppSettings["JDAppSecret"] ?? "";
+        public static string AppKey
+        {
+            get { return System.Configuration.ConfigurationManager.AppSettings["JDAppKey"] ?? ""; }
+        }
+
+        public static string AppSecret
+        {
+            get { return System.Configuration.ConfigurationManager.AppSettings["JDAppSecret"] ?? ""; }
+        }
 
         public const string AuthUrl = "https://oauth.jd.com/oauth/authorize?";
 

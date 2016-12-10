@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace WebServer
 {
@@ -11,8 +6,22 @@ namespace WebServer
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Response.Clear();
-            Response.Write(Request.Url.ToString());
+            if (!IsPostBack)
+            {
+                string code = Request.QueryString["code"];
+                if (!string.IsNullOrEmpty(code))
+                {
+                    Response.Clear();
+                    var flage=JdServer.GetAccessToken(code);
+                    if(flage)
+                        Response.Write("sucessed");
+                    else
+                        Response.Write("error");
+                }
+            }
+
+           
+
 
         }
     }
