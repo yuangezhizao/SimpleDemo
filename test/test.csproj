@@ -43,6 +43,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Servers\Servers.csproj">
+      <Project>{d39bd966-c27e-4f8b-bc8e-8c9475d6a4ba}</Project>
+      <Name>Servers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SpriderProxy\SpriderProxy.csproj">
       <Project>{763e72f5-f60f-4311-825a-08dee502604a}</Project>
       <Name>SpriderProxy</Name>

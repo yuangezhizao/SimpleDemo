@@ -34,6 +34,14 @@ namespace BLL.Sprider.classInfo
                     Path = "/",
                     Expires = DateTime.Now.AddMonths(1)
                 };
+                var session = new Cookie
+                {
+                    Value = "BF5CABE0A6DB1754F54EBB8551283433",
+                    Name = "JSESSIONID",
+                    Domain = "list.feiniu.com",
+                    Path = "/",
+                    Expires = DateTime.Now.AddMonths(1)
+                };
                 var ckdistarea = new Cookie
                 {
                     Value = "S000016_310100_310113_3101130001",
@@ -43,6 +51,7 @@ namespace BLL.Sprider.classInfo
                     Expires = DateTime.Now.AddMonths(1)
                 };
                 _cookie.Add(ckdist);
+                _cookie.Add(session);
                 _cookie.Add(ckdistarea);
                 return _cookie;
             }
@@ -61,9 +70,9 @@ namespace BLL.Sprider.classInfo
                
                 string item = list[i].Groups["x"].Value;
                 string href = RegGroupsX<string>(item, "href=\"(?<x>.*?)\"");
-                if (href.IndexOf("category", StringComparison.Ordinal)==0)
+                if (href.IndexOf("http://list.feiniu.com/", StringComparison.Ordinal)==-1)
                 {
-                    href = "http://www.feiniu.com/"+ href;
+                    href = "http://list.feiniu.com/" + href;
                 }
                 string proName = RegGroupsX<string>(item, " target=\"_blank\">(?<x>.*?)$");
                 if (href.Contains("market"))
@@ -141,8 +150,13 @@ namespace BLL.Sprider.classInfo
 
         private void UpdateCat(SiteClassInfo siteClassInfo)
         {
+            HtmlAnalysis requent = new HtmlAnalysis();
+            requent.Headers.Add("Cookie", "cart_token=cb924284c3a93939d49947a2c52bdadd_1473496950515; guid=8E7A996D-D48A-4249-9EE9-A9CD3B0C01F4; first_login_time=1473496955710; access=192; Hm_lvt_7f78a821324600a0f059acdb24cf0937=1478745768,1478825562,1479197457,1479287754; _ga=GA1.2.2146744620.1473496958; _uniut_id.633=3eb90e8fda122a08%7C1473496958%7C1%7C1479326814%7C1479306233%7C80DBB23C04294257D3C779; _uni_id=80DBB23C04294257D3C779; _jzqa=1.3351778468201770500.1473496958.1479306234.1479308663.194; _pzfxuvpc=1473496958495%7C7429572381140915729%7C710%7C1479326813730%7C200%7C1308848803776733003%7C3755478111650129946; C_dist=CPG1_CS000016; C_dist_area=CS000016_310100_310113_3101130001; abToken=72; _jzqx=1.1477718245.1477718245.1.jzqsr=c%2Eduomai%2Ecom|jzqct=/track%2Ephp.-; _jzqckmp=1; Hm_lpvt_7f78a821324600a0f059acdb24cf0937=1479326814; _jzqc=1; _qzja=1.1797373537.1473496958384.1479306233483.1479308663278.1479326483747.1479326813706..0.0.710.194; CNZZDATA1256948007=1677849392-1477715224-%7C1478589142; CNZZDATA1256614422=283867746-1477716746-%7C1478585114; CNZZDATA1256613015=2111691907-1477717194-%7C1478585626; resource_id=undefined; _qzjto=39.0.0; TS01efe1c2=01cfbf1eb5213b341f69517951b47fc3af39bdb07f85a9d1893767fa0e705525d917514dba; _qzjc=1");
+            requent.RequestUserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101";
+            string url = siteClassInfo.Urlinfo.Replace("http://www.feiniu.com/category/", "http://list.feiniu.com/");
 
-            string pageinfo = HtmlAnalysis.Gethtmlcode(siteClassInfo.Urlinfo, Cookies);
+            string pageinfo = requent.HttpRequest(url); //HtmlAnalysis.Gethtmlcode(siteClassInfo.Urlinfo, Cookies);
+            siteClassInfo.Urlinfo = url;
 
             string fncatid = RegGroupsX<string>(pageinfo, " dsp_object.cate_id = \"(?<x>.*?)\"");
             string one_cate = RegGroupsX<string>(pageinfo, " dsp_object.one_cate = \"(?<x>.*?)\"");
@@ -177,12 +191,30 @@ namespace BLL.Sprider.classInfo
                 siteClassInfo.ParentName = parentName;
             }
 
+            string cromp = RegGroupsX<string>(pageinfo, "<!-- 面包屑 -->(?<x>.*?)<!-- 品牌 -->");
+            //string firstparent= RegGroupsX<string>(cromp, "<div class=\"u-bar-item\">\\s+<a class=\"link\" href=\"(?<y>.*?)\">(?<x>.*?)</a>");
+            //string firsturl = RegGroupsX<string>(cromp, "<div class=\"u-bar-item\">\\s+<a class=\"link\" href=\"(?<x>.*?)\">");
+            var cromplist = RegGroupCollection(cromp, "href=\"http://list.feiniu.com/(?<x>.*?)\""); //<a class=\"link\" href=\"javascript:;\">糖果巧克力</a>
+            if(cromplist!=null&&cromplist.Count>0)
+            foreach (Match cat in cromplist)
+            {
+                var tempcatid = cat.Groups["x"].Value;
+                if (string.IsNullOrEmpty(tempcatid))
+                    continue;
+                var catitem = HasBindClasslist.FirstOrDefault(c => c.ClassId == tempcatid);
+                if (catitem == null)
+                {
+                    AddNode($"http://list.feiniu.com/C{tempcatid}");
+     
+                }
+            }
+
             //if (!string.IsNullOrEmpty(catname))
             //{
             //    siteClassInfo.ClassName = catname;
             //}
             var sonpage = RegGroupsX<string>(pageinfo, "<ul class=\"v-lst J-lst\">(?<x>.*?)</ul>");
-            var soncat = RegGroupCollection(sonpage, "category/(?<x>C\\d+)");
+            var soncat = RegGroupCollection(sonpage, "http://list.feiniu.com/(?<x>C\\d+)");
             if (soncat != null && soncat.Count > 0)
             {
              
@@ -194,7 +226,7 @@ namespace BLL.Sprider.classInfo
                     var catitem = HasBindClasslist.FirstOrDefault(c => c.ClassId == tempcatid);
                     if (catitem == null)
                     {
-                        AddNode($"http://www.feiniu.com/category/C{tempcatid}");
+                        AddNode($"http://list.feiniu.com/C{tempcatid}");
                         continue;
                     }
                     if (string.IsNullOrEmpty(catitem.ParentClass))
@@ -222,7 +254,7 @@ namespace BLL.Sprider.classInfo
             siteClassInfo.HasChild = HasBindClasslist.Exists(c => c.ParentClass == siteClassInfo.ClassId);
             new mmbSiteClassInfoDB().UpdateSiteClass(siteClassInfo);
 
-            var catlist =RegGroupCollection(pageinfo, "category/C(?<x>\\d+)");
+            var catlist =RegGroupCollection(pageinfo, "http://list.feiniu.com/(?<x>C\\d+)");
 
             foreach (Match item in catlist)
             {
@@ -230,7 +262,7 @@ namespace BLL.Sprider.classInfo
                 string tempid = item.Groups["x"].Value;
                 if (HasBindClasslist.Exists(p => p.ClassId == tempid))
                     continue;
-                string tempurl=$"http://www.feiniu.com/category/C{tempid}";
+                string tempurl=$"http://list.feiniu.com/{tempid}";
                 AddNode(tempurl);
             }
             if (shopClasslist.Count > 0)
@@ -242,7 +274,7 @@ namespace BLL.Sprider.classInfo
         }
         private void  AddNode(string url)
         {
-            string classid = RegGroupsX<string>(url, "category/(?<x>.*?)$");
+            string classid = RegGroupsX<string>(url, "http://list.feiniu.com/(?<x>.*?)$");
             if (string.IsNullOrEmpty(classid))
                 return;
             if (HasBindClasslist.Exists(p => p.ClassId == classid))

@@ -135,8 +135,8 @@ namespace BLL.Sprider.Stock
         {
             //if(info.CurrentPrice==0)
             //    return;
-            GetRzrqInfo(info);
-            return;
+            //GetRzrqInfo(info);
+            //return;
             var code = (info.StockTypeAdd+ info.StockNo).ToUpper();
         
             string url = $"https://xueqiu.com/v4/stock/quote.json?code={code}&_=1465259721266";

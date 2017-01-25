@@ -291,8 +291,19 @@ namespace BLL.Sprider.classInfo
 
         private void UpdateTmallNode(SiteClassInfo item)
         {
+
+            if(item.ParentClass!="")
+                return;
+
+            string url = string.Format("http://list.tmall.com/search_product.htm?cat={0}" , item.ClassId);
+            HtmlAnalysis reqest = new HtmlAnalysis();
+
+            reqest.Headers.Add("Cookie", "_med=dw:1440&dh:900&pw:1440&ph:900&ist:0; pnm_cku822=126UW5TcyMNYQwiAiwQRHhBfEF8QXtHcklnMWc%3D%7CUm5Ockt%2BQXVPdUp%2BQH9Dfyk%3D%7CU2xMHDJxPk82UjVOI1h2VnhCbExiPl85VTJMNhhOGA%3D%3D%7CVGhXd1llXGlWYlhiXWlXaFRoX2JAekN3TndMdUB1S3RAeUx0TmA2%7CVWldfS0SMgwzCCgULg4gWz0ReEB2Aix6LA%3D%3D%7CVmhIGCcYJAQ%2FAyMXLRc3DTQNORklHCUYOAwxDCwQKRAtDTgDPmg%2B%7CV25Tbk5zU2xMcEl1VWtTaUlwJg%3D%3D; cq=ccp%3D1; tt=login.taobao.com; res=scroll%3A990*776-client%3A977*290-offset%3A977*290-screen%3A1440*900; hng=; uss=BqRyb7nd5KLIbC5D91VCamaiwt66iy8KP0cAS24EJNQWFeWsxGZv%2FwEo%2BAs%3D; cna=cFJaEEwJdRsCATyy24A1yMNe; l=AkZGKGJIZ/WDVSsY65u6dVSj1jLItYph; isg=Alpa8TTm1nmgf1rVi7OVW5M1rADEst5lFaLZTWTTFO241_oRTBsudSCt8xs0; OZ_1U_2061=vid=v801c15a894bb1.0&ctime=1478143053&ltime=1476512356; otherx=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0; x=__ll%3D-1%26_ato%3D0; _tb_token_=eeed7bb353eb5; ck1=; uc1=cookie14=UoW%2FX9QwsnjAzg%3D%3D&lng=zh_CN&cookie16=W5iHLLyFPlMGbLDwA%2BdvAGZqLg%3D%3D&existShop=false&cookie21=V32FPkk%2FhSg%2F&tag=0&cookie15=UIHiLt3xD8xYTw%3D%3D&pas=0; uc3=sg2=AQI4ctClVx2ycnFp5kyAa%2F3VFKDYjzhZBJFC8KK2LVw%3D&nk2=D9ZNP7htc6w%3D&id2=UU8Lx7%2BmPirPbw%3D%3D&vt3=F8dARHfHI%2BnGtn3VuNA%3D&lg2=UtASsssmOIJ0bQ%3D%3D; lgc=lunce188; tracknick=lunce188; cookie2=10682dca3e46d779e26f299924785699; cookie1=AV0h8l61cg4iTp3AqqPZRlYP3nQGpHHQCAg%2FB5Sm3VI%3D; unb=2731635449; t=65336f3349d3648c68445898ef92bec2; skt=2c4d55251dbb75a9; _nk_=lunce188; _l_g_=Ug%3D%3D; cookie17=UU8Lx7%2BmPirPbw%3D%3D; login=true");
+            reqest.RequestUserAgent = "Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2 NokiaE75-1 /110.48.125 Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413";
+            string catPage=  reqest.HttpRequest(url);
+
             Thread.Sleep(new Random().Next(6, 30)*1000);
-            string catPage = HtmlAnalysis.Gethtmlcode("http://list.tmall.com/search_product.htm?cat=" + item.ClassId);
+            //string catPage = HtmlAnalysis.Gethtmlcode("http://list.tmall.com/search_product.htm?cat=" + item.ClassId);
             if (catPage.Contains("ResponseUri:http://www.tmall.com/") && item.UpdateTime.AddDays(15)<DateTime.Now)
             {
                 new SiteClassBll().delClass(item);

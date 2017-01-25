@@ -1,21 +1,15 @@
-﻿using System.Text.RegularExpressions;
-using System.Web;
-using BLL;
-using BLL.Sprider.classInfo;
-using BLL.WeiBo;
+﻿using BLL;
 using Commons;
-using PhantomjsDrive;
 using Servers;
 using ServiceStack;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using System.Threading;
+using System.Text.RegularExpressions;
 using BLL.Sprider.Stock;
-using FastVerCode;
 using Mode;
-using Mode.account;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PhantomjsDrive;
 
 namespace WebAppClinet
 {
@@ -25,12 +19,17 @@ namespace WebAppClinet
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // new SpriderSystem().SaveSiteCate(241);
-            //new SpriderSystem().UpdateSiteCat(161);
-            //new SiteClassBll().UpdatemmbsiteClass(241);
+
+            //string url = "http://list.secoo.com/bags/30-0-0-0-0-1-0-0-1-10-0-0-100-0.shtml#pageTitle";
+            //PhantomjsBase.PhantomjsPath = Request.PhysicalApplicationPath;
+            //var directoryHtml = new DownLoadServer().DownLoadpage(url);
+            // new SpriderSystem().SaveSiteCate(264);
+            //new SpriderSystem().UpdateSiteCat(264);
+            new SiteClassBll().UpdatemmbsiteClass(264);
             // new StockInfoBll().GetNewStockInfo();
-           SubmitOrder("");
+            //SubmitOrder("");
             //var aa = ranCode();
+            //loadjdUser();
             //test();
 
         }
@@ -56,7 +55,10 @@ namespace WebAppClinet
 
         private void SubmitOrder(string skuid)
         {
+       
             JdOrderServer server = new JdOrderServer();
+
+            //server.gotoUrl("https://btmkt.jd.com/activity/initParty?key=3e0ff0f1cc6c8265f7cadc64355fd40b&cpdad=1DLSUE");
             var JuserInfo = new SiteUserInfoBll().GetAllUser();
             foreach (var user in JuserInfo)
             {
@@ -68,7 +70,7 @@ namespace WebAppClinet
 
                 //server.AddCat($"{skuid},2477473", "1,1");
                 server.ClearCat();
-                server.AddCat("1010278,2477374", "1,1");
+                server.AddCat("3062344,2477374", "1,1");
                 server.CatDetial();
                 server.SubmitOrder();
                 //server.ClearCat();
@@ -120,6 +122,25 @@ namespace WebAppClinet
 
         private void test()
         {
+            var url =
+                "http://list.gome.com.cn/cat10000049-00-0-48-1-0-0-0-1-0-0-0-0-0-0-0-0-0.html?page=2&bws=0x12&type=json";
+            HtmlAnalysis request = new HtmlAnalysis();
+            request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
+            request.RequestUserAgent ="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+            request.Headers.Add("Cookie", "route=a4740778113c5452684f57d9d18e1433; uid=CjozJVh3CnG1nZS+FcVEAg==; atgregion=22060100%7C%E6%B5%99%E6%B1%9F%E7%9C%81%E5%AE%81%E6%B3%A2%E5%B8%82%E7%A7%91%E6%8A%80%E5%9B%AD%E5%8C%BA%E7%A7%91%E6%8A%80%E5%9B%AD%E5%8C%BA%7C22060000%7C22000000%7C220601001; __clickidc=148419646713113959; __c_visitor=148419646713113959; _idusin=73057384033; DSESSIONID=683cb316953e4df79d1547141bf10f13; _index_ad=0; cartnum=0; s_cc=true; _ga=GA1.3.249638576.1484196470; _gat=1; gpv_pn=%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%3A%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%A7%86; gpv_p22=no%20value; s_getNewRepeat=1484197930657-New; s_sq=gome-prd%3D%2526pid%253D%2525E5%252595%252586%2525E5%252593%252581%2525E5%252588%252597%2525E8%2525A1%2525A8%25253A%2525E5%2525B9%2525B3%2525E6%25259D%2525BF%2525E7%252594%2525B5%2525E8%2525A7%252586%2526pidt%253D1%2526oid%253Djavascript%25253Avoid(0)%2526ot%253DA; g_co=show; s_ppv=-%2C33%2C18%2C2375");
+            //request.Headers.Add("X-Content-Type-Options", "nosniff");
+
+            //request.Headers.Add("X-Frame-Options", "DENY");
+            //request.Headers.Add("X-Info", "201-22-58-06cbgk5");
+            //request.Headers.Add("X-X-XSS-Protection", "1; mode=block");
+            //request.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            request.RequestReferer = "http://list.gome.com.cn/cat10000049.html";
+            var Pagegm = request.HttpRequest(url);
+            var aa = "ddd";
+            //new StockInfoBll().GetRzrqInfo("SH600219"); 
+            //new SiteFactory().StockInfoManager.GetALlStockInfo();
+            //return;
+            //new BondSpiderServer().UpdateallBond();
             //string feiniuurl = "https://reg.feiniu.com/patcha/image";
             //WebClient myWebClient = new WebClient();
             //var imge = myWebClient.DownloadData(feiniuurl);
@@ -160,7 +181,7 @@ namespace WebAppClinet
 
             //new SiteFactory().StockInfoManager.GetALlStockInfo();
             //return;17074858678
-            string tempurl = "https://xueqiu.com/v4/stock/quote.json?code=SZ300104";
+            string tempurl = "https://xueqiu.com/v4/stock/quote.json?code=SH600886";
 
             string codedetial = "https://xueqiu.com/s/SZ000002";
             var cookies = new SiteCookiesBll().GetOneByDomain("xueqiu.com");
@@ -172,7 +193,7 @@ namespace WebAppClinet
             //string url = "http://chart.windin.com/hqserver/HQProxyHandler.ashx?windcode=600873.SH";
             //string url = "http://licaike.hexun.com/List.action?fundCode=&fundcode=&fundTypes=&isGuaranteedFund=&isQdiiFund=&isIndexFund=&riskLvlt=&nav=&accumulativeNav=&investManner=&fundSize=&fundEstablishDate=&thisYearRate=&weekRiseRate=&monthRiseRate=&month3RiseRate=&month6RiseRate=&yearRiseRate=&year2RiseRate=&year3RiseRate=&cxRank=&htRank=&expan=&companyExpan=&pager.activePage=1";
             //TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)).AddMilliseconds(1464012000000);
-            HtmlAnalysis request = new HtmlAnalysis();
+            //HtmlAnalysis request = new HtmlAnalysis();
             //request.RequestMethod = "post";
             //request.Headers.Add("Upgrade-Insecure-Requests", "1");
             //request.Headers.Add("Origin", "http://licaike.hexun.com");
@@ -186,16 +207,16 @@ namespace WebAppClinet
                 request.Headers.Add("Cookie", cookies.Cookies);
                 request.RequestUserAgent = cookies.UserAgent;
             }
-            var codedetialpage = request.HttpRequest(codedetial);
+            //var codedetialpage = request.HttpRequest(codedetial);
             // request.Headers.Add("Cookie", "s=n4v12ge0yu; webp=0; bid=dfa57ca958de46f53568cc28e1762269_ipbu7hld; xq_a_token=ed3a6f41cd40749a7026f25f4f3e936379e415ed; xq_r_token=d54ca76f529ff87e19b08c546ed16a464caa90ef; __utmt=1; Hm_lvt_1db88642e346389874251b5a1eded6e3=1468887873,1469001779; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1469001795; __utma=1.2122399928.1465259166.1468888024.1469001780.4; __utmb=1.4.9.1469001795053; __utmc=1; __utmz=1.1465259166.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)");
             //request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/5";
             //{"SH603288":{"symbol":"SH603288","exchange":"SH","code":"603288","name":"海天味业","current":"30.09","percentage 跌幅百分比":"-0.59","change （下跌或者上涨）价格":"-0.18","open":"30.39","high":"30.85","low":"29.83","close 收盘价":"30.09","last_close上次收盘价":"30.27","high52week >52周最高":"38.38","low52week52周最低":"24.4","volume成交（手 1/100股）":"3541015.0","volumeAverage":"3826996","marketCapital":"8.143094214E10","eps":"0.3","pe_ttm":"31.4916","pe_lyr":"32.4474","beta":"0.0","totalShares":"2706246000","time":"Mon Jun 06 14:59:47 +0800 2016","afterHours":"0.0","afterHoursPct":"0.0","afterHoursChg":"0.0","updateAt":"1465214405369","dividend":"0.6","yield":"1.99","turnover_rate":"1.31","instOwn":"0.0","rise_stop":"33.3","fall_stop":"27.24","currency_unit":"CNY","amount":"1.07284402E8","net_assets":"2.9381","hasexist":"","has_warrant":"0","type":"11","flag":"1","rest_day":"","amplitude":"3.37","lot_size":"100","min_order_quantity":"0","max_order_quantity":"0","tick_size":"0.01","kzz_stock_symbol":"","kzz_stock_name":"","kzz_stock_current":"0.0","kzz_convert_price":"0.0","kzz_covert_value":"0.0","kzz_cpr":"0.0","kzz_putback_price":"0.0","kzz_convert_time":"","kzz_redempt_price":"0.0","kzz_straight_price":"0.0","kzz_stock_percent":"","pb":"10.24","benefit_before_tax":"0.0","benefit_after_tax":"0.0","convert_bond_ratio":"","totalissuescale":"","outstandingamt":"","maturitydate":"","remain_year":"","convertrate":"0.0","interestrtmemo":"","release_date":"","circulation":"0.0","par_value":"0.0","due_time":"0.0","value_date":"","due_date":"","publisher":"","redeem_type":"F","issue_type":"1","bond_type":"","warrant":"","sale_rrg":"","rate":"","after_hour_vol":"0","float_shares":"269460000","float_market_capital":"8.1080514E9","disnext_pay_date":"","convert_rate":"0.0","psr":"7.0653"}}
             var Page = request.HttpRequest(tempurl);
-            
 
+      
         }
 
-
+     
 
     }
 }
