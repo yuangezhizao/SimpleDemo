@@ -91,6 +91,7 @@
     <Compile Include="Sprider\classInfo\LbxcnClassInfo.cs" />
     <Compile Include="Sprider\classInfo\MiaClassInfo.cs" />
     <Compile Include="Sprider\classInfo\QlkClassInfo.cs" />
+    <Compile Include="Sprider\classInfo\TkyfwClassInfo.cs" />
     <Compile Include="Sprider\classInfo\YaofangwangClassinfo.cs" />
     <Compile Include="Sprider\classInfo\YIerYaoClass.cs" />
     <Compile Include="Sprider\classInfo\YiwugouClassInfo.cs" />

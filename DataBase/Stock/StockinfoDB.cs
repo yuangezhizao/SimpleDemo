@@ -29,6 +29,7 @@ namespace DataBase.Stock
                 try
                 {
                     db.InsertAll(list);
+                    LogServer.WriteLog("新增"+list.Count, "StockDetial");
                 }
                 catch (Exception ex)
                 {

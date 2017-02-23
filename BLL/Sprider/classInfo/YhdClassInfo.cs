@@ -213,7 +213,7 @@ namespace BLL.Sprider.classInfo
             string tempcurcatid = "c" + extid + "-" + categoryname;
             if (!regIsMatch(tempcurcatid, "^(?<x>c\\d+-\\d+(-\\d+)?)$"))
             {
-                var aa = "ddd";
+
                 return;
             }
             if (categoryname == "0-0")

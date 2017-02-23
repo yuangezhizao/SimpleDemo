@@ -7,6 +7,7 @@ using Mode;
 using NetDimension.Json.Linq;
 using SpriderProxy.Analysis.Gome;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace BLL.Sprider.classInfo
@@ -89,8 +90,8 @@ namespace BLL.Sprider.classInfo
 
             for (int i = 0; i < HasBindClasslist.Count; i++)
             {
-                if (!HasBindClasslist[i].HasChild)
-                    continue;
+                //if (HasBindClasslist[i].HasChild)
+                //    continue;
                 try
                 {
                     UpdateCat(HasBindClasslist[i]);
@@ -157,19 +158,120 @@ namespace BLL.Sprider.classInfo
 
         //const string AsynSearchMoth = "http://www.gome.com.cn/p/asynSearch?module=catalog&parentId={1}&cateId={0}&brother=1";
         const string AsynSearchMoth = "http://search.gome.com.cn/cloud/asynSearch?module=catalog&cateId={0}&brother=0";
+
+        private void UpdateCat(SiteClassInfo catinfo)
+        {
+            string caturl = string.Format("http://list.gome.com.cn/{0}.html",catinfo.ClassId);
+            string pageinfo = HtmlAnalysis.Gethtmlcode(caturl);
+            catinfo.TotalProduct = RegGroupsX<int>(pageinfo, "共(?<x>\\d+)商品|共 <em id=\"searchTotalNumber\">(?<x>\\d+)</em> 个商品");
+            if (catinfo.TotalProduct == 0)
+            {
+                //if (pageinfo.Contains("<dt class=\"category-name\"></dt>"))
+                //{
+                //    new SiteClassBll().delClass(catinfo);
+                //}
+                return;
+
+            }
+
+            var crumb = RegGroupsX<string>(pageinfo,"<div class=\"nSearch-crumb clearfix\">(?<x>.*?)</div>");
+            var catlist = RegGroupCollection(crumb, "<dl(?<x>.*?)</dl>");
+            var catname = RegGroupsX<string>(pageinfo, "dsp_gome_c3name = \"(?<x>.*?)\"");
         
+            var crumbName = RegGroupsX<string>(pageinfo, "catMap =\"(?<x>.*?)\";");
+            if (!string.IsNullOrEmpty(crumbName))
+            {
+                catinfo.ClassCrumble = crumbName;
+            }
+            if (!string.IsNullOrEmpty(catname))
+            {
+                catinfo.ClassName = catname;
+            }
+            if (catlist != null && catlist.Count ==2)
+            {
+                catinfo.ParentName = RegGroupsX<string>(catlist[0].Groups["x"].Value, "<dt class=\"category-name\">(?<x>.*?)</dt>");
+                catinfo.ParentClass = RegGroupsX<string>(crumb, "<dl class=\"nSearch-crumb-category\" catgoryId=\"(?<x>.*?)\" id=\"category-third\">");
+                catinfo.ParentUrl = string.Format("http://list.gome.com.cn/{0}.html", catinfo.ParentClass);
+            }
+
+            catinfo.Urlinfo = caturl;
+
+            var cats=new ArrayList();
+            var allcats = RegGroupCollection(pageinfo, "href=\"//list.gome.com.cn/(?<x>cat\\d+).html\"");
+            foreach (Match match in allcats)
+            {
+                var catid = match.Groups["x"].Value;
+                if (HasBindClasslist.Exists(p => p.ClassId == catid))
+                    continue;
+
+                if (!cats.Contains(catid))
+                {
+                    cats.Add(catid);
+                    var tempurl = string.Format("http://list.gome.com.cn/{0}.html", catid);
+                    string temppage = HtmlAnalysis.Gethtmlcode(caturl);
+                    var tempprocount = RegGroupsX<int>(temppage, "共(?<x>\\d+)商品|共 <em id=\"searchTotalNumber\">(?<x>\\d+)</em> 个商品");
+                    var tempcrumbName = RegGroupsX<string>(pageinfo, "catMap =\"(?<x>.*?)\";");
+                    var tempcatname = RegGroupsX<string>(pageinfo, "dsp_gome_c3name = \"(?<x>.*?)\"");
+                    if (tempprocount<1)
+                        continue;
+
+                    SiteClassInfo cat = new SiteClassInfo
+                    {
+                        ClassId = catid,
+                        ClassCrumble = tempcrumbName,
+                        HasChild = false,
+                        ClassName = tempcatname,
+                        CreateDate = DateTime.Now,
+                        UpdateTime = DateTime.Now,
+                        SiteId = Baseinfo.SiteId,
+                        IsDel = false,
+                        IsBind = false,
+                        IsHide = false,
+                        BindClassId = 0,
+                        BindClassName = "",
+                        //ParentClass = parentId,
+                        //ParentName = parentName,
+                        //ParentUrl = parentUrl,
+                        Urlinfo = tempurl,
+                        TotalProduct = tempprocount
+                    };
+                    HasBindClasslist.Add(cat);
+                    shopClasslist.Add(cat);
+                }
+                
+            }
+            new SiteClassBll().UpdateSiteCat(catinfo);
+            if (shopClasslist.Count > 0)
+            {
+                new SiteClassInfoDB().AddSiteClass(shopClasslist);
+                shopClasslist.Clear();
+            }
+            //foreach (Match match in catlist)
+            //{
+            //    var catname = RegGroupsX<string>(match.Groups["x"].Value, "<dt class=\"category-name\">(?<x>.*?)</dt>");
+            //    var catid = RegGroupsX<string>(match.Groups["x"].Value, "<dt class=\"modelid\">(?<x>.*?)</dt>");
+            //}
+        }
+
         /// <summary>
         /// 更新类别
         /// </summary>
         /// <param name="catinfo"></param>
-        private void UpdateCat(SiteClassInfo catinfo)
+        private void OldUpdateCat(SiteClassInfo catinfo)
         {
             string pageinfo = HtmlAnalysis.Gethtmlcode(catinfo.Urlinfo);
             catinfo.TotalProduct = RegGroupsX<int>(pageinfo, "共(?<x>\\d+)商品|共 <em id=\"searchTotalNumber\">(?<x>\\d+)</em> 个商品");
             if (catinfo.TotalProduct == 0)
+            {
+                if (pageinfo.Contains("<dt class=\"category-name\"></dt>"))
+                {
+                    new SiteClassBll().delClass(catinfo);
+                }
                 return;
 
-    
+            }
+
+
             var tempar = HasBindClasslist.FirstOrDefault(c => c.ClassId == catinfo.ParentClass);
             if (tempar != null)
             {

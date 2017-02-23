@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using DataBase;
 using Mode;
@@ -247,7 +248,7 @@ namespace BLL
            
             if (string.IsNullOrEmpty(cat.ClassName))
                 return;
-
+            cat.UpdateTime=DateTime.Now;
             new SiteClassInfoDB().updateSpiderOnly(cat);
         }
 

@@ -57,7 +57,7 @@ namespace BLL.Sprider.classInfo
                     IsDel = false,
 
                     ParentClass = "",
-                    Urlinfo = "http://pop.jumei.com/list?filter=0-11-1&cat=" + tempid,
+                    Urlinfo = "http://search.jumei.com/?filter=0-31-1&search=&cat=" + tempid,
 
                     HasChild = true,
                     IsBind = false
@@ -142,10 +142,13 @@ namespace BLL.Sprider.classInfo
 
         private void UpdateNode(SiteClassInfo item)
         {
+            if(item.ParentClass!= "")
+                return;
+
             string catPage = HtmlAnalysis.Gethtmlcode(item.Urlinfo);
             if (catPage.Contains("抱歉，没有找到相关的产品"))
                 return;
-            string crumb = RegGroupsX<string>(catPage, "<\\!-- 面包屑 start -->(?<x>.*?)<\\!-- 面包屑 end -->|<div class=\"selected_panel\">(?<x>.*?)<div class=\"hover_mask\">");
+            string crumb = RegGroupsX<string>(catPage, "<ul class=\"clearfix fl bread_ul\">(?<x>.*?)<!--");
             if (crumb == null)
                 return;
             var crumblist = RegGroupCollection(crumb, "<a href=\"(?<x>.*?)\"( target=\"_blank\")?>(?<y>.*?)</a>");
@@ -155,15 +158,19 @@ namespace BLL.Sprider.classInfo
 
             foreach (Match catinfo in crumblist)
             {
-                if (catinfo.ToString().Contains("聚美优品") || catinfo.ToString().Contains(item.ClassName))
+                if (catinfo.ToString().Contains("聚美优品"))
                     continue;
                 if (catinfo.ToString().Contains("化妆品首页"))
                 {
                     parentName = "化妆品";
-                    parentid = "hzp";
+                    parentid = "170";
                 }
                 else
                 {
+                    var tempurl = catinfo.Groups["x"].Value;
+                    ;
+                    if (tempurl.Contains(item.ClassId))
+                        break;
                     parenturl = catinfo.Groups["x"].Value;
                     parentName = catinfo.Groups["y"].Value;
                     parentid = RegGroupsX<string>(parenturl, "cat=(?<x>\\d+)") ?? "";
@@ -176,22 +183,22 @@ namespace BLL.Sprider.classInfo
         
             int proTotal = RegGroupsX<int>(catPage, "共<span>(?<x>.*?)</span>个商品");
 
-            string catName = RegGroupsX<string>(catPage, "<div class=\"filter_choosed_item\">分类：<span>(?<x>.*?)<a");
+            string catName = RegGroupsX<string>(catPage, "<span class=\"next_selected_bor\" title=\"分类:(?<x>.*?)\">|<strong>在<span>(?<x>.*?)</span>中筛选");
             catName = WordCenter.FilterHtml(catName);
        
-            string childCatArea = RegGroupsX<string>(catPage, "<ul class=\"pop_list\">(?<x>.*?)</ul>");
+            string childCatArea = RegGroupsX<string>(catPage, "<div class=\"filter_attrs\" id=\"filter_cat\">(?<x>.*?)</ul>");
 
             var childList = RegGroupCollection(childCatArea, "href=\"(?<x>.*?)\">(?<y>.*?)</a>");
             if (proTotal > 0)
             {
                 if (ValidCatId(parentid))
                     item.ParentClass = parentid;
-                if (string.IsNullOrEmpty(parentName))
+                if (!string.IsNullOrEmpty(parentName))
                     item.ParentName = parentName;
                 item.ParentUrl = parenturl;
                 item.TotalProduct = proTotal;
                 item.UpdateTime = DateTime.Now;
-                if (string.IsNullOrEmpty(catName))
+                if (!string.IsNullOrEmpty(catName))
                 item.ClassName = catName;
                 if (childList == null || childList.Count < 2)
                     item.HasChild = false;

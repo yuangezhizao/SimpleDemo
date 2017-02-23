@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Commons;
 using DataBase;
 using Mode;
@@ -11,7 +10,7 @@ namespace BLL.Sprider.classInfo
 {
     public class DangdangClassInfo : DangDang, ISiteClassBLL
     {
-        protected List<SiteClassInfo> shopClasslist = new List<SiteClassInfo>();
+        protected List<SiteClassInfo> ShopClasslist = new List<SiteClassInfo>();
         private List<SiteClassInfo> HasBindClasslist { get; set; }
         public DangdangClassInfo()
         {
@@ -23,7 +22,7 @@ namespace BLL.Sprider.classInfo
             HasBindClasslist = new SiteClassInfoDB().getAllSiteCatInfo(Baseinfo.SiteId);
             string directoryHtml = HtmlAnalysis.Gethtmlcode("http://category.dangdang.com/");
 
-            string tempPage = RegGroupsX<string>(directoryHtml, "<div  class=\"col col_2\" name=5596>(?<x>.*?)<style></style><script type=\"text/javascript\"");
+            string tempPage = RegGroupsX<string>(directoryHtml, "<div ddt-pit=\"10\" id=\"floor_10\"(?<x>.*?)<script");
             var list = RegGroupCollection(tempPage, "href=\"(?<x>.*?)\"|href='(?<x>.*?)'");
             for (int i = 0; i < list.Count; i++)
             {
@@ -31,10 +30,10 @@ namespace BLL.Sprider.classInfo
 
                 if(regIsMatch(tempurl,"^http://category.dangdang.com/cid\\d+.html$"))
                     AddNode(tempurl);
-                if (shopClasslist.Count > 0)
+                if (ShopClasslist.Count > 0)
                 {
-                    new SiteClassInfoDB().AddSiteClass(shopClasslist);
-                    shopClasslist.Clear();
+                    new SiteClassInfoDB().AddSiteClass(ShopClasslist);
+                    ShopClasslist.Clear();
                 }
             }
 
@@ -115,7 +114,7 @@ namespace BLL.Sprider.classInfo
             TotalProduct = total
             };
             HasBindClasslist.Add(cat);
-            shopClasslist.Add(cat);
+            ShopClasslist.Add(cat);
             foreach (var item in newCat)
             {
                 AddNode(item);
@@ -125,6 +124,8 @@ namespace BLL.Sprider.classInfo
             if (string.IsNullOrEmpty(catHtml))
                 return;
             var list = RegGroupCollection(catHtml, "href=\"/cid(?<x>\\d+).html#");
+            if(list==null)
+                return;
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -250,10 +251,10 @@ namespace BLL.Sprider.classInfo
                 }
 
             }
-            if (shopClasslist.Count > 0)
+            if (ShopClasslist.Count > 0)
             {
-                new SiteClassInfoDB().AddSiteClass(shopClasslist);
-                shopClasslist.Clear();
+                new SiteClassInfoDB().AddSiteClass(ShopClasslist);
+                ShopClasslist.Clear();
             }
         }
 

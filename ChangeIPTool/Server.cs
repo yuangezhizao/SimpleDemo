@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -17,6 +18,19 @@ namespace ChangeIPTool
         private int IPLoopCount = 3; //允许重复次数  拨号3次还是重复的ip 
         private int DialFaildSleepTime = 30000;
 
+        public static string OldIpAddress { get; set; }
+        public static string CurrentIpAddress { get; set; }
+
+
+        public void SendMsgtoServer()
+        {
+            //GetWebClient
+            if (Process.GetProcessesByName("GetWebClient").Any())
+            {
+                new WebClient().DownloadDataAsync(new Uri("http://service.manmanbuy.com/mmb.ashx?method=ipduankai"));
+            }
+ 
+        }
 
         /// <summary>
         /// 宽带ip转换
@@ -26,6 +40,9 @@ namespace ChangeIPTool
         /// <param name="pwd">密码</param>
         public void ChangeIp(string kdlj, string userName, string pwd)
         {
+
+            SendMsgtoServer();
+
             //hx.Mset.IsChangeIp = hx.Mset.IsChangeIp;
             LogServer.WriteLog("开始准备更换IP", "changeIp");
 
@@ -43,6 +60,7 @@ namespace ChangeIPTool
                     RasIPInfo ipAddresses = (RasIPInfo) oldConn.GetProjectionInfo(RasProjectionType.IP);
                     string oldIp = ipAddresses.IPAddress.ToString();
                     LogServer.WriteLog("现在名称:" + entryName + "IP是" + oldIp, "changeIp");
+                    OldIpAddress = oldIp;
                     LogServer.WriteLog("开始挂断", "changeIp");
                     oldConn.HangUp(10*1000);
                     //Thread.Sleep(hx.Mset.RasHangUpSleepTime);
@@ -117,13 +135,13 @@ namespace ChangeIPTool
                     }
                     historyIps.Add(ipAddresses);
                 }
-
+                CurrentIpAddress = ipAddresses;
                 //addlog("现在的IP是" + ipAddresses);
 
 
             }
             //main.pppoeact = true;
-            LogServer.WriteLog("更换成功", "changeIp");
+            LogServer.WriteLog("更换成功原ip:"+oldIpAddress+"当前ip:"+ CurrentIpAddress, "changeIp");
             //addlog("更换成功.. ");
         }
 
@@ -210,17 +228,17 @@ namespace ChangeIPTool
         }
 
 
-        public static DateTime lastUpdate;
+        public static DateTime LastUpdate = DateTime.Now;
 
         public void TimerDoing(string kdlj, string userName, string pwd)
         {
             DateTime logTime = LogServer.ReadLogRowNo("shieldSpider");
-            if (lastUpdate < logTime)
+            if (LastUpdate < logTime)
             {
                 try
                 {
                     ChangeIp(kdlj, userName, pwd);
-                    lastUpdate = DateTime.Now.AddMinutes(3);
+                    LastUpdate = DateTime.Now.AddMinutes(5);
                 }
                 catch (Exception ex)
                 {
@@ -235,12 +253,24 @@ namespace ChangeIPTool
                 {
                     try
                     {
+                        LogServer.WriteLog("网络已断开", "changeIp");
                         ChangeIp(kdlj, userName, pwd);
-                        lastUpdate = DateTime.Now.AddMinutes(3);
+                        LastUpdate = DateTime.Now.AddMinutes(5);
                     }
                     catch (Exception ex)
                     {
                         LogServer.WriteLog(ex, "changeIp");
+                    }
+                  
+                }
+                else
+                {
+                    string url = "http://www.manmanbuy.com/";
+                    var page = new HttpHelper().GetHtml(new HttpItem { URL = url }).Html;
+                    if (string.IsNullOrEmpty(page)|| page.Length<500)
+                    {
+                        LogServer.WriteLog("网络已断开,将重新进行连接", "changeIp");
+                        new Server().ChangeIp(kdlj, userName, pwd);
                     }
                 }
             }
@@ -253,6 +283,8 @@ namespace ChangeIPTool
         //参数说明 constate 连接说明 ，reder保留值
         public static bool IsConnectedToInternet()
         {
+
+     
             int Desc = 0;
             return InternetGetConnectedState(out Desc, 0);
         }

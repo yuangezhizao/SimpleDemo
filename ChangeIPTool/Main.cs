@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using MHttpHelper;
 using Newtonsoft.Json.Linq;
 
 namespace ChangeIPTool
@@ -11,7 +14,7 @@ namespace ChangeIPTool
         public Main()
         {
             InitializeComponent();
-            timerInfo.Interval = 30000;
+            timerInfo.Interval = 1000*180; //三分钟执行一次
             timerInfo.Start();
             string config = GetJsonConfig("IpConfig");
             if (string.IsNullOrEmpty(config))
@@ -21,8 +24,10 @@ namespace ChangeIPTool
             txtUserName.Text = conJson["UserName"].Value<string>();
             txtpwd.Text = conJson["Pwd"].Value<string>();
             txtTimeSpan.Text = conJson["TimeSpan"].Value<string>();
-
+         
         }
+
+ 
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {

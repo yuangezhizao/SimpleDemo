@@ -20,18 +20,14 @@ namespace WebAppClinet
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //string url = "http://list.secoo.com/bags/30-0-0-0-0-1-0-0-1-10-0-0-100-0.shtml#pageTitle";
-            //PhantomjsBase.PhantomjsPath = Request.PhysicalApplicationPath;
-            //var directoryHtml = new DownLoadServer().DownLoadpage(url);
-            // new SpriderSystem().SaveSiteCate(264);
-            //new SpriderSystem().UpdateSiteCat(264);
-            new SiteClassBll().UpdatemmbsiteClass(264);
-            // new StockInfoBll().GetNewStockInfo();
+            //new SpriderSystem().SaveSiteCate(52);
+            //new SpriderSystem().UpdateSiteCat(52);
+            //new SiteClassBll().UpdatemmbsiteClass(52);
+            //new StockInfoBll().GetNewStockInfo();
             //SubmitOrder("");
             //var aa = ranCode();
             //loadjdUser();
             //test();
-
         }
         //static Random ran = new Random();
         //private string ranCode()

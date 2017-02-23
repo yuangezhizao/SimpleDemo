@@ -23,7 +23,7 @@ namespace DataBase
         {
             try
             {
-              //getSithInfo();
+                //getSithInfo();
                 using (var db = _dbFactory.OpenDbConnection())
                 {
                     return db.Single<SiteInfo>(p => p.SiteId == siteid);
