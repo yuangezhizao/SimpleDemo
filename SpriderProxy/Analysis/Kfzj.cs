@@ -11,7 +11,6 @@ namespace SpriderProxy.Analysis
     /// </summary>
    public class Kfzj:BaseSiteInfo
     {
-
         public override bool ValidCatId(string catId)
         {
             if (string.IsNullOrEmpty(catId))

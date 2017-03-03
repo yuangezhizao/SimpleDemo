@@ -3,3 +3,23 @@
 ################################################################################
 
 /WebServer/bin
+/AamirKhan/bin/Debug
+/BLL/obj/Debug
+/Commons/obj/Debug
+/DataBase/obj/Debug
+/GuardSystem/obj/Debug
+/GuardWinServer/obj/Debug
+/AamirKhan/obj/Debug
+/ChangeIPTool/obj/Debug
+/Mode/obj/Debug
+/PhantomjsDrive/obj/Debug
+/Servers/obj/Debug
+/SpiderWinService/obj/Debug
+/SpriderProxy/obj/Debug
+/test/obj/Debug
+/WebApp/obj/Debug
+/WebServer/obj/Debug
+/WebAppClinet/obj/Debug
+/WebAppClinet/bin
+/WebApp/bin
+/.vs
