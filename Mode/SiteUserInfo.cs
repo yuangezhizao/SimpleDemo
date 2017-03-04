@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ServiceStack.DataAnnotations;
+
 namespace Mode
 {
     public class SiteUserInfo
@@ -10,6 +8,7 @@ namespace Mode
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
         public string Domain { get; set; }
         public string SiteName { get; set; }
         public string UserName { get; set; }

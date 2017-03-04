@@ -4,7 +4,7 @@ using MongoDB.Bson;
 namespace Mode
 {
     /// <summary>
-    /// 商城分类品牌对应信息
+    ///     商城分类品牌对应信息
     /// </summary>
     public class SiteClassBand
     {
@@ -25,17 +25,19 @@ namespace Mode
         public string ImgUrl { get; set; }
 
         public string UniqueKey { get; set; }
+
         /// <summary>
-        /// 商城分类品牌地址
+        ///     商城分类品牌地址
         /// </summary>
         public string Urlinfo { get; set; }
 
         /// <summary>
-        /// 品牌 产品数量
+        ///     品牌 产品数量
         /// </summary>
         public int ProductCount { get; set; }
+
         /// <summary>
-        /// 品牌 评论数
+        ///     品牌 评论数
         /// </summary>
         public int CommentCount { get; set; }
 
@@ -44,7 +46,5 @@ namespace Mode
         public DateTime UpdateDate { get; set; }
 
         public bool IsHid { get; set; }
-
-
     }
 }

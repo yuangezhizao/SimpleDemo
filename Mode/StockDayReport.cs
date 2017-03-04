@@ -9,6 +9,7 @@ namespace Mode
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
         public string StockNo { get; set; }
         public string StockName { get; set; }
         public decimal CurrentPrice { get; set; }
@@ -25,7 +26,7 @@ namespace Mode
         public decimal Pe { get; set; }
         public decimal Pb { get; set; }
         public decimal PElyr { get; set; }
-        public bool IsStop{ get; set; }
+        public bool IsStop { get; set; }
         public float Zdf5 { get; set; }
         public float Zdf10 { get; set; }
         public float Zdf20 { get; set; }
@@ -36,7 +37,5 @@ namespace Mode
         public string Industry { get; set; }
         public string Area { get; set; }
         public DateTime CreateDate { get; set; }
-
-
     }
 }

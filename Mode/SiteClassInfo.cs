@@ -1,10 +1,11 @@
-﻿using ServiceStack.DataAnnotations;
-using System;
+﻿using System;
+using ServiceStack.DataAnnotations;
+
 namespace Mode
 {
     public class SiteClassInfo
     {
-          [AutoIncrement]
+        [AutoIncrement]
         public int Id { get; set; }
 
         public int SiteId { get; set; }

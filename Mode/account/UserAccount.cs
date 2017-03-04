@@ -1,11 +1,13 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
+
 namespace Mode.account
 {
     public class UserAccount
     {
         [AutoIncrement]
         public int Id { get; set; }
+
         public string NickName { get; set; }
         public string UserNo { get; set; }
         public decimal TotalAmount { get; set; }

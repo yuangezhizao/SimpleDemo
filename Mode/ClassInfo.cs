@@ -5,11 +5,11 @@ namespace Mode
 {
     public class ClassInfo
     {
-         [AutoIncrement]
+        [AutoIncrement]
         public int Id { get; set; }
 
         public string CatName { get; set; }
-        
+
         public int ParentId { get; set; }
 
         public string ParentName { get; set; }
@@ -35,7 +35,5 @@ namespace Mode
         public DateTime CreateDate { get; set; }
 
         public DateTime UpdateTime { get; set; }
-
-        
     }
 }

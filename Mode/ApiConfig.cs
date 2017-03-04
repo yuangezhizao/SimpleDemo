@@ -8,6 +8,7 @@ namespace Mode
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
         public string ApiId { get; set; }
         public string ApiSupplier { get; set; }
         public string ApiUserName { get; set; }
@@ -17,10 +18,12 @@ namespace Mode
         public string Token { get; set; }
         public string CallBackUrl { get; set; }
         public string Summary { get; set; }
+
         /// <summary>
-        /// token 有效期
+        ///     token 有效期
         /// </summary>
         public DateTime TokenValidity { get; set; }
+
         public DateTime UpdateTime { get; set; }
         public DateTime CreateDate { get; set; }
     }
