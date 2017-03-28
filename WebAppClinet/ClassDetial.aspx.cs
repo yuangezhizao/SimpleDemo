@@ -10,7 +10,8 @@ using Mode;
 namespace WebAppClinet
 {
     public partial class ClassDetial : System.Web.UI.Page
-    {
+    {   
+        //ddd
         protected StringBuilder ParaCatInfo = new StringBuilder();
         protected string SiteData;
         protected string SiteCatName;
