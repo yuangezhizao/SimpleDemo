@@ -45,6 +45,7 @@
             this.SpiderTimer = new System.Windows.Forms.Timer(this.components);
             this.dtpTime = new System.Windows.Forms.DateTimePicker();
             this.cbxTime = new System.Windows.Forms.CheckBox();
+            this.cbxVolid = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -181,11 +182,24 @@
             this.cbxTime.UseVisualStyleBackColor = true;
             this.cbxTime.CheckedChanged += new System.EventHandler(this.cbxTime_CheckedChanged);
             // 
+            // cbxVolid
+            // 
+            this.cbxVolid.AutoSize = true;
+            this.cbxVolid.Checked = true;
+            this.cbxVolid.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxVolid.Location = new System.Drawing.Point(204, 69);
+            this.cbxVolid.Name = "cbxVolid";
+            this.cbxVolid.Size = new System.Drawing.Size(72, 16);
+            this.cbxVolid.TabIndex = 12;
+            this.cbxVolid.Text = "开启监控";
+            this.cbxVolid.UseVisualStyleBackColor = true;
+            // 
             // Domain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(518, 556);
+            this.Controls.Add(this.cbxVolid);
             this.Controls.Add(this.cbxTime);
             this.Controls.Add(this.dtpTime);
             this.Controls.Add(this.rtbMsg);
@@ -227,6 +241,7 @@
         private System.Windows.Forms.Timer SpiderTimer;
         private System.Windows.Forms.DateTimePicker dtpTime;
         private System.Windows.Forms.CheckBox cbxTime;
+        private System.Windows.Forms.CheckBox cbxVolid;
     }
 }
 

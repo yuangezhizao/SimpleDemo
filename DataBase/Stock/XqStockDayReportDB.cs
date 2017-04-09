@@ -20,6 +20,47 @@ namespace DataBase.Stock
                 db.CreateTable<XqStockDayReport>();
             }
         }
+        /// <summary>
+        /// 获取当天的更新量
+        /// </summary>
+        /// <returns></returns>
+        public long GetXqStockDayCount()
+        {
+            try
+            {
+                using (var db = DbFactory.OpenDbConnection())
+                {
+                   var result= db.Count<XqStockDayReport>(c => c.CreateDate > DateTime.Now.Date);
+                    return result;
+
+                }
+              
+            }
+            catch (Exception ex1)
+            {
+                LogServer.WriteLog(ex1.Message, "DBError");
+            }
+            return 0;
+        }
+        /// <summary>
+        /// 删除当天的更新记录
+        /// </summary>
+        public void DelCurrentDatXqStock()
+        {
+            try
+            {
+                using (var db = DbFactory.OpenDbConnection())
+                {
+                    db.Delete<XqStockDayReport>(c => c.CreateDate > DateTime.Now.Date);
+                }
+
+            }
+            catch (Exception ex1)
+            {
+                LogServer.WriteLog(ex1.Message, "DBError");
+            }
+        }
+
 
         public void AddXqStockDayReport(XqStockDayReport item)
         {
