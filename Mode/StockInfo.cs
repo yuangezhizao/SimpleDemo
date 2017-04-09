@@ -29,12 +29,13 @@ namespace Mode
         /// <summary>
         /// 成交额
         /// </summary>
-        public int Turnover { get; set; }
+        public decimal Turnover { get; set; }
         public decimal Huanshou { get; set; }
         public decimal Zhenfu { get; set; }
         public decimal Liangbi { get; set; }
         public string StockType { get; set; }
         public string StockTypeAdd { get; set; }
+        public DateTime UpdateTime { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

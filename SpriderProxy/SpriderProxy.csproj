@@ -44,7 +44,6 @@
     <Compile Include="Analysis\Amazon.cs" />
     <Compile Include="Analysis\Baoshuiguoji.cs" />
     <Compile Include="Analysis\Cnbuyers.cs" />
-    <Compile Include="Analysis\Tkyfw.cs" />
     <Compile Include="Analysis\DangDang.cs" />
     <Compile Include="Analysis\Ehaoyao.cs" />
     <Compile Include="Analysis\Feiniu.cs" />
