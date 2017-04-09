@@ -219,6 +219,9 @@ namespace BLL.Sprider.classInfo
             siteClassInfo.TotalProduct = RegGroupsX<int>(page, "共计<font class=\"red\"><b>(?<x>\\d+)</b></font>件商品");
             new mmbSiteClassInfoDB().UpdateSiteClass(siteClassInfo);
 
+          
+
+
         }
 
 

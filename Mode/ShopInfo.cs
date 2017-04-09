@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ServiceStack.DataAnnotations;
 
 namespace Mode
@@ -10,15 +7,18 @@ namespace Mode
     {
         [AutoIncrement]
         public int Id { get; set; }
+
         public string UserName { get; set; }
         public string UserPhone { get; set; }
         public string UserMobile { get; set; }
         public string Userqq { get; set; }
         public string UserEmail { get; set; }
+
         /// <summary>
-        /// 商铺编号
+        ///     商铺编号
         /// </summary>
         public string ShopNo { get; set; }
+
         public string ShopUserID { get; set; }
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
@@ -31,7 +31,5 @@ namespace Mode
         public string ParentName { get; set; }
         public DateTime UpdateTime { get; set; }
         public DateTime CreateDate { get; set; }
-        
-
     }
 }

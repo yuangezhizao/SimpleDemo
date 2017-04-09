@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Mode
+﻿namespace Mode
 {
     public class JdCoupons
     {
-
     }
 }

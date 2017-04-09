@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using ServiceStack.DataAnnotations;
 
 namespace Mode
@@ -12,6 +8,7 @@ namespace Mode
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
         public string StockNo { get; set; }
         public string StockName { get; set; }
         public decimal StratPrice { get; set; }
@@ -25,6 +22,5 @@ namespace Mode
         public decimal MaxRange { get; set; }
         public string CurrentInfo { get; set; }
         public DateTime CreateDate { get; set; }
-
     }
 }

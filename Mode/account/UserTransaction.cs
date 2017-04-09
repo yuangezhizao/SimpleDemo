@@ -7,6 +7,7 @@ namespace Mode.account
     {
         [AutoIncrement]
         public int Id { get; set; }
+
         public string NickName { get; set; }
         public int UserId { get; set; }
         public string StockName { get; set; }
@@ -24,4 +25,3 @@ namespace Mode.account
         public DateTime CreateTime { get; set; }
     }
 }
-
