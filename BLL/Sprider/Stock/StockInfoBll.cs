@@ -516,7 +516,39 @@ namespace BLL.Sprider.Stock
             LogServer.WriteLog(item.StockNo + "价格监控 currect:" + item.CtPrice + " MaxPrice:" + item.MaxPrice, "StockSendMsg");
         }
 
+        public void UpdateStock(StockInfo info)
+        {
+            string url = $"http://hq.sinajs.cn/rn=1388445310564&list={info.StockTypeAdd}{info.StockNo}";
+            var head = $"var hq_str_{info.StockTypeAdd}{info.StockNo}=\"";
+            var page = HtmlAnalysis.Gethtmlcode(url);
+            if (string.IsNullOrEmpty(page)||!page.Contains(head))
+                return;
 
+            var stock = page.Replace(head, "").Replace("\";", "");
+            var list = stock.Split(',');
+            if (list.Length <10)
+                return;
+          
+            try
+            {
+                info.StockName = list[0];
+                info.Startprice = decimal.Parse(list[1]);
+                info.Oldprice = decimal.Parse(list[2]);
+                info.CurrentPrice = decimal.Parse(list[3]);
+                info.Maxprice = decimal.Parse(list[4]);
+                info.Minprice = decimal.Parse(list[5]);
+                info.Volume = int.Parse(list[8]);
+                info.Turnover = decimal.Parse(list[9]);
+                info.UpdateTime = DateTime.Now;
+                new StockinfoDB().UpdateStockinfo(info);
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex);
+            }
+           
+
+        }
 
         public string GetCurrentStock(string num)
         {

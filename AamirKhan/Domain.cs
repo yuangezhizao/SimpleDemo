@@ -23,12 +23,13 @@ namespace AamirKhan
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-
+        
             StockDayReport();
         }
 
         public void StockDayReport()
         {
+            new StockMonitorBll().DelCurrentDatXqStock();
             var prolist = new StockInfoBll().GetAllinfo();
             int count;
             int.TryParse(txtTheadCount.Text, out count);
@@ -63,6 +64,9 @@ namespace AamirKhan
 
         public void AllCompleted(QueueThreadPlusBase<StockInfo>.CompetedEventArgs cea)
         {
+
+            if(cbxVolid.Checked)
+                new StockMonitorBll().VolidReportCount();
             LogServer.WriteLog("所有任务已经完成");
         }
 

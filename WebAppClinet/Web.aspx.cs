@@ -4,13 +4,7 @@ using Servers;
 using ServiceStack;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using BLL.Sprider.Stock;
 using Mode;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PhantomjsDrive;
 
 namespace WebAppClinet
 {
@@ -21,37 +15,14 @@ namespace WebAppClinet
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //new SpriderSystem().SaveSiteCate(241);
-            //new SpriderSystem().UpdateSiteCat(241);
-            //new SiteClassBll().UpdatemmbsiteClass(241);
+            //new SpriderSystem().SaveSiteCate(52);
+            //new SpriderSystem().UpdateSiteCat(52);
+            //new SiteClassBll().UpdatemmbsiteClass(52);
             //new StockInfoBll().GetNewStockInfo();
             //SubmitOrder("");
             //var aa = ranCode();
             //loadjdUser();
-            test();
-            //string[] cats =
-            //{
-            //    "1000",
-            //    "3000",
-            //    "38000",
-            //    "4000",
-            //    "2000",
-            //    "2000",
-            //    "230000",
-            //    "5000",
-            //    "225000",
-            //     "43000",
-            //      "34000",
-            //      "36000",
-            //    "37000"
-            //};
-            //foreach (string cat in cats)
-            //{
-            //    juhuasuan(cat);
-            //}
-            //qiangtaobao();
-
-
+            //test();
         }
         //static Random ran = new Random();
         //private string ranCode()
@@ -62,45 +33,6 @@ namespace WebAppClinet
         //    return res.ToString();
         //}
 
-        private void juhuasuan(string cat)
-        {
-  
-
-            int maxpage = 2;
-            for (int i = 1; i < maxpage; i++)
-            {
-                try
-                {
-                    string url = $"https://ju.taobao.com/json/tg/ajaxGetItemsV2.json?callback=define&page={i}&psize=20&type=0&frontCatId={cat}";
-                    var page = HtmlAnalysis.Gethtmlcode(url).Replace("define(", "").TrimEnd(')');
-                    if (string.IsNullOrEmpty(page))
-                        continue;
-                 
-                    var token = JToken.Parse(page);
-                    if (i == 1)
-                    {
-                        maxpage = token["totalPage"].Value<int>();
-                    }
-                    LogServer.WriteLog(page);
-                }
-                catch (Exception ex)
-                {
-                    
-                    LogServer.WriteLog(ex);
-                }
-       
-            }
-        }
-
-        private void qiangtaobao()
-        {
-            var t = Convert.ToInt32((DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0)).TotalSeconds);
-
-            string url =
-                $"https://api.m.taobao.com/h5/mtop.msp.qianggou.queryitembycategoryid/3.0/?v=3.0&api=mtop.msp.qianggou.queryItemByCategoryId&appKey=12574478&t={t}&callback=mtopjsonp1&type=jsonp&sign=dfbbeb5e9f89294ce6a34e5e51b03535&data=%7B%22categoryId%22%3A%22312000%22%2C%22offset%22%3A50%2C%22limit%22%3A50%7D";
-            HtmlAnalysis requent = new HtmlAnalysis();
-
-        }
 
         private void smsServer()
         {
@@ -139,7 +71,7 @@ namespace WebAppClinet
 
         }
 
-
+ 
         private void loadjdUser()
         {
             var page = DocumentServer.ReadFileInfo(@"C:\Users\Administrator\Downloads\20160722200040011100980004303485_10_jdwmsbzh.txt","default");
@@ -178,44 +110,15 @@ namespace WebAppClinet
             }
             new SiteUserInfoBll().addUser(newlist);
         }
-        public string Getjstime()
-        {//获取javascript时间
-            string time;
-            var minTicks = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
-            var nowTicks = DateTime.Now.ToUniversalTime().Ticks;
-            var ticks = (nowTicks - minTicks) / 10000L;
-            time = (ticks / 1000).ToString();
-            return time;
-        }
+
         private void test()
         {
-
-
-            string tepurl =
-                "https://mdskip.taobao.com/core/initItemDetail.htm?sellerPreview=false&tryBeforeBuy=false&showShopProm=false&household=false&addressLevel=3&cartEnable=true&isForbidBuyItem=false&isApparel=false&isAreaSell=true&isUseInventoryCenter=true&service3C=false&offlineShop=false&queryMemberRight=true&isRegionLevel=true&itemId=534648284377&tmallBuySupport=true&isPurchaseMallPage=false&isSecKill=false&cachedTimestamp=" + Getjstime();
-
-            HtmlAnalysis request = new HtmlAnalysis();
-
-            var itempage =
-                HtmlAnalysis.Gethtmlcode(
-                    "https://chaoshi.detail.tmall.com/item.htm?spm=a3204.7933263.0.0.sgJTc9&id=534648284377&rewcatid=50514008", "GBK");
-
-            request.RequestAccept = "application/x-javascript;charset=GBK";
-            request.RequestReferer =
-                "https://chaoshi.detail.tmall.com/item.htm?spm=a3204.7933263.0.0.sgJTc9&id=534648284377&rewcatid=50514008";
-            request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
-            //request.Headers.Add("Cookie", "_med=dw:1440&dh:900&pw:1440&ph:900&ist:0; sm4=330200; _tb_token_=Ai1uLykCPq; ck1=; uc3=sg2=V361YQ7FVF5AOC08Dydnr4lcmGQqYHl%2FHI2IabXuLd4%3D&nk2=An0OaqLqaGzx&id2=W8t12UU4MPQ%3D&vt3=F8dARVadCIoLCi0aoWg%3D&lg2=V32FPkk%2Fw0dUvg%3D%3D; lgc=albert533; tracknick=albert533; cookie2=3cb7bb7286fac7b2a29a0396e666cdff; t=44d8050f785496a344695478df479174; skt=601fa1de64224d6a; hng=; uss=VT3hPhx5HrabrXglOD1xiUiiBNYkHBY4Bkz72wur7vDi%2BZMC2q1bi7zgZVQ%3D; otherx=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0; cna=o982EXx2ZnsCAXPVOGrgYf+E; cq=ccp%3D1; isg=AqKiGTtwDkVYWBKR0CZXHDvB8yilSaYNLFHtDew7zpXAv0I51IP2HSg9mUy5; l=Ak9Pn9p-c27KkGOcJrAD1me-X-lZ0KOWif-none-match:W/\"4ba27ee27ba7aec0f3bd3234ad9e8fc2\"");
-            var page = request.HttpRequest(tepurl);
-
-
-
-
             var url =
                 "http://list.gome.com.cn/cat10000049-00-0-48-1-0-0-0-1-0-0-0-0-0-0-0-0-0.html?page=2&bws=0x12&type=json";
-            //HtmlAnalysis request = new HtmlAnalysis();
-            //request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
-            //request.RequestUserAgent ="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
-            //request.Headers.Add("Cookie", "route=a4740778113c5452684f57d9d18e1433; uid=CjozJVh3CnG1nZS+FcVEAg==; atgregion=22060100%7C%E6%B5%99%E6%B1%9F%E7%9C%81%E5%AE%81%E6%B3%A2%E5%B8%82%E7%A7%91%E6%8A%80%E5%9B%AD%E5%8C%BA%E7%A7%91%E6%8A%80%E5%9B%AD%E5%8C%BA%7C22060000%7C22000000%7C220601001; __clickidc=148419646713113959; __c_visitor=148419646713113959; _idusin=73057384033; DSESSIONID=683cb316953e4df79d1547141bf10f13; _index_ad=0; cartnum=0; s_cc=true; _ga=GA1.3.249638576.1484196470; _gat=1; gpv_pn=%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%3A%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%A7%86; gpv_p22=no%20value; s_getNewRepeat=1484197930657-New; s_sq=gome-prd%3D%2526pid%253D%2525E5%252595%252586%2525E5%252593%252581%2525E5%252588%252597%2525E8%2525A1%2525A8%25253A%2525E5%2525B9%2525B3%2525E6%25259D%2525BF%2525E7%252594%2525B5%2525E8%2525A7%252586%2526pidt%253D1%2526oid%253Djavascript%25253Avoid(0)%2526ot%253DA; g_co=show; s_ppv=-%2C33%2C18%2C2375");
+            HtmlAnalysis request = new HtmlAnalysis();
+            request.RequestAccept = "application/json, text/javascript, */*; q=0.01";
+            request.RequestUserAgent ="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+            request.Headers.Add("Cookie", "route=a4740778113c5452684f57d9d18e1433; uid=CjozJVh3CnG1nZS+FcVEAg==; atgregion=22060100%7C%E6%B5%99%E6%B1%9F%E7%9C%81%E5%AE%81%E6%B3%A2%E5%B8%82%E7%A7%91%E6%8A%80%E5%9B%AD%E5%8C%BA%E7%A7%91%E6%8A%80%E5%9B%AD%E5%8C%BA%7C22060000%7C22000000%7C220601001; __clickidc=148419646713113959; __c_visitor=148419646713113959; _idusin=73057384033; DSESSIONID=683cb316953e4df79d1547141bf10f13; _index_ad=0; cartnum=0; s_cc=true; _ga=GA1.3.249638576.1484196470; _gat=1; gpv_pn=%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%3A%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%A7%86; gpv_p22=no%20value; s_getNewRepeat=1484197930657-New; s_sq=gome-prd%3D%2526pid%253D%2525E5%252595%252586%2525E5%252593%252581%2525E5%252588%252597%2525E8%2525A1%2525A8%25253A%2525E5%2525B9%2525B3%2525E6%25259D%2525BF%2525E7%252594%2525B5%2525E8%2525A7%252586%2526pidt%253D1%2526oid%253Djavascript%25253Avoid(0)%2526ot%253DA; g_co=show; s_ppv=-%2C33%2C18%2C2375");
             //request.Headers.Add("X-Content-Type-Options", "nosniff");
 
             //request.Headers.Add("X-Frame-Options", "DENY");

@@ -45,7 +45,7 @@ namespace Commons
                 //随机筛选一组用户
               //  int index = Rand.Next(0, SendMailAccount.Count);
                 string username = "chennysnow@sina.com";// SendMailAccount[index].Item1;
-                string password = "cj62415709"; //SendMailAccount[index].Item2;
+                string password = "chenny@62415109"; //SendMailAccount[index].Item2;
                 //发件人信息
                 msg.From = new MailAddress(username, "慢慢买更新工具", Encoding.UTF8);
                 msg.Subject = subject; //邮件标题

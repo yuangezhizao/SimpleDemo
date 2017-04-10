@@ -78,5 +78,22 @@ namespace DataBase.Stock
             return null;
 
         }
+
+        public void UpdateStockinfo(StockInfo stock)
+        {
+            try
+            {
+
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    db.Update(stock);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogServer.WriteLog(ex, "DBError");
+            }
+
+        }
     }
 }
