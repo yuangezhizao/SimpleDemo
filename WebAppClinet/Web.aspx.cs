@@ -178,17 +178,34 @@ namespace WebAppClinet
             }
             new SiteUserInfoBll().addUser(newlist);
         }
-
+        public string Getjstime()
+        {//获取javascript时间
+            string time;
+            var minTicks = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
+            var nowTicks = DateTime.Now.ToUniversalTime().Ticks;
+            var ticks = (nowTicks - minTicks) / 10000L;
+            time = (ticks / 1000).ToString();
+            return time;
+        }
         private void test()
         {
-            new TaskFactory().StartNew(new StockInfoBll().StockMonitor);
-            return;
-            var tmallurl = "https://www.tmall.com/";
+
+
+            string tepurl =
+                "https://mdskip.taobao.com/core/initItemDetail.htm?sellerPreview=false&tryBeforeBuy=false&showShopProm=false&household=false&addressLevel=3&cartEnable=true&isForbidBuyItem=false&isApparel=false&isAreaSell=true&isUseInventoryCenter=true&service3C=false&offlineShop=false&queryMemberRight=true&isRegionLevel=true&itemId=534648284377&tmallBuySupport=true&isPurchaseMallPage=false&isSecKill=false&cachedTimestamp=" + Getjstime();
+
             HtmlAnalysis request = new HtmlAnalysis();
-            request.RequestAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-            request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
-            request.Headers.Add("Cookie", "_med=dw:1440&dh:900&pw:1440&ph:900&ist:0; sm4=330200; _tb_token_=Ai1uLykCPq; ck1=; uc3=sg2=V361YQ7FVF5AOC08Dydnr4lcmGQqYHl%2FHI2IabXuLd4%3D&nk2=An0OaqLqaGzx&id2=W8t12UU4MPQ%3D&vt3=F8dARVadCIoLCi0aoWg%3D&lg2=V32FPkk%2Fw0dUvg%3D%3D; lgc=albert533; tracknick=albert533; cookie2=3cb7bb7286fac7b2a29a0396e666cdff; t=44d8050f785496a344695478df479174; skt=601fa1de64224d6a; hng=; uss=VT3hPhx5HrabrXglOD1xiUiiBNYkHBY4Bkz72wur7vDi%2BZMC2q1bi7zgZVQ%3D; otherx=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0; cna=o982EXx2ZnsCAXPVOGrgYf+E; cq=ccp%3D1; isg=AqKiGTtwDkVYWBKR0CZXHDvB8yilSaYNLFHtDew7zpXAv0I51IP2HSg9mUy5; l=Ak9Pn9p-c27KkGOcJrAD1me-X-lZ0KOWif-none-match:W/\"4ba27ee27ba7aec0f3bd3234ad9e8fc2\"");
-            var page = request.HttpRequest(tmallurl);
+
+            var itempage =
+                HtmlAnalysis.Gethtmlcode(
+                    "https://chaoshi.detail.tmall.com/item.htm?spm=a3204.7933263.0.0.sgJTc9&id=534648284377&rewcatid=50514008", "GBK");
+
+            request.RequestAccept = "application/x-javascript;charset=GBK";
+            request.RequestReferer =
+                "https://chaoshi.detail.tmall.com/item.htm?spm=a3204.7933263.0.0.sgJTc9&id=534648284377&rewcatid=50514008";
+            request.RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+            //request.Headers.Add("Cookie", "_med=dw:1440&dh:900&pw:1440&ph:900&ist:0; sm4=330200; _tb_token_=Ai1uLykCPq; ck1=; uc3=sg2=V361YQ7FVF5AOC08Dydnr4lcmGQqYHl%2FHI2IabXuLd4%3D&nk2=An0OaqLqaGzx&id2=W8t12UU4MPQ%3D&vt3=F8dARVadCIoLCi0aoWg%3D&lg2=V32FPkk%2Fw0dUvg%3D%3D; lgc=albert533; tracknick=albert533; cookie2=3cb7bb7286fac7b2a29a0396e666cdff; t=44d8050f785496a344695478df479174; skt=601fa1de64224d6a; hng=; uss=VT3hPhx5HrabrXglOD1xiUiiBNYkHBY4Bkz72wur7vDi%2BZMC2q1bi7zgZVQ%3D; otherx=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0; cna=o982EXx2ZnsCAXPVOGrgYf+E; cq=ccp%3D1; isg=AqKiGTtwDkVYWBKR0CZXHDvB8yilSaYNLFHtDew7zpXAv0I51IP2HSg9mUy5; l=Ak9Pn9p-c27KkGOcJrAD1me-X-lZ0KOWif-none-match:W/\"4ba27ee27ba7aec0f3bd3234ad9e8fc2\"");
+            var page = request.HttpRequest(tepurl);
 
 
 

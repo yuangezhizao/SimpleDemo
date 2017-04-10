@@ -40,3 +40,6 @@
 /Webznm/bin
 /Webznm/obj/Debug
 /AamirKhan/obj/Debug
+/GuardSystem
+*.user
+/WebServer/App_Data
