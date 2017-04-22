@@ -40,3 +40,6 @@
 /test/bin/Debug
 /SpriderProxy/bin/Debug
 /SpiderWinService/bin/Debug
+*.db
+*.user
+*.config

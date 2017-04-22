@@ -28,6 +28,9 @@ namespace GuardSystem
                         SystemConfig.ToGuardProcessName = args[1];
                     if (args.Length > 2)
                         SystemConfig.PackFilePath = args[2];
+                    if (args.Length > 3)
+                        SystemConfig.PackExcludeFilesRex = args[3];
+
                     CompressServer.PackServerPluse();
                 }
                 else

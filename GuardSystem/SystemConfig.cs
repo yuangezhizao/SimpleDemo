@@ -4,11 +4,23 @@ namespace GuardSystem
 {
     public static class SystemConfig
     {
+        /// <summary>
+        /// 下载压缩包的路径
+        /// </summary>
         public static readonly string CloudScourUrl = @"http://bijiatool.manmanbuy.com/uptools/";
-        public static string PackFilePath = @"E:\work\cloudmanmanbuy\mmbSpider\bin\Release\";
-        public static readonly string PackExcludeFilesRex = @"JdzyConfig.json|.pdb$|.vshost.";
+        /// <summary>
+        /// 需要打包的源文件的地址
+        /// </summary>
+        public static string PackFilePath = @"C:\Users\Administrator\Desktop\ShopRobot\source";
+        /// <summary>
+        /// 需要排除的文件
+        /// </summary>
+        public static string PackExcludeFilesRex = @"\\assets\\|\\js\\|\\View\\|.pdb$|.vshost.";
         public static readonly bool IsAutoStop = true;
-        public static string ToGuardProcessName = "mmbSpider";
-        public static string ToGuardProcessPath = @"C:\Users\Administrator\Desktop\jdzy";
+        /// <summary>
+        /// 
+        /// </summary>
+        public static string ToGuardProcessName = "ShopRobot";
+     
     }
 }

@@ -71,9 +71,17 @@ namespace GuardSystem
 
             foreach (var file in list)
             {
-                if (Regex.IsMatch(file, SystemConfig.PackExcludeFilesRex, RegexOptions.Singleline))
-                    continue;
-                fdict.Add(file.Replace(SystemConfig.PackFilePath, ""), Compress(File.ReadAllBytes(file)));
+                try
+                {
+                    if (Regex.IsMatch(file, SystemConfig.PackExcludeFilesRex, RegexOptions.Singleline))
+                        continue;
+                    fdict.Add(file.Replace(SystemConfig.PackFilePath, ""), Compress(File.ReadAllBytes(file)));
+                }
+                catch (Exception ex)
+                {
+                   LogServer.WriteLog(ex);
+                }
+
             }
 
             string strFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase.Replace("\\", "/") + "Pack/";
