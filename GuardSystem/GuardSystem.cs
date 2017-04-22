@@ -109,16 +109,18 @@ namespace GuardSystem
                         {
                             try
                             {
-                                var d = Path.GetDirectoryName(item.Key);
-                                if (Regex.IsMatch(item.Key, SystemConfig.PackExcludeFilesRex, RegexOptions.Singleline))
-                                    continue;
-                                //if (item.Key.Contains("ServiceStack.Text.dll")&& File.Exists(item.Key))
-                                //    continue;
-                                if (!string.IsNullOrEmpty(d) && !Directory.Exists(d))
+                                if (string.IsNullOrEmpty(SystemConfig.ToGuardProcessPath))
                                 {
-                                    Directory.CreateDirectory(d);
+                                    //如果没有指定安装目录 默认为当前目录
+                                    SystemConfig.ToGuardProcessPath = Environment.CurrentDirectory;
                                 }
-                                File.WriteAllBytes(item.Key, CompressServer.Decompress(item.Value));
+                                var temppath = SystemConfig.ToGuardProcessPath + item.Key;
+                                temppath = temppath.Substring(0, temppath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+                                if (!string.IsNullOrEmpty(temppath) && !Directory.Exists(temppath))
+                                {
+                                    Directory.CreateDirectory(temppath);
+                                }
+                                File.WriteAllBytes(SystemConfig.ToGuardProcessPath + item.Key, CompressServer.Decompress(item.Value));
                                 LogServer.WriteLog("下载并解压dll  " + item.Key, "GuardSystem");
                             }
                             catch (Exception ex)
@@ -128,10 +130,6 @@ namespace GuardSystem
                         }
                         Localmd5 = servermd5;
                         File.WriteAllText(SystemConfig.ToGuardProcessName + ".md5", servermd5);
-                        //Process newProcess= new Process();
-                        //newProcess.StartInfo.FileName = course + ".exe";
-
-
                         //清除缓存的文件列表信息
                         Process.Start(SystemConfig.ToGuardProcessName + ".exe", "restart");
                         UpdateRun = false;

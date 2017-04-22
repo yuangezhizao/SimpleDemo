@@ -15,12 +15,14 @@ namespace GuardSystem
         /// <summary>
         /// 需要排除的文件
         /// </summary>
-        public static string PackExcludeFilesRex = @"\\assets\\|\\js\\|\\View\\|.pdb$|.vshost.";
+        public static string PackExcludeFilesRex = @".pdb$|.vshost.";
         public static readonly bool IsAutoStop = true;
         /// <summary>
         /// 
         /// </summary>
         public static string ToGuardProcessName = "ShopRobot";
-     
+
+        public static string ToGuardProcessPath = "";
+
     }
 }

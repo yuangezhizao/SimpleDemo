@@ -35,7 +35,10 @@ namespace GuardSystem
                 }
                 else
                 {
-                    SystemConfig.ToGuardProcessName = args[0];
+                    if (args.Length > 0)
+                        SystemConfig.ToGuardProcessName = args[0];
+                    if (args.Length > 1)
+                        SystemConfig.ToGuardProcessPath = args[1];
                     GuardSystem.DoMain();
                 }
 
