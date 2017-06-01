@@ -18,7 +18,7 @@ namespace BLL.Sprider.classInfo
 
         protected List<SiteClassInfo> shopClasslist = new List<SiteClassInfo>();
 
-        private const string Regid ="http://channel.jd.com/(?<x>\\w+).html|/(?<x>\\d*-\\d*(-\\d*)?).html|cat=(?<x>\\d*,\\d*(,\\d*)?)";
+        private const string Regid = "http://channel.jd.com/list.html?cat=(?<x>.*?)$|/(?<x>\\d*-\\d*(-\\d*)?).html|cat=(?<x>\\d*,\\d*(,\\d*)?)";
         /// <summary>
         /// 获取所有分类
         /// </summary>
@@ -38,7 +38,7 @@ namespace BLL.Sprider.classInfo
             string directoryHtml = req.HttpRequest("http://www.jd.com/allSort.aspx");
             //string directoryHtml = HtmlAnalysis.Gethtmlcode("http://www.jd.com/allSort.aspx");
    
-            string allsort = RegGroupsX<string>(directoryHtml, "<!--左主体分类-->(?<x>.*?)<!--彩票-->");
+            string allsort = RegGroupsX<string>(directoryHtml, "<i></i><span>手机</span>(?<x>.*?)<i></i><span>整车</span>");
             var list = RegGroupCollection(allsort, "<a( title=\".*?\")? href=\"(?<x>.*?)\">(?<y>.*?)</a>");
 
             foreach (Match item in list)
@@ -79,6 +79,7 @@ namespace BLL.Sprider.classInfo
                     continue;
                 try
                 {
+ 
                     UpdateJdNode(HasBindClasslist[i]);
                 }
                 catch (Exception ex)
@@ -120,6 +121,29 @@ namespace BLL.Sprider.classInfo
                     LogServer.WriteLog("未取得分类编号2" + catinfo.Urlinfo + "\t" + catinfo.ClassName, "AddClassError");
                 return;
             }
+
+            string soncatlist = RegGroupsX<string>(pageinfo, "<ul class=\"J_valueList(?<x>.*?)</ul>");
+            MatchCollection catListson = RegGroupCollection(soncatlist, "<a href=\"(?<x>.*?)\"");
+            foreach (Match t in catListson)
+            {
+                string urlinfo = t.Groups["x"].Value.Trim();
+                string tempCatId = RegGroupsX<string>(urlinfo, Regid);
+                if (!ValidCatId(tempCatId))
+                {
+                    continue;
+                }
+                if (tempCatId.Contains('-'))
+                    tempCatId = tempCatId.Replace('-', ',');
+
+                if (tempCatId != "" && !HasBindClasslist.Exists(p => p.ClassId == tempCatId))
+                {
+
+                    AddJdNode(tempCatId, "");
+                    //newCat += t.ToString();
+                }
+   
+            }
+
 
             MatchCollection catList = RegGroupCollection(sortlist, "<a[^>]*?>(?<Text>[^<]*)</a>");
 
