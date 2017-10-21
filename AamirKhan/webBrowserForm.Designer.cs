@@ -38,6 +38,7 @@
             this.lblcookie = new System.Windows.Forms.Label();
             this.btnJDLogin = new System.Windows.Forms.Button();
             this.JdLoginTimer = new System.Windows.Forms.Timer(this.components);
+            this.test = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtUrl
@@ -62,7 +63,7 @@
             this.webBrowser.Location = new System.Drawing.Point(14, 41);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(439, 323);
+            this.webBrowser.Size = new System.Drawing.Size(523, 338);
             this.webBrowser.TabIndex = 9;
             this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
@@ -113,11 +114,22 @@
             // 
             this.JdLoginTimer.Tick += new System.EventHandler(this.JdLoginTimer_Tick);
             // 
+            // test
+            // 
+            this.test.Location = new System.Drawing.Point(462, 399);
+            this.test.Name = "test";
+            this.test.Size = new System.Drawing.Size(75, 23);
+            this.test.TabIndex = 15;
+            this.test.Text = "测试";
+            this.test.UseVisualStyleBackColor = true;
+            this.test.Click += new System.EventHandler(this.test_Click);
+            // 
             // webBrowserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 477);
+            this.ClientSize = new System.Drawing.Size(549, 488);
+            this.Controls.Add(this.test);
             this.Controls.Add(this.btnJDLogin);
             this.Controls.Add(this.txtUserAgent);
             this.Controls.Add(this.lblAgent);
@@ -143,5 +155,6 @@
         private System.Windows.Forms.Label lblcookie;
         private System.Windows.Forms.Button btnJDLogin;
         private System.Windows.Forms.Timer JdLoginTimer;
+        private System.Windows.Forms.Button test;
     }
 }

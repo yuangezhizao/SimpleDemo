@@ -15,14 +15,18 @@ namespace WebAppClinet
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //new SpriderSystem().SaveSiteCate(52);
-            //new SpriderSystem().UpdateSiteCat(52);
-            //new SiteClassBll().UpdatemmbsiteClass(52);
+            //new SpriderSystem().SaveSiteCate(1);
+            //   new SpriderSystem().UpdateSiteCat(1);
+            //new SiteClassBll().UpdatemmbsiteClass(1);
             //new StockInfoBll().GetNewStockInfo();
-            //SubmitOrder("");
+            SubmitOrder("");
             //var aa = ranCode();
             //loadjdUser();
             //test();
+            //loadjdUser();
+
+            new SpriderSystem().SaveSitePromo();
+            
         }
         //static Random ran = new Random();
         //private string ranCode()

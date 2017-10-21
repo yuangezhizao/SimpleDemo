@@ -30,8 +30,12 @@ namespace Servers
             //Fp = "f3595909a05d0c87bd723f1cbfe6a82e";
             if (string.IsNullOrEmpty(Fp))
                 Fp = "4231a9e01b4f44e79d1deb02b427b7c8";
+            //e1d34dde2e4e093dd3a12b7fadcf3de8
+            //d0885aa5f3a20878c5dba17789e89bd7
             if (string.IsNullOrEmpty(Eid))
                 Eid = "ED743BE582053C240F57BED2A721971997408F3D8C96D43F75CF85E78B35F755D881606EFF3F83340C8CC2105F73B493";
+            //MHCCASAM2HJWG66PVERUIVAG5Z4Q465URPFW3UQMIKKSWLINAANQO7CBNTFNGAC6EKI5O6ANFCJ24K2E6N6GRQZ4DU
+            //MHCCASAM2HJWG66PVERUIVAG5Z4Q465URPFW3UQMIKKSWLINAANQO7CBNTFNGAC6EKI5O6ANFCJ24K2E6N6GRQZ4DU
             if (string.IsNullOrEmpty(jdUserAgent))
             {
                 jdUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0";
@@ -300,7 +304,7 @@ namespace Servers
             {
                 param = param + "&submitOrderParam.presaleMobile=" + mobileForPresale;
             }
-            var trackID = "";
+            var trackID = "";//1BSYNrDKUkgKThRMSh0ZLLrJU9G-N5aOE8ksYSHu069LWYgNCiHWLsfIoQ3BtOh5M7YRmPggRk0jHRERHJxVprRSsNekEzbCSZdxZ4v7YSB8
             if (!string.IsNullOrEmpty(trackID))
             {
                 param = param + "&submitOrderParam.trackID=" + trackID;

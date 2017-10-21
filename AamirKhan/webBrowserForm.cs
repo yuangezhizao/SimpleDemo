@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -238,7 +239,7 @@ namespace AamirKhan
             //webBrowser.Navigate(jdloginUrl);
             CurrentUserIndex++;
         }
-
+        //webbrowser1.document.all.item("jq_date_start").click
         private void btnJDLogin_Click(object sender, EventArgs e)
         {
 
@@ -254,6 +255,142 @@ namespace AamirKhan
             //new JdOrderServer().Login(uname,upwd);
 
 
+        }
+
+        //public void Start()
+        //{
+        //    try
+        //    {
+
+        //        JdMiaoShaServer.IsRuning = true;//http://item.jd.com/4477667.html?dist=
+
+        //        while (JdMiaoShaServer.IsRuning)
+        //        {
+        //            var lessTime = (JdMiaoShaServer.StartTime - DateTime.Now).TotalMilliseconds;
+        //            if (JdMiaoShaServer.OldPrice == 9999)
+        //            {
+        //                var tempinfo = new JdMiaoShaServer().GetJdPrice(JdMiaoShaServer.Skuid);
+        //                if (!string.IsNullOrEmpty(tempinfo) && tempinfo.Contains("\"p\":"))
+        //                {
+        //                    var tempMsPrice = Regex.Match(tempinfo, "\"p\":\"(?<x>.*?)\"").Groups["x"].Value;
+        //                    if (!string.IsNullOrEmpty(tempMsPrice) && decimal.TryParse(tempMsPrice, out JdMiaoShaServer.OldPrice))
+        //                    {
+        //                        SetJdPrice(JdMiaoShaServer.Skuid, tempMsPrice, "秒杀准备设置当前价格");
+        //                    }
+        //                }
+        //            }
+
+        //            if (lessTime > 1000)
+        //            {
+        //                Thread.Sleep(1000);
+        //                continue;
+        //            }
+        //            if (lessTime < -2000)
+        //                break;
+
+        //            var tasklist = new TaskFactory();
+        //            for (int i = 0; i < 20; i++)
+        //            {
+        //                tasklist.StartNew(GetPrice);
+        //                Thread.Sleep(20);
+        //            }
+
+
+             
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        LogServer.WriteLog(ex, "JdMiaoShaServer");
+        //    }
+        //    LogServer.WriteLog("======秒 杀 结 束 ======" + DateTime.Now.ToString("HH:mm:ss.ffff zzz"), "success");
+        //}
+
+        //public string GetJdPrice(string skuid)
+        //{
+        //    string priceurl = string.Format("http://pm.3.cn/prices/pcpmgets?callback=&skuids={0}&origin=2&source=1", skuid);
+        //    HttpHelper request = new HttpHelper();
+        //    Stopwatch watch = new Stopwatch();
+        //    watch.Start();
+        //    var tempresult = request.GetHtml(new HttpItem { URL = priceurl });
+        //    var page = tempresult.Html;
+        //    watch.Stop();
+        //    var ms = watch.Elapsed.TotalMilliseconds;
+        //    LogServer.WriteLog(page + "耗时:" + ms + "now:" + DateTime.Now.ToString("HH:mm:ss.ffff zzz"), "success");
+        //    return page;
+        //}
+
+        //public string SetJdPrice(string skuid, string price, string msg)
+        //{
+        //    LogServer.WriteLog("======" + msg + "======" + DateTime.Now.ToString("HH:mm:ss.ffff zzz"), "success");
+        //    int error = 0;
+        //    do
+        //    {
+
+        //        Stopwatch watch = new Stopwatch();
+        //        watch.Start();
+
+        //        string priceurl =
+        //            string.Format(
+        //                "https://service.manmanbuy.com/i.ashx?method=mmb.service.mmb.tools.gettime&type=set&skuid={0}&price={1}",
+        //                skuid, price);
+        //        HttpHelper request = new HttpHelper();
+        //        var tempresult = request.GetHtml(new HttpItem { URL = priceurl });
+        //        var page = tempresult.Html;
+
+        //        watch.Stop();
+        //        var ms = watch.Elapsed.TotalMilliseconds;
+
+        //        LogServer.WriteLog("发送秒杀信息耗时" + page + "耗时:" + ms + "now:" + DateTime.Now.ToString("HH:mm:ss.ffff zzz"),
+        //            "success");
+        //        if (!page.Contains("success"))
+        //        {
+        //            error++;
+        //            continue;
+        //        }
+
+        //        return page;
+
+        //    } while (error < 3);
+        //    return "";
+
+        //}
+        //private void GetPrice()
+        //{
+
+        //    if (!JdMiaoShaServer.IsRuning)
+        //        return;
+
+        //    var result = GetJdPrice(JdMiaoShaServer.Skuid);
+        //    if (result.Contains("\"" + JdMiaoShaServer.MsPrice + "\""))
+        //    {
+
+        //        try
+        //        {
+        //            lock (JdMiaoShaServer.LOCK_SUBMIT)
+        //            {
+        //                if (JdMiaoShaServer.IsRuning)
+        //                    SetJdPrice(JdMiaoShaServer.Skuid, JdMiaoShaServer.MsPrice, "秒杀已开始");
+        //                webBrowser.Document.GetElementById("order-submit").InvokeMember("Click");
+        //            }
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            LogServer.WriteLog(ex, "JdMiaoShaServer");
+        //        }
+        //        JdMiaoShaServer.IsRuning = false;
+        //    }
+
+
+        //}
+
+        private void test_Click(object sender, EventArgs e)
+        {
+            //Start();
+          
         }
     }
 }

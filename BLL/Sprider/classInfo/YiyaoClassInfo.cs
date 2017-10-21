@@ -114,6 +114,11 @@ namespace BLL.Sprider.classInfo
             }
             siteClassInfo.HasChild = deep <=3;
             siteClassInfo.TotalProduct = RegGroupsX<int>(pageinfo, "<span id=\"num\">(?<x>\\d+)</span>");
+            string catname= RegGroupsX<string>(pageinfo, "<title>(?<x>.*?)用药,|<title>(?<x>.*?)价格");
+            if (siteClassInfo.ClassName != catname)
+            {
+                siteClassInfo.ClassName = catname;
+            }
 
             string catArea = RegGroupsX<string>(pageinfo, "<!--三级列表开始-->(?<x>.*?)<!--三级列表结束-->");
 

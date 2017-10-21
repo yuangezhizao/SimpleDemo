@@ -24,8 +24,10 @@ namespace BLL.Sprider.classInfo
         /// </summary>
         public void SaveAllSiteClass()
         {
-            HasBindClasslist = new SiteClassInfoDB().getAllSiteCatInfo(Baseinfo.SiteId);
 
+          
+            HasBindClasslist = new SiteClassInfoDB().getAllSiteCatInfo(Baseinfo.SiteId);
+ 
             HtmlAnalysis req= new HtmlAnalysis();
             req.RequestAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
             req.Headers = new Dictionary<string, string>();
@@ -75,6 +77,7 @@ namespace BLL.Sprider.classInfo
 
             for (int i = 0; i < HasBindClasslist.Count; i++)
             {
+           
                 if (string.IsNullOrEmpty(HasBindClasslist[i].ClassId))
                     continue;
                 try
@@ -312,6 +315,8 @@ namespace BLL.Sprider.classInfo
                 LogServer.WriteLog("未取得分类编号2" + url, "AddClassError");
                 return;
             }
+
+
 
             MatchCollection catList = RegGroupCollection(sortlist, "<a[^>]*?>(?<Text>[^<]*)</a>");
             //string newCat = "";
